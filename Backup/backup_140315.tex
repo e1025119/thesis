@@ -1,0 +1,211 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%	Bachelor's Thesis			%
+%	Christoph Groß, 1025119		%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[12pt]{report}
+
+\usepackage{graphicx}					%pitctures in titlepage
+\usepackage[margin=0.65in]{geometry}
+\usepackage[utf8]{inputenc}				%last name..
+\usepackage{changepage}					%line 44: adjustwidth
+\usepackage[parfill]{parskip}			%linespace between two paragraphs 
+\usepackage{etoolbox} 					%line 19: AtBeginEnvironment
+\usepackage{amssymb,amsthm,amsmath,bm}	%bm = "bold math"
+
+
+%custom definition, linebreak after "title" of defn/exmpl/elab
+\newtheoremstyle{break}
+  {4pt}{4pt}% <- above/below space
+  {\itshape}{}%
+  {\bfseries}{}%
+  {\newline}{}%
+\theoremstyle{break}
+\newtheorem{defn}{Definition}[chapter]
+\newtheorem{exmpl}{Example}[chapter]
+\newtheorem{elab}{Elaboration}[chapter]
+
+%due to parfill/parskip package -> no linespace before defn/exmpl/elab 
+%	-> solution by hand (7.25+2 = \parskip)
+\AtBeginEnvironment{defn}{\vspace{7.25pt plus 2pt}}
+\AtBeginEnvironment{exmpl}{\vspace{7.25pt plus 2pt}}
+\AtBeginEnvironment{elab}{\vspace{7.25pt plus 2pt}}
+
+% --------------- BEGIN OF THESIS ---------------
+\begin{document}
+%Titlepage
+\newgeometry{margin=1.25in}
+\begin{titlepage}
+
+\begin{center}
+	\includegraphics[scale=1.25]{logo.pdf}
+	\hspace{1cm}
+	\includegraphics[scale=0.15]{logo.jpg}
+	\vspace{2cm}\\
+	
+	%title
+	\Huge \textbf{Argumentation Theory}\\ \large \textbf{Nonmonotonic Reasoning}\\
+	\vspace{2cm}
+	{\large \textbf{BACHELOR'S THESIS}} \vspace{2.5mm}\\ {\small submitted in partial fulfillment of the requirements for the degree of} \vspace{2.5mm}\\ 
+	{\large \textbf{Bachelor of Science}} \vspace{2.5mm}\\ {\small in} \vspace{2.5mm}\\ {\large Software- and Information Engineering} \vspace{2.5mm}\\
+	{\small by} \vspace{2.5mm}\\
+	%author
+	\huge \textbf{Christoph Groß, 1025119}\\
+\end{center}
+	%advisor
+	\vspace{2cm}
+\begin{flushleft}
+	\begin{adjustwidth}{-0.5in}{}
+	{\small to the Faculty of Informatics \\ at the Vienna University of Technology \vspace{2.5mm}\\ Advisor: Ao.Prof.Dipl.-Ing.Dr.techn. Christian Georg Fermüller}
+	\end{adjustwidth}
+\end{flushleft}
+
+\end{titlepage}
+\restoregeometry{}
+
+%Table of Contents
+\tableofcontents{}
+
+%Statutory Declaration
+\chapter*{Statutory Declaration}
+\addcontentsline{toc}{chapter}{Statutory Declaration}
+
+Hereby I assure that this thesis is a result of my personal work and that no other than the indicated aids have been used for its completion.\\
+Furthermore I assure that all the quotations and statements, that have been inferred literally or in a general manner from published or unpublished writings, are marked as such.\\
+Beyond this I assure that the work has not been used, neither completely nor in parts, to pass any previous examination.
+
+\vspace{1.5cm}
+Vienna, \today
+\hspace{1.5cm}
+\begin{tabular}{l}
+\makebox[2.5in]{\hrulefill}\\
+Christoph Groß\\
+\end{tabular}
+
+%Acknowledgements
+\chapter*{Acknowledgements}
+\addcontentsline{toc}{chapter}{Acknowledgements}
+
+%Abstract
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+
+Throughout this thesis, I am going to explore the applications of argumentation theory in the context of nonmonotonic reasoning.\\
+First off, I will introduce the necessary formal definitions, give a few easy examples as clarification and draw the theoretical conclusions.\\
+In the next step, the reader is given an overview over the real-life applications of argumentation theory.\\
+Finally I will append the documentation of an application specifically written during the course of this thesis, which purpose is to graphically help understanding the subject.\\
+
+\raggedright %left-align whole text
+%Chapter 1, Introduction
+\chapter{Introduction}
+
+%Nonmonotonic reasoning
+\section{Nonmonotonic Reasoning}
+When talking about nonmonotonic reasoning, one is referring to the process of deducing knowledge within a formal logic,
+whose consequence relation does not fulfill the requirements of monotonicity.
+
+%Definition of Monotonicity :TODO evtl. noch ein bsp. einbauen? auf default logic verweisen?
+\begin{elab}[Monotonicity]
+If for a given set of formulas $\bm{\psi}$ and a formula $\bm{A}$ the logical consequence $\bm{\psi \vdash A}$ holds,\\ then $\bm{\psi,B \vdash A}$ still holds.
+\end{elab}
+As one can see, nonmonotonic sets of formulas might change their deducable knowledge as new facts are added. 
+
+\section{Argumentation Theory}
+In a human context, we (hopefully) argue to reach a sound conclusion. We do that by claiming statements based on premisses, and usually, due to different perception and other factors,
+these statements tend to vary in their degree of believability.
+
+Argumentation Theory, from a logical point of view, tries to formalize these strategies and introduces rules to that purpose. 
+Therefore arguments are modeled as formulas which might or might not attack each other.
+For instance, the most believeable argument out of two, so to say the "winner", 
+would be the one, that attacks the other argument, and at the same time, does not get attacked by said argument.\\
+In the following chapter, I will provide all the necessary definitions to achieve the above mentioned aim.
+Most of the definitions used in this thesis were originally introduced in \cite{Dung}.
+
+\newpage	
+
+\subsection{Argumentation Frameworks}
+\begin{defn}[Argumentation Framework]
+\textbf{AF := (AR,att)}
+\end{defn}
+
+An argumentation framework AF is defined as a tuple, consisting of a set of arguments and a set of attack relations.
+The following example should help illustrating this construct a little better.
+
+\begin{exmpl}
+\textbf{s =}"Superman is the best superhero!"\textbf{, b =}"Batman is way cooler.."\\
+\textbf{AR = \{s,b\}, att = \{(b,s)\}}
+\end{exmpl}
+
+Since the only tuple in $\bm{att}$ is the one that represents $\bm{b}$ attacking $\bm{s}$, the (frankly obvious) outcome is that $\bm{b}$ is the winning argument.
+
+%Properties of argumentation frameworks
+\subsection{Properties of (Sets of) Arguments}
+
+%basic properties: conflict free, acceptable, admissible
+\begin{defn}[Conflict-freeness]
+A set \textbf{S} of arguments is said to be conflict-free, if for any argument $\bm{a \in S}$, there is no other argument $\bm{b \in S}$ so that $\bm{(a,b) \in att_{S}}$.
+\end{defn}
+
+\begin{defn}[Acceptability]
+An argument $\bm{a \in AR}$ is acceptable with respect to a set \textbf{S}, iff \textbf{S} attacks any argument $\bm{b \in AR}$ that attacks \textbf{a}. 
+\end{defn}
+
+\begin{defn}[Admissibility]
+A conflict-free Set \textbf{S} is said to be admissible, iff each argument $\bm{a \in S}$ is acceptable with respect to \textbf{S}.
+\end{defn}
+
+These are the basic properties that can be fulfilled by arguments or sets of arguments. Based on them, we will now introduce a few more interesting definitions.
+For instance, argumentation theory knows a number of different extensions, which can be used to model the degree of "credulity" of an agent.
+
+Before we discuss those extensions and their implications on argumentation theory, I would like to make a detour and discuss the conventional meaning of extensions in predicate logic.
+
+%extensions in prediacte logic
+\begin{elab}[Extensions]
+For any n-ary predicate $\bm{\Phi}$, its extension can be written as $\bm{\{(x_{1},...,x_{n})|\Phi(x_{1},...,x_{n})\}}$.\\
+So, the extension of a predicate is nothing other than the maximum set of tuples \\ fulfilling said predicate.
+\end{elab}
+
+\newpage
+
+The aforementioned extensions, used in argumentation theory, use this idea in combination with certain selective criteria to model the desired behaviour. 
+The first extension takes a rather gullible approach to things, the so called \textit{preferred extension} is defined as follows:
+
+\begin{defn}[Preferred Extensions]
+$\bm{E_{p}}$ is a preferred extension of \textbf{AF}, iff $\bm{E_{p}}$ is a maximum admissible set of \textbf{AF}.
+\end{defn}
+
+As you can see, the preferred extension is made up of the biggest, conflict-free set of arguments, that can be defended against all other arguments not in the set.
+
+Another approach would be the \textit{stable extension}, which is defined as follows:
+\begin{defn}
+$\bm{E_{s}}$ is a stable extension of \textbf{AF}, iff $\bm{E_{s}}$ attacks each argument $\bm{a \notin E_{s}}$; which is equivalent to \\
+$\bm{\{a|a}$ is not attacked by $\bm{E_{s}\}}$.
+\end{defn}
+
+Apparently, the stable extension contains all arguments that it does not attack itself. Therefore it has to be a conflict-free, admissible set.\\
+We will explore the differences between those extensions in a later chapter.
+
+
+%TODO noch restlichen extensions vorstellen..
+
+\subsection{Examples of different Extensions}
+
+\chapter{The Meaning of different Extensions}
+
+
+
+
+
+
+
+
+
+
+
+%Bibliography - references to papers
+\begin{thebibliography}{1}
+	\bibitem[\textbf{Dung}]{Dung} "On the acceptability of arguments and its fundamental role in nonmonotonic reasoning,...";\\Phan Minh Dung; 1995
+	\bibitem[\textbf{EgGaWo}]{Egly} "Answer-Set Programming Encodings for Argumentation Frameworks"; Uwe Egly, Alice Gaggl, Stefan Woltran; 2010  
+\end{thebibliography}
+
+\end{document}
