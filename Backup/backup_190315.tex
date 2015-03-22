@@ -183,7 +183,6 @@ If for said argument $\bm{a}$ is not being attacked by any $\bm{b \in AR}$, then
 
 \begin{mydefn}[Admissibility]
 A conflict-free Set \textbf{S} is said to be admissible, iff each argument $\bm{a \in S}$ is acceptable with respect to \textbf{S}.
-\label{admissible}
 \end{mydefn}
 
 These are the basic properties that can be fulfilled by arguments or sets of arguments. Based on them, we will now introduce a few more interesting definitions.
@@ -203,34 +202,14 @@ The aforementioned extensions, adapted fo fit the needs of argumentation theory,
 The first extension takes a rather gullible approach to things; the so called \textit{preferred extension} is defined as follows:
 
 \begin{myrmrk}
-From here on, we will use $\bm{E_{i}}$ to denote an arbitrary but fixed extension of type $\bm{i \text{, while } E_{I}}$ denotes the set of all extensions of type $\bm{i}$.\\
-Also, if we want to talk about the set of all extensions of one specific type, we will use $\bm{i(AF)}$.
+From here on, we will use $E_{i}$ to denote an arbitrary but fixed extension of type $i$, while $E_{I}$ denotes the set of all extensions of type $i$.
 \end{myrmrk}
 
 \begin{mydefn}[Preferred Extensions]
 $\bm{E_{p}}$ is a preferred extension of \textbf{AF}, iff $\bm{E_{p}}$ is a maximum admissible set of \textbf{AF}.
 \end{mydefn}
 
-As you can see, the preferred extension is made up of the biggest, conflict-free set of arguments, that can be defended against all other arguments not in the set.\\
-The following lemma will be useful later on.
-\begin{mylem}
-For every AF, there exists at least one preferred extension.
-\end{mylem}
-
-\begin{myprf}
-The proof will be depending on two different properties of admissible sets:
-\begin{enumerate}
-	\item{The empty set is always admissible.}
-	\item{Given an admissible Set $\bm{S}$ and an argument $\bm{a}$, which is acceptable with respect to $\bm{S}$, the unification $\bm{S \cup a}$ is also admissible.}
-\end{enumerate}
-$(1)$ directly follows from the definition \ref{admissible}\\
-$(2)$ We just have to show, that $\bm{S \cup a}$ is conflict-free. To achieve that, we assume the contrary:\\ 
-There exists an argument $\bm{b \in S \text{ so that either } (a,b) \text{ or } (b,a)}$ holds.
-There has to be an argument $\bm{c \in S}$, so that either $\bm{(c,a) \text{ or } (c,b) \text{. We know, that } S \text{ is conflict-free, so } (c,b) \implies \text{\Lightning}}$\\
-On the other hand, $\bm{c \text{ and } a}$ are both acceptable with respect to $\bm{S \text{; } (c,a) \implies \text{\Lightning}}$.  
-\end{myprf}
-
-\newpage
+As you can see, the preferred extension is made up of the biggest, conflict-free set of arguments, that can be defended against all other arguments not in the set.
 
 Another approach would be the \textit{stable extension}, which is defined as follows:
 \begin{mydefn}[Stable Extensions]
@@ -251,10 +230,11 @@ It is easy to see that many different complete extensions can exist, depending o
 
 \begin{mydefn}[Grounded Extensions]
 The intersection of all complete extensions is called the grounded extension. $\bm{E_{g} := \bigcap{comp(AF)}}$
-\label{ground ext}
 \end{mydefn}
 
 Since all the necessary, basic definitions of argumentation frameworks have been laid out, I will go on and provide the promised examples.
+
+\newpage
 
 \subsection{Examples of different Extensions}
 By expanding example 1.1 with a few more arguments, we now have to consider the following example.
@@ -312,6 +292,8 @@ Following extensions can be calculated
 	\item{$\bm{E_{G}=\{\{\emptyset\}\}}$}
 \end{itemize}
 
+\newpage
+
 The following example (on the contrary to the above) has different preferred and stable extensions.
 
 \begin{myexmpl}
@@ -361,13 +343,13 @@ $\bm{\implies \exists E_{c}: E_{c} \in E_{C} \land E_{c} \notin E_{P} \implies \
 \end{myprf}
 
 \begin{myprf}[2]
-Proof for this lemma follows directly from definition \ref{ground ext}.
+Proof for this lemma follows directly from the definition of ground extensions.
 \end{myprf}
 
 \newpage
 
 \section{Properties of Argumentation Frameworks}
-Up to now, we have only talked about sets of arguments and their properties. Now we will focus on the whole argumentation framework and 
+Up to now, we have only talked about sets of arguments and their properties. Now we will take a closer look at the whole argumentation framework and 
 make a connection between its properties and extensions.
 
 \subsection{Well-Founded Argumentation Frameworks}
@@ -393,19 +375,11 @@ If $\bm{a}$ is not acceptable with respect to $\bm{E_{g}}$, this means that ther
 which is also not attacked by $\bm{E_{g}}$. \\ Therefore an infinite sequence of arguments like $\bm{a \text{ and }c}$ has to exist $\implies \text{\Lightning}$.
 \end{myprf}
 
-\newpage
-
 \subsection{Coherent Argumentation Frameworks}
-If an AF has a preferred extension, which is not a stable one too, that indicates some sort of "anomaly" in the framework (see example \ref{b loop ex}).\\
-So what we want to do next, is to find out what criteria has to be met so that preferred and stable extension coincide.
 
-\begin{mydefn}[Coherent Argumentation Frameworks]
-An AF is called coherent, if $\bm{E_{P} = E_{S}}$.
-\end{mydefn}
 
-\begin{myrmrk}
-It follows directly from the definition, that there always exists at least one stable extension in a coherent AF.
-\end{myrmrk}
+
+
 
 
 
