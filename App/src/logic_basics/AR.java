@@ -1,18 +1,20 @@
-package logic;
+package logic_basics;
+
+import java.util.ArrayList;
 
 public class AR {
 
-	private Argument[] arguments;
+	private ArrayList<Argument> arguments;
 	
-	public AR(Argument[] arguments) {
+	public AR(ArrayList<Argument> arguments) {
 		this.arguments = arguments;
 	}
 
-	public Argument[] getArguments() {
+	public ArrayList<Argument> getArguments() {
 		return arguments;
 	}
 
-	public void setArguments(Argument[] arguments) {
+	public void setArguments(ArrayList<Argument> arguments) {
 		this.arguments = arguments;
 	}
 	

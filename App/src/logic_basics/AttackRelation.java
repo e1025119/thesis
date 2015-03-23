@@ -1,4 +1,4 @@
-package logic;
+package logic_basics;
 
 public class AttackRelation {
 
