@@ -24,6 +24,13 @@ public class Argument {
 	public void setRef(String ref) {
 		this.ref = ref;
 	}
+
+	public boolean equals(Argument a) {
+		if(ref.equals(a.getRef()) && text.equals(a.getText())) {
+			return true;
+		}
+		return false;
+	}
 	
 	public String toString() {
 		return ref+" (\""+text+"\")";
