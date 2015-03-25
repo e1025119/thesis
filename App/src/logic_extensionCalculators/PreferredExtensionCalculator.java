@@ -13,14 +13,12 @@ public class PreferredExtensionCalculator implements ExtensionCalculator {
 	@Override
 	public PreferredExtension calculate(AF framework) {
 		ArrayList<Argument> ar = new ArrayList<Argument>();
-		ArrayList<Argument> tmp1,tmp2 = new ArrayList<Argument>();
+		ArrayList<Argument> tmp1 = new ArrayList<Argument>(),tmp2 = new ArrayList<Argument>();
 
-		ar.addAll(framework.getUnattacked(null));
+		ar.addAll(framework.getUnattacked(tmp1));
 		for(Argument a : ar) {
 			tmp1 = framework.getAtt().getAttacked(a);
-			for(Argument b : tmp1) {
-				tmp2.addAll(framework.getUnattacked(b));
-			}
+			tmp2.addAll(framework.getUnattacked(tmp1));
 		}
 
 		for(Argument a : tmp2) {

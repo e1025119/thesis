@@ -26,10 +26,13 @@ public class Main {
 		AR ar = new AR(al);
 		
 		AttackRelation r1 = new AttackRelation(a,b);
-		AttackRelation r2 = new AttackRelation(b,e);
-		AttackRelation r3 = new AttackRelation(b,c);
-		AttackRelation r4 = new AttackRelation(c,d);
-		AttackRelation r5 = new AttackRelation(d,c);
+		AttackRelation r2 = new AttackRelation(a,c);
+		AttackRelation r3 = new AttackRelation(b,e);
+		AttackRelation r4 = new AttackRelation(c,e);
+		AttackRelation r5 = new AttackRelation(e,f);
+		AttackRelation r6 = new AttackRelation(f,e);
+		AttackRelation r7 = new AttackRelation(b,d);
+		AttackRelation r8 = new AttackRelation(c,d);
 		
 		ArrayList<AttackRelation> rl1 = new ArrayList<AttackRelation>();
 		rl1.add(r1);
@@ -37,6 +40,9 @@ public class Main {
 		rl1.add(r3);
 		rl1.add(r4);
 		rl1.add(r5);
+		rl1.add(r6);
+		rl1.add(r7);
+		rl1.add(r8);
 		Att att = new Att(rl1);
 		
 		AF af = new AF(ar,att);
