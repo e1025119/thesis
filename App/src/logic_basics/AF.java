@@ -32,13 +32,13 @@ public class AF {
 	 * @brief this method returns the unattacked (while ignoring all the relations in the given set) 
 	 * 			arguments of an AF. 
 	 */
-	public ArrayList<Argument> getUnattacked(ArrayList<Argument> ign) {
+	public AR getUnattacked(AR ign) {
 		boolean add = true;
 		ArrayList<Argument> arg = new ArrayList<Argument>();
 		for(Argument a : ar.getArguments()) {
 			add = true;
 			for(AttackRelation rel : att.getAttacks()) {
-				if(!ign.isEmpty()) {
+				if(!ign.getArguments().isEmpty()) {
 					if(a.equals(rel.getA2()) && !ign.contains(rel.getA1())) {
 						add = false;
 						break;
@@ -55,17 +55,24 @@ public class AF {
 				arg.add(a);
 			}
 		}
-		return arg;
+		return new AR(arg);
 	}
 
-	public ArrayList<Argument> getUndecided() {
+	public AR getUndecided() {
 		ArrayList<Argument> ret = new ArrayList<Argument>();
 		for(Argument a : ar.getArguments()) {
 			if(a.getStatus() == 0) {
 				ret.add(a);
 			}
 		}
-		return ret;
+		return new AR(ret);
+	}
+
+	public boolean equals(AF af) {
+		if(this.ar.equals(af.getAr()) && this.att.equals(af.getAtt())) {
+			return true;
+		}
+		return false;
 	}
 	
 	public String toString() {

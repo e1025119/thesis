@@ -35,6 +35,13 @@ public abstract class Extension {
 	public void setArguments(ArrayList<Argument> arguments) {
 		this.arguments = new AR(arguments);
 	}
+
+	public boolean equals(Extension e) {
+		if(this.arguments.equals(e.arguments) && this.framework.equals(framework)) {
+			return true;
+		}
+		return false;
+	}
 	
 	public String toString() {
 		return arguments.toString();

@@ -14,17 +14,17 @@ public class PreferredExtensionCalculator implements ExtensionCalculator {
 	public ArrayList<PreferredExtension> calculate(AF framework) {
 		ArrayList<PreferredExtension> ret = new ArrayList<PreferredExtension>();
 
-		ArrayList<Argument> pref = new ArrayList<Argument>(),conflicting = new ArrayList<Argument>();
-		ArrayList<Argument> tmp1 = new ArrayList<Argument>(),tmp2 = new ArrayList<Argument>();
+		AR pref = new AR(new ArrayList<Argument>()),conflicting = new AR(new ArrayList<Argument>());
+		AR tmp1 = new AR(new ArrayList<Argument>()),tmp2 = new AR(new ArrayList<Argument>());
 		int count = 0;
 
 		/* deterministic part */
 		pref.addAll(framework.getUnattacked(tmp1));
 		do {
-			count = pref.size();
-			for(Argument a : pref) {
+			count = pref.getArguments().size();
+			for(Argument a : pref.getArguments()) {
 				tmp1 = framework.getAtt().getAttacked(a);
-				for(Argument b : tmp1) {
+				for(Argument b : tmp1.getArguments()) {
 					if(!conflicting.contains(b)) {
 						conflicting.add(b);
 					}
@@ -32,34 +32,26 @@ public class PreferredExtensionCalculator implements ExtensionCalculator {
 				tmp2.addAll(framework.getUnattacked(tmp1));
 			}
 
-			for(Argument a : tmp2) {
+			for(Argument a : tmp2.getArguments()) {
 				if(!pref.contains(a)) {
 					pref.add(a);
 				}
 			}
-		} while(count != pref.size());
-		//cleanup
-		for(Argument a : pref) {
-			a.setStatus(1);
-		}
-		for(Argument a : conflicting) {
-			a.setStatus(-1);
-		}
-
+		} while(count != pref.getArguments().size());
 		/* non-deterministic part */
-		ArrayList<Argument> rest = new ArrayList<Argument>();
-		ArrayList<ArrayList<Argument>> restSolution = new ArrayList<ArrayList<Argument>>();
+		AR rest = new AR(new ArrayList<Argument>());
+		ArrayList<AR> restSolution = new ArrayList<AR>();
 		for(Argument a : framework.getAr().getArguments()) {
 			if(!conflicting.contains(a) && !pref.contains(a)) {
 				rest.add(a);
 			}
 		}
-		for(int i=0; i<rest.size(); i++){
-			for(Argument a: rest) {
+		for(int i=0; i<rest.getArguments().size(); i++){
+			for(Argument a: rest.getArguments()) {
 				a.setStatus(0);
 			}
-			rest.get(i).setUsedInCalculation(1);
-			restSolution.add(calculateRest(new AR(new ArrayList<Argument>()),new AR(rest),framework));
+			rest.getArguments().get(i).setUsedInCalculation(1);
+			restSolution.add(calculateRest(new AR(new ArrayList<Argument>()),rest,framework));
 		}
 
 		/* create all valid solutions by permuting the remaining (status = 1) arguments */
@@ -74,17 +66,21 @@ public class PreferredExtensionCalculator implements ExtensionCalculator {
 	 * 
 	 * @brief creates a new PreferredExtension for each partial solution in listArg by adding arg.
 	 * */
-	public ArrayList<PreferredExtension> createSolution(ArrayList<Argument> arg, ArrayList<ArrayList<Argument>> listArg,AF af) {
+	public ArrayList<PreferredExtension> createSolution(AR arg, ArrayList<AR> listArg,AF af) {
 		ArrayList<PreferredExtension> ret = new ArrayList<PreferredExtension>();
-		for(ArrayList<Argument> a : listArg) {
-			ArrayList<Argument> tmp = new ArrayList<Argument>();
-			tmp.addAll(arg);
-			tmp.addAll(a);
-			ret.add(new PreferredExtension(new AR(tmp),af));
+		if(listArg.isEmpty()) {
+			ret.add(new PreferredExtension(arg,af));
+		} else {
+			for(AR a : listArg) {
+				AR tmp = new AR(new ArrayList<Argument>());
+				tmp.addAll(arg);
+				tmp.addAll(a);
+				ret.add(new PreferredExtension(tmp,af));
+			}
 		}
 		return ret;
 	}
-	
+
 	/** 
 	 * @param ar1 this set of arguments comes in empty and gets filled up, the deeper the recursion goes.
 	 * 			in the end, this is the partial solution.
@@ -95,7 +91,7 @@ public class PreferredExtensionCalculator implements ExtensionCalculator {
 	 * 
 	 * @brief this method is an entry point for the recursive calculateRest method. Only defines the starting point.
 	 */
-	public ArrayList<Argument> calculateRest(AR ar1,AR ar2,AF af) {
+	public AR calculateRest(AR ar1,AR ar2,AF af) {
 		ArrayList<Argument> ret = new ArrayList<Argument>();
 
 		for(int i=0; i<ar2.getArguments().size(); i++) {
@@ -111,7 +107,7 @@ public class PreferredExtensionCalculator implements ExtensionCalculator {
 			}
 			a.setUsedInCalculation(0);
 		}
-		return ret;
+		return new AR(ret);
 	}
 
 	/**

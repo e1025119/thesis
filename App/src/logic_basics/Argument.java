@@ -44,7 +44,7 @@ public class Argument {
 	}
 
 	public boolean equals(Argument a) {
-		if(ref.equals(a.getRef()) && text.equals(a.getText())) {
+		if(this.ref.equals(a.getRef()) && this.text.equals(a.getText())) {
 			return true;
 		}
 		return false;
@@ -57,13 +57,13 @@ public class Argument {
 	public boolean isDefendable(AR ar1,AR ar2,AF af) {
 		boolean ret = false;
 		AttackRelation itself = new AttackRelation(this,this);
-		if(af.getAtt().getAttacks().contains(itself)) {
+		if(af.getAtt().contains(itself)) {
 			return false;
 		}
 		for(Argument a : ar2.getArguments()) {
 			for(AttackRelation rel : af.getAtt().getAttacks()) {
 				/* a attacks one of the already confirmed arguments */
-				if(ar1.getArguments().contains(rel.getA2()) && a.equals(rel.getA1())) {
+				if(ar1.contains(rel.getA2()) && a.equals(rel.getA1())) {
 					return false;
 				}
 				else if(rel.getA2().equals(this) && rel.getA1().equals(a)) {
