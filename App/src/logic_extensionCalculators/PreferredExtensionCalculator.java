@@ -38,7 +38,14 @@ public class PreferredExtensionCalculator implements ExtensionCalculator {
 				}
 			}
 		} while(count != pref.size());
-	
+		//cleanup
+		for(Argument a : pref) {
+			a.setStatus(1);
+		}
+		for(Argument a : conflicting) {
+			a.setStatus(-1);
+		}
+
 		/* non-deterministic part */
 		ArrayList<Argument> rest = new ArrayList<Argument>();
 		ArrayList<ArrayList<Argument>> restSolution = new ArrayList<ArrayList<Argument>>();
@@ -55,7 +62,7 @@ public class PreferredExtensionCalculator implements ExtensionCalculator {
 			restSolution.add(calculateRest(new AR(new ArrayList<Argument>()),new AR(rest),framework));
 		}
 
-		/* create all valid solutions by permutating the remaining (status = 1) arguments */
+		/* create all valid solutions by permuting the remaining (status = 1) arguments */
 		ret = createSolution(pref,restSolution,framework);
 		return ret;
 	}
