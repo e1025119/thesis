@@ -1,13 +1,11 @@
 package logic_extensions;
 
-import java.util.ArrayList;
-
 import logic_basics.AF;
-import logic_basics.Argument;
+import logic_basics.AR;
 
 public class CompleteExtension extends Extension {
 
-	public CompleteExtension(ArrayList<Argument> arguments,AF framework) {
+	public CompleteExtension(AR arguments,AF framework) {
 		super(arguments,framework);
 	}
 	

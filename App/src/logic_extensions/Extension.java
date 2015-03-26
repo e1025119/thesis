@@ -11,8 +11,8 @@ public abstract class Extension {
 	private AR arguments;
 	private AF framework;
 	
-	public Extension(ArrayList<Argument> arguments,AF framework) {
-		this.arguments = new AR(arguments);
+	public Extension(AR arguments,AF framework) {
+		this.arguments = arguments;
 		this.framework = framework;
 	}
 	

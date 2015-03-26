@@ -39,7 +39,6 @@ public class AF {
 			add = true;
 			for(AttackRelation rel : att.getAttacks()) {
 				if(!ign.isEmpty()) {
-					System.out.println(a+", "+rel);
 					if(a.equals(rel.getA2()) && !ign.contains(rel.getA1())) {
 						add = false;
 						break;
@@ -59,6 +58,16 @@ public class AF {
 		return arg;
 	}
 
+	public ArrayList<Argument> getUndecided() {
+		ArrayList<Argument> ret = new ArrayList<Argument>();
+		for(Argument a : ar.getArguments()) {
+			if(a.getStatus() == 0) {
+				ret.add(a);
+			}
+		}
+		return ret;
+	}
+	
 	public String toString() {
 		String ret = "";
 		ret += "----------AF----------"+"\n";

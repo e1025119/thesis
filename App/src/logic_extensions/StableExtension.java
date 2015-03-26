@@ -1,13 +1,11 @@
 package logic_extensions;
 
-import java.util.ArrayList;
-
 import logic_basics.AF;
-import logic_basics.Argument;
+import logic_basics.AR;
 
 public class StableExtension extends Extension {
 
-	public StableExtension(ArrayList<Argument> arguments,AF framework) {
+	public StableExtension(AR arguments,AF framework) {
 		super(arguments,framework);
 	}
 

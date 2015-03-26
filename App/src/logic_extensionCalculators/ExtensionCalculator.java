@@ -1,9 +1,11 @@
 package logic_extensionCalculators;
 
+import java.util.ArrayList;
+
 import logic_basics.*;
-import logic_extensions.Extension;
 
 public interface ExtensionCalculator {
 	
-	public abstract Extension calculate(AF framework);
+	public abstract ArrayList<?> calculate(AF framework);
+
 }
