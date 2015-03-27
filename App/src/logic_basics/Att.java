@@ -9,7 +9,11 @@ public class Att {
 	public Att(ArrayList<AttackRelation> attacks) {
 		this.attacks = attacks;
 	}
-
+	
+	public Att() {
+		this.attacks = new ArrayList<AttackRelation>();
+	}
+	
 	public ArrayList<AttackRelation> getAttacks() {
 		return attacks;
 	}

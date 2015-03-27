@@ -9,6 +9,10 @@ public class AR {
 	public AR(ArrayList<Argument> arguments) {
 		this.arguments = arguments;
 	}
+	
+	public AR() {
+		this.arguments = new ArrayList<Argument>();
+	}
 
 	public ArrayList<Argument> getArguments() {
 		return arguments;
@@ -49,6 +53,10 @@ public class AR {
 		for(Argument a : ar.getArguments()) {
 			this.add(a);
 		}
+	}
+
+	public void remove(Argument arg) {
+		this.getArguments().remove(arg);
 	}
 	
 	public String toString() {

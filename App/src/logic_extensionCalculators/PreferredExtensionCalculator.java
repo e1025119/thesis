@@ -13,43 +13,24 @@ public class PreferredExtensionCalculator implements ExtensionCalculator {
 	@Override
 	public ArrayList<PreferredExtension> calculate(AF framework) {
 		ArrayList<PreferredExtension> ret = new ArrayList<PreferredExtension>();
-
 		AR pref = new AR(new ArrayList<Argument>()),conflicting = new AR(new ArrayList<Argument>());
-		AR tmp1 = new AR(new ArrayList<Argument>()),tmp2 = new AR(new ArrayList<Argument>());
-		int count = 0;
 
 		/* deterministic part */
-		pref.addAll(framework.getUnattacked(tmp1));
-		do {
-			count = pref.getArguments().size();
-			for(Argument a : pref.getArguments()) {
-				tmp1 = framework.getAtt().getAttacked(a);
-				for(Argument b : tmp1.getArguments()) {
-					if(!conflicting.contains(b)) {
-						conflicting.add(b);
-					}
-				}
-				tmp2.addAll(framework.getUnattacked(tmp1));
-			}
-
-			for(Argument a : tmp2.getArguments()) {
-				if(!pref.contains(a)) {
-					pref.add(a);
-				}
-			}
-		} while(count != pref.getArguments().size());
+		pref.addAll(framework.getUntouched());
+		conflicting.addAll(framework.getSelfies());
+		conflicting.addAll(framework.getIndefendables());
+		//TODO ??
+		
 		/* non-deterministic part */
 		AR rest = new AR(new ArrayList<Argument>());
 		ArrayList<AR> restSolution = new ArrayList<AR>();
+
 		for(Argument a : framework.getAr().getArguments()) {
 			if(!conflicting.contains(a) && !pref.contains(a)) {
 				rest.add(a);
 			}
 		}
 		for(int i=0; i<rest.getArguments().size(); i++){
-			for(Argument a: rest.getArguments()) {
-				a.setStatus(0);
-			}
 			rest.getArguments().get(i).setUsedInCalculation(1);
 			restSolution.add(calculateRest(new AR(new ArrayList<Argument>()),rest,framework));
 		}
@@ -98,10 +79,11 @@ public class PreferredExtensionCalculator implements ExtensionCalculator {
 			Argument a = ar2.getArguments().get(i);
 			if(a.getUsedInCalculation() == 1) {
 				if(a.isDefendable(ar1,ar2,af)) {
-					a.setStatus(1);
-					ar1.getArguments().add(a);
+					ar1.add(a);
+					ar2.remove(a);
 				} else {
-					a.setStatus(-1);
+					//TODO nur entfernen wenn a wirklich was "anstellt", nicht nur entfernen weil es nicht defendable is.
+					ar2.remove(a);
 				}
 				ret = calculateRestRecursive(ar1,ar2,af);
 			}
@@ -128,22 +110,19 @@ public class PreferredExtensionCalculator implements ExtensionCalculator {
 
 		for(int i=0; i<ar2.getArguments().size(); i++) {
 			Argument a = ar2.getArguments().get(i);
-			if(a.getStatus() == 0) {
-				if(a.isDefendable(ar1,ar2,af)) {
-					ar1.getArguments().add(a);
-					a.setStatus(1);
-					calculateRestRecursive(ar1,ar2,af);
-				}
-				else{
-					a.setStatus(-1);
-				}
+			if(a.isDefendable(ar1,ar2,af)) {
+				ar1.add(a);
+				ar2.remove(a);
+				calculateRestRecursive(ar1,ar2,af);
+			}
+			else{
+				ar2.remove(a);
 			}
 		}
 		ret = ar1.getArguments();
 		return ret;
 	}
-
-
+	
 }
 
 

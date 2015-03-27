@@ -29,26 +29,17 @@ public class AF {
 	}
 
 	/** 
-	 * @brief this method returns the unattacked (while ignoring all the relations in the given set) 
-	 * 			arguments of an AF. 
+	 * @brief this method returns the completely isolated arguments. 
 	 */
-	public AR getUnattacked(AR ign) {
+	public AR getUntouched() {
 		boolean add = true;
 		ArrayList<Argument> arg = new ArrayList<Argument>();
 		for(Argument a : ar.getArguments()) {
 			add = true;
 			for(AttackRelation rel : att.getAttacks()) {
-				if(!ign.getArguments().isEmpty()) {
-					if(a.equals(rel.getA2()) && !ign.contains(rel.getA1())) {
-						add = false;
-						break;
-					}
-				}
-				else {
-					if(a.equals(rel.getA2())) {
-						add = false;
-						break;
-					}
+				if(a.equals(rel.getA2()) || a.equals(rel.getA1())) {
+					add = false;
+					break;
 				}
 			}
 			if(!arg.contains(a) && add) {
@@ -58,11 +49,49 @@ public class AF {
 		return new AR(arg);
 	}
 
-	public AR getUndecided() {
+	/** 
+	 * @brief this method returns all arguments that only attack while being unattacked itself.
+	 */
+	public AR getUnattacked() {
+		AR arg = new AR();
+		for(Argument a : this.ar.getArguments()){
+			for(AttackRelation rel : this.att.getAttacks()) {
+				if(rel.getA2().equals(a)) {
+					break;
+				}
+				arg.add(a);
+			}
+		}
+		return arg;
+	}
+	
+	//TODO nochmal überprüfen :)
+	
+	/** 
+	 * @brief this method returns all the arguments, that cannot be part of any admissible set.
+	 * 			in other words all the arguments, that are attacked by the output of getUnattacked().
+	 * */
+	public AR getIndefendables() {
+		AR unatt = getUnattacked();
+		AR ret = new AR();
+		for(AttackRelation rel : this.att.getAttacks()) {
+			if(unatt.contains(rel.getA1())) {
+				ret.add(rel.getA2());
+			}
+ 		}
+		return ret;
+	}
+
+	/** 
+	 * @brief returns all the arguments in the framework, that are attacking itself.
+	 */
+	public AR getSelfies() {
 		ArrayList<Argument> ret = new ArrayList<Argument>();
-		for(Argument a : ar.getArguments()) {
-			if(a.getStatus() == 0) {
-				ret.add(a);
+		for(Argument a : this.ar.getArguments()) {
+			for(AttackRelation rel : this.att.getAttacks()) {
+				if(rel.equals(new AttackRelation(a,a))) {
+					ret.add(a);
+				}
 			}
 		}
 		return new AR(ret);
@@ -74,7 +103,7 @@ public class AF {
 		}
 		return false;
 	}
-	
+
 	public String toString() {
 		String ret = "";
 		ret += "----------AF----------"+"\n";
