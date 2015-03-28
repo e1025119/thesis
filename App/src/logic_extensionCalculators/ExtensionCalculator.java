@@ -1,10 +1,10 @@
 package logic_extensionCalculators;
 
-import java.util.ArrayList;
+import logic_basics.AF;
+import logic_extensions.Extension;
+import logic_extensions.ExtensionList;
 
-import logic_basics.*;
-
-public interface ExtensionCalculator { 
+public interface ExtensionCalculator<E extends Extension> { 
 	
-	public abstract ArrayList<?> calculate(AF framework);
+	public abstract ExtensionList<E> calculate(AF framework);
 }

@@ -5,14 +5,10 @@ import java.util.ArrayList;
 import logic_basics.*;
 import logic_extensions.*;
 
-public class PreferredExtensionCalculator implements ExtensionCalculator {
-
-	public PreferredExtensionCalculator() {
-	}
+public class PreferredExtensionCalculator implements ExtensionCalculator<PreferredExtension> {
 
 	@Override
-	public ArrayList<PreferredExtension> calculate(AF framework) {
-		ArrayList<PreferredExtension> ret = new ArrayList<PreferredExtension>();
+	public PreferredExtensionList calculate(AF framework) {
 		AR pref = new AR(),conflicting = new AR();
 
 		/* deterministic part */
@@ -33,18 +29,18 @@ public class PreferredExtensionCalculator implements ExtensionCalculator {
 
 		/* create all valid solutions by building the cross product of pref and partSol*/
 		ArrayList<AR> maxRest = maxAdm(partSol,framework);
-		ret = createSolution(pref,maxRest,framework);
-		return ret;
+		return createSolution(pref,maxRest,framework);
 	}
 
-	public ArrayList<PreferredExtension> createSolution(AR pref,ArrayList<AR> maxRest,AF af) {
-		ArrayList<PreferredExtension> ret = new ArrayList<PreferredExtension>();
+	public PreferredExtensionList createSolution(AR pref,ArrayList<AR> maxRest,AF af) {
+		PreferredExtensionList ret = new PreferredExtensionList();
 		for(AR ar : maxRest) {
 			AR tmp = new AR();
 			tmp.addAll(pref);
 			tmp.addAll(ar);
 			ret.add(new PreferredExtension(tmp,af));
 		}
+		System.out.println("RET: "+ret);
 		return ret;
 	}
 	
@@ -65,6 +61,9 @@ public class PreferredExtensionCalculator implements ExtensionCalculator {
 		}
 	}
 
+	/** 
+	 * @brief this method checks the power set for maximal admissible sets.
+	 * */
 	public ArrayList<AR> maxAdm(ArrayList<AR> args,AF framework) {
 		ArrayList<AR> ret = new ArrayList<AR>();
 		for(AR ar : args) {
