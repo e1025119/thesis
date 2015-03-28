@@ -7,7 +7,9 @@ public class AR {
 	private ArrayList<Argument> arguments;
 	
 	public AR(ArrayList<Argument> arguments) {
-		this.arguments = arguments;
+		ArrayList<Argument> tmp = new ArrayList<Argument>();
+		tmp.addAll(arguments);
+		this.arguments = tmp;
 	}
 	
 	public AR() {
@@ -57,6 +59,24 @@ public class AR {
 
 	public void remove(Argument arg) {
 		this.getArguments().remove(arg);
+	}
+	
+	public boolean isConflictFree(Att att) {
+		for(AttackRelation rel : att.getAttacks()) {
+			if(this.arguments.contains(rel.getA1()) && this.arguments.contains(rel.getA2())) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public boolean attacksArgument(Argument a,Att att) {
+		for(Argument b : this.arguments) {
+			if(att.contains(new AttackRelation(b,a))) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public String toString() {

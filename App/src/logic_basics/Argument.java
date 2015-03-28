@@ -3,16 +3,6 @@ package logic_basics;
 public class Argument {
 
 	private String text,ref;
-	private int status; // 1 = chosen, 0 = unmarked, -1 = kicked
-	private int usedInCalculation;
-
-	public int getUsedInCalculation() {
-		return usedInCalculation;
-	}
-
-	public void setUsedInCalculation(int usedInCalculation) {
-		this.usedInCalculation = usedInCalculation;
-	}
 
 	public Argument(String ref,String text) {
 		this.ref = ref;
@@ -21,14 +11,6 @@ public class Argument {
 
 	public String getText() {
 		return text;
-	}
-
-	public int getStatus() {
-		return status;
-	}
-
-	public void setStatus(int status) {
-		this.status = status;
 	}
 
 	public void setText(String text) {
@@ -49,7 +31,7 @@ public class Argument {
 		}
 		return false;
 	}
-
+	
 	/** 
 	 * @brief this method checks, if a single argument is defendable by a given set
 	 * 			and the attack relations of the framework. 
@@ -83,8 +65,5 @@ public class Argument {
 
 	public String toString() {
 		return ref+" (\""+text+"\")";
-	}
-	public String toStringDev() {
-		return ref+" (\""+text+"\")"+" Status: "+status+", UsedInCalc: "+usedInCalculation;
 	}
 }

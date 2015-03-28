@@ -7,7 +7,9 @@ public class Att {
 	private ArrayList<AttackRelation> attacks;
 	
 	public Att(ArrayList<AttackRelation> attacks) {
-		this.attacks = attacks;
+		ArrayList<AttackRelation> tmp = new ArrayList<AttackRelation>();
+		tmp.addAll(attacks);
+		this.attacks = tmp;
 	}
 	
 	public Att() {
@@ -69,7 +71,6 @@ public class Att {
 			this.add(a);
 		}
 	}
-
 	
 	public boolean equals(Att att) {
 		if(this.attacks.size() != att.getAttacks().size()) {

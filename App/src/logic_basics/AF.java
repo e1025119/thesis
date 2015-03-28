@@ -8,8 +8,8 @@ public class AF {
 	private Att att;
 
 	public AF(AR ar,Att att) {
-		this.ar = ar;
-		this.att = att;
+		this.ar = new AR(ar.getArguments());
+		this.att = new Att(att.getAttacks());
 	}
 
 	public AR getAr() {
@@ -32,53 +32,38 @@ public class AF {
 	 * @brief this method returns the completely isolated arguments. 
 	 */
 	public AR getUntouched() {
-		boolean add = true;
-		ArrayList<Argument> arg = new ArrayList<Argument>();
-		for(Argument a : ar.getArguments()) {
-			add = true;
-			for(AttackRelation rel : att.getAttacks()) {
-				if(a.equals(rel.getA2()) || a.equals(rel.getA1())) {
-					add = false;
-					break;
-				}
-			}
-			if(!arg.contains(a) && add) {
-				arg.add(a);
-			}
+		AR arg = new AR(this.ar.getArguments());
+		for(AttackRelation rel : att.getAttacks()) {
+			arg.remove(rel.getA1());
+			arg.remove(rel.getA2());
 		}
-		return new AR(arg);
+		return arg;
 	}
 
 	/** 
 	 * @brief this method returns all arguments that only attack while being unattacked itself.
 	 */
 	public AR getUnattacked() {
-		AR arg = new AR();
-		for(Argument a : this.ar.getArguments()){
-			for(AttackRelation rel : this.att.getAttacks()) {
-				if(rel.getA2().equals(a)) {
-					break;
-				}
-				arg.add(a);
-			}
+		AR arg = new AR(this.ar.getArguments());
+		for(AttackRelation rel : this.att.getAttacks()) {
+			arg.remove(rel.getA2());
 		}
 		return arg;
 	}
-	
-	//TODO nochmal überprüfen :)
-	
+
 	/** 
 	 * @brief this method returns all the arguments, that cannot be part of any admissible set.
 	 * 			in other words all the arguments, that are attacked by the output of getUnattacked().
 	 * */
 	public AR getIndefendables() {
 		AR unatt = getUnattacked();
+		unatt.addAll(getSelfies());
 		AR ret = new AR();
 		for(AttackRelation rel : this.att.getAttacks()) {
 			if(unatt.contains(rel.getA1())) {
 				ret.add(rel.getA2());
 			}
- 		}
+		}
 		return ret;
 	}
 
@@ -87,14 +72,32 @@ public class AF {
 	 */
 	public AR getSelfies() {
 		ArrayList<Argument> ret = new ArrayList<Argument>();
-		for(Argument a : this.ar.getArguments()) {
-			for(AttackRelation rel : this.att.getAttacks()) {
-				if(rel.equals(new AttackRelation(a,a))) {
-					ret.add(a);
-				}
+		for(AttackRelation rel : this.att.getAttacks()) {
+			if(rel.getA1().equals(rel.getA2())) {
+				ret.add(rel.getA1());
 			}
 		}
 		return new AR(ret);
+	}
+	
+	public boolean isAdmissibleSubset(AR sub) {
+		AR others = new AR();
+		others.addAll(this.ar);
+		for(Argument a : sub.getArguments()) {
+			others.remove(a);
+		}
+		
+		for(AttackRelation  rel : this.att.getAttacks()) {
+			if(sub.contains(rel.getA1()) && sub.contains(rel.getA2())) {
+				return false;
+			}
+			if(sub.contains(rel.getA2()) && others.contains(rel.getA1())) {
+				if(!sub.attacksArgument(rel.getA1(),att)) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 
 	public boolean equals(AF af) {
