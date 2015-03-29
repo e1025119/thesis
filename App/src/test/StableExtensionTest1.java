@@ -1,0 +1,74 @@
+package test;
+
+import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import logic_basics.*;
+import logic_extensionCalculators.StableExtensionCalculator;
+import logic_extensions.*;
+
+import org.junit.Before;
+import org.junit.Test;
+
+public class StableExtensionTest1 {
+
+	ArrayList<Argument> l1;
+	ArrayList<AttackRelation> l2;
+	
+	@Before
+	public void setUp() {
+		l1  = new ArrayList<Argument>();
+		l2 = new ArrayList<AttackRelation>();	
+	}
+	
+	@Test
+	public void testCalculateTrueA1() {
+		Argument a = new Argument("a","test a");
+		
+		AttackRelation r1 = new AttackRelation(a,a);
+		
+		l1.add(a);
+		AR ar = new AR(l1);
+		l2.add(r1);
+		Att att = new Att(l2);
+		
+		AF af = new AF(ar,att);
+		
+		StableExtensionCalculator sc1 = new StableExtensionCalculator();
+		
+		StableExtensionList s1 = sc1.calculate(af);
+		assertTrue("Passt nicht..",s1 == null);		
+	}
+	
+	@Test
+	public void testCalculateTrueAB1() {
+		Argument a = new Argument("a","test a");
+		Argument b = new Argument("b","test b");
+		
+		AttackRelation r1 = new AttackRelation(a,b);
+		AttackRelation r2 = new AttackRelation(b,a);
+		
+		l1.add(a);
+		l1.add(b);
+		AR ar = new AR(l1);
+		l2.add(r1);
+		l2.add(r2);
+		Att att = new Att(l2);
+		
+		AF af = new AF(ar,att);
+
+		ArrayList<Argument> sol1 = new ArrayList<Argument>(Arrays.asList(a));
+		ArrayList<Argument> sol2 = new ArrayList<Argument>(Arrays.asList(b));
+		
+		StableExtensionCalculator sc1 = new StableExtensionCalculator();
+		
+		StableExtension pa = new StableExtension(new AR(sol1),af);
+		StableExtension pb = new StableExtension(new AR(sol2),af);
+		StableExtensionList sol = new StableExtensionList(new ArrayList<StableExtension>(Arrays.asList(pa,pb)));
+		StableExtensionList s1 = sc1.calculate(af);
+		
+		assertTrue("Passt nicht..",s1.equals(sol));		
+	}
+}

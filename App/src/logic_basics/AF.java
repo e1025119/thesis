@@ -80,6 +80,29 @@ public class AF {
 		return new AR(ret);
 	}
 	
+	/** 
+	 * @brief this method checks if a given set of arguments is
+	 * 			a stable subset (it attacks all arguments not in the set, conflict-free).
+	 * */
+	public boolean isStableSubset(AR sub) {
+		AR others = new AR();
+		others.addAll(this.ar);
+		for(Argument a : sub.getArguments()) {
+			others.remove(a);
+		}
+		
+		for(Argument a : others.getArguments()) {
+			if(!sub.attacksArgument(a,this.att)) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	/** 
+	 * @brief this method checks if a given set of arguments is
+	 * 			an admissible subset (it defends every argument it has, conflict-free).
+	 * */
 	public boolean isAdmissibleSubset(AR sub) {
 		AR others = new AR();
 		others.addAll(this.ar);

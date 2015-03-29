@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import logic_basics.*;
 import logic_extensions.*;
 
-public class PreferredExtensionCalculator implements ExtensionCalculator<PreferredExtension> {
+public class PreferredExtensionCalculator extends ExtensionCalculator<PreferredExtension> {
 
 	@Override
 	public PreferredExtensionList calculate(AF framework) {
@@ -32,33 +32,28 @@ public class PreferredExtensionCalculator implements ExtensionCalculator<Preferr
 		return createSolution(pref,maxRest,framework);
 	}
 
+	/**
+	 * @param pref deterministic part of the solution, this is the same for all extensions
+	 * 
+	 * @param maxRest these are the partial solutions from the non-deterministic part of the algorithm.
+	 * 			every single one gets combined with the {@code pref}.
+	 * 
+	 * @brief this method adds every partial solution to the deterministic solution and
+	 * 			by doing so, creates the full solution. If both parameters {@code pref} and {@code maxRest}
+	 * 			are empty, then the solution defaults to the empty set.
+	 */
 	public PreferredExtensionList createSolution(AR pref,ArrayList<AR> maxRest,AF af) {
 		PreferredExtensionList ret = new PreferredExtensionList();
+		if(pref.getArguments().isEmpty() && maxRest.isEmpty()) {
+			return ret;
+		}
 		for(AR ar : maxRest) {
 			AR tmp = new AR();
 			tmp.addAll(pref);
 			tmp.addAll(ar);
 			ret.add(new PreferredExtension(tmp,af));
 		}
-		System.out.println("RET: "+ret);
 		return ret;
-	}
-	
-	/** 
-	 * @brief this method calculates the power set of the remaining, undecided arguments for later evaluation. 
-	 */
-	public void powerRest(int index,AR ar1,AR ar2,ArrayList<AR> sol) {
-		if(index < ar2.getArguments().size()){
-			Argument a = ar2.getArguments().get(index);
-			AR yes = new AR(), no = new AR();
-			yes.addAll(ar1);
-			yes.add(a);
-			no.addAll(ar1);
-			powerRest(index+1,yes,ar2,sol);
-			powerRest(index+1,no,ar2,sol);
-		} else {
-			sol.add(ar1);
-		}
 	}
 
 	/** 
