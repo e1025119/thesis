@@ -25,7 +25,7 @@ public class PreferredExtensionCalculator extends ExtensionCalculator<PreferredE
 		}
 
 		ArrayList<AR> partSol = new ArrayList<AR>();
-		powerRest(0,new AR(),rest,partSol);
+		powerSet(0,new AR(),rest,partSol);
 
 		/* create all valid solutions by building the cross product of pref and partSol*/
 		ArrayList<AR> maxRest = maxAdm(partSol,framework);

@@ -68,7 +68,7 @@ public class StableExtensionTest1 {
 		StableExtension pb = new StableExtension(new AR(sol2),af);
 		StableExtensionList sol = new StableExtensionList(new ArrayList<StableExtension>(Arrays.asList(pa,pb)));
 		StableExtensionList s1 = sc1.calculate(af);
-		
+
 		assertTrue("Passt nicht..",s1.equals(sol));		
 	}
 }

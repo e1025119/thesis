@@ -26,7 +26,7 @@ public class StableExtensionCalculator extends ExtensionCalculator<StableExtensi
 		}
 
 		ArrayList<AR> partSol = new ArrayList<AR>(); 
-		powerRest(0,new AR(),rest,partSol);
+		powerSet(0,new AR(),rest,partSol);
 		
 		ArrayList<AR> stableRest = stable(partSol,framework);
 		return createSolution(pref,stableRest,framework);
@@ -42,6 +42,7 @@ public class StableExtensionCalculator extends ExtensionCalculator<StableExtensi
 	 * 			by doing so, creates the full solution. If both {@code pref} and {@code stableRest} are empty,
 	 * 			then there is no solution (= null).
 	 */
+	@Override
 	public StableExtensionList createSolution(AR pref,ArrayList<AR> stableRest,AF af) {
 		StableExtensionList ret = new StableExtensionList();
 		if(pref.getArguments().isEmpty() && stableRest.isEmpty()) {

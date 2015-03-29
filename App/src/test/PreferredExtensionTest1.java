@@ -37,14 +37,10 @@ public class PreferredExtensionTest1 {
 		AF af = new AF(ar,att);
 		
 		PreferredExtensionCalculator pc1 = new PreferredExtensionCalculator();
-		ArrayList<Argument> sol1 = new ArrayList<Argument>();
 		
-		PreferredExtension pa = new PreferredExtension(new AR(sol1),af);
-		PreferredExtensionList sol = new PreferredExtensionList(new ArrayList<PreferredExtension>(Arrays.asList(pa)));
 		PreferredExtensionList p1 = pc1.calculate(af);
-
-		System.out.println("p1: "+p1);
-		assertFalse("Passt nicht..",p1.equals(sol));		
+		
+		assertFalse("Passt nicht..",p1 == null);		
 	}
 	
 	@Test
@@ -388,15 +384,15 @@ public class PreferredExtensionTest1 {
 		AF af = new AF(ar,att);
 		
 		PreferredExtensionCalculator pc1 = new PreferredExtensionCalculator();
-		ArrayList<Argument> sol1 = new ArrayList<Argument>(Arrays.asList(a));
-		ArrayList<Argument> sol2 = new ArrayList<Argument>(Arrays.asList(b));
+		ArrayList<Argument> sol1 = new ArrayList<Argument>(Arrays.asList(d,b,f));
+		ArrayList<Argument> sol2 = new ArrayList<Argument>(Arrays.asList(d,b,g));
 		
 		PreferredExtension pa = new PreferredExtension(new AR(sol1),af);
 		PreferredExtension pb = new PreferredExtension(new AR(sol2),af);
 		PreferredExtensionList sol = new PreferredExtensionList(new ArrayList<PreferredExtension>(Arrays.asList(pa,pb)));
 		PreferredExtensionList p1 = pc1.calculate(af);
 
-		assertFalse("Passt nicht..",p1.equals(sol));		
+		assertTrue("Passt nicht..",p1.equals(sol));		
 	}
 
 	@Test
