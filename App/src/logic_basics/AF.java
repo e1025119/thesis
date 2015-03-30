@@ -57,7 +57,7 @@ public class AF {
 	 * */
 	public AR getIndefendables() {
 		AR unatt = getUnattacked();
-		unatt.addAll(getSelfies());
+		unatt.addAll(getUntouchedSelfies());
 		AR ret = new AR();
 		for(AttackRelation rel : this.att.getAttacks()) {
 			if(unatt.contains(rel.getA1())) {
@@ -67,6 +67,17 @@ public class AF {
 		return ret;
 	}
 
+	public AR getUntouchedSelfies() {
+		AR tmp = new AR(), ret = new AR();
+		tmp.addAll(getSelfies());
+		for(Argument a : tmp.getArguments()) {
+			if(this.att.getAttacker(a).getArguments().size() == 1) {
+				ret.add(a);
+			}
+		}
+		return ret;
+	}
+	
 	/** 
 	 * @brief returns all the arguments in the framework, that are attacking itself.
 	 */

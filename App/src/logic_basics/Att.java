@@ -72,6 +72,16 @@ public class Att {
 		}
 	}
 	
+	public Att getRelationsOfArgument(Argument a) {
+		ArrayList<AttackRelation> ret = new ArrayList<AttackRelation>();
+		for(AttackRelation rel : this.attacks) {
+			if(rel.getA1().equals(a) || rel.getA2().equals(a)) {
+				ret.add(rel);
+			}
+		}
+		return new Att(ret);
+	}
+	
 	public boolean equals(Att att) {
 		if(this.attacks.size() != att.getAttacks().size()) {
 			return false;
