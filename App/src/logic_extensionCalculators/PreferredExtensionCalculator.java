@@ -28,7 +28,7 @@ public class PreferredExtensionCalculator extends ExtensionCalculator<PreferredE
 		powerSet(0,new AR(),rest,partSol);
 
 		/* create all valid solutions by building the cross product of pref and partSol*/
-		ArrayList<AR> maxRest = maxAdm(partSol,framework);
+		PreferredExtensionList maxRest = maxAdm(partSol,framework);
 		return createSolution(pref,maxRest,framework);
 	}
 
@@ -42,15 +42,15 @@ public class PreferredExtensionCalculator extends ExtensionCalculator<PreferredE
 	 * 			by doing so, creates the full solution. If both parameters {@code pref} and {@code maxRest}
 	 * 			are empty, then the solution defaults to the empty set.
 	 */
-	public PreferredExtensionList createSolution(AR pref,ArrayList<AR> maxRest,AF af) {
+	public PreferredExtensionList createSolution(AR pref,ExtensionList<PreferredExtension> maxRest,AF af) {
 		PreferredExtensionList ret = new PreferredExtensionList();
-		if(pref.getArguments().isEmpty() && maxRest.isEmpty()) {
+		if(pref.getArguments().isEmpty() && maxRest.getExtensions().isEmpty()) {
 			return ret;
 		}
-		for(AR ar : maxRest) {
+		for(Extension e : maxRest.getExtensions()) {
 			AR tmp = new AR();
 			tmp.addAll(pref);
-			tmp.addAll(ar);
+			tmp.addAll(e.getArguments());
 			ret.add(new PreferredExtension(tmp,af));
 		}
 		return ret;
@@ -59,23 +59,23 @@ public class PreferredExtensionCalculator extends ExtensionCalculator<PreferredE
 	/** 
 	 * @brief this method checks the power set for maximal admissible sets.
 	 * */
-	public ArrayList<AR> maxAdm(ArrayList<AR> args,AF framework) {
-		ArrayList<AR> ret = new ArrayList<AR>();
+	public PreferredExtensionList maxAdm(ArrayList<AR> args,AF framework) {
+		PreferredExtensionList ret = new PreferredExtensionList();
 		for(AR ar : args) {
 			if(framework.isAdmissibleSubset(ar)) {
-				ret.add(ar);
+				ret.add(new PreferredExtension(ar,framework));
 			}
 		}
 		int maxSize = 0;
-		for(AR ar : ret) {
-			if(ar.getArguments().size() > maxSize) {
-				maxSize = ar.getArguments().size();
+		for(PreferredExtension pe : ret.getExtensions()) {
+			if(pe.size() > maxSize) {
+				maxSize = pe.size();
 			}
 		}
-		ArrayList<AR> tmp = new ArrayList<AR>();
-		for(AR ar : ret) {
-			if(ar.getArguments().size() == maxSize) {
-				tmp.add(ar);
+		PreferredExtensionList tmp = new PreferredExtensionList();
+		for(PreferredExtension pe : ret.getExtensions()) {
+			if(pe.size() == maxSize) {
+				tmp.add(pe);
 			}
 		}
 		return tmp;

@@ -28,7 +28,7 @@ public class StableExtensionCalculator extends ExtensionCalculator<StableExtensi
 		ArrayList<AR> partSol = new ArrayList<AR>(); 
 		powerSet(0,new AR(),rest,partSol);
 		
-		ArrayList<AR> stableRest = stable(partSol,framework);
+		StableExtensionList stableRest = stable(partSol,framework);
 		return createSolution(pref,stableRest,framework);
 	}
 	
@@ -43,25 +43,25 @@ public class StableExtensionCalculator extends ExtensionCalculator<StableExtensi
 	 * 			then there is no solution (= null).
 	 */
 	@Override
-	public StableExtensionList createSolution(AR pref,ArrayList<AR> stableRest,AF af) {
+	public StableExtensionList createSolution(AR pref,ExtensionList<StableExtension> stableRest,AF af) {
 		StableExtensionList ret = new StableExtensionList();
-		if(pref.getArguments().isEmpty() && stableRest.isEmpty()) {
+		if(pref.getArguments().isEmpty() && stableRest.getExtensions().isEmpty()) {
 			return null;
 		}
-		for(AR ar : stableRest) {
+		for(StableExtension se : stableRest.getExtensions()) {
 			AR tmp = new AR();
 			tmp.addAll(pref);
-			tmp.addAll(ar);
+			tmp.addAll(se.getArguments());
 			ret.add(new StableExtension(tmp,af));
 		}
 		return ret;
 	}
 	
-	public ArrayList<AR> stable(ArrayList<AR> args,AF framework) {
-		ArrayList<AR> ret = new ArrayList<AR>();
+	public StableExtensionList stable(ArrayList<AR> args,AF framework) {
+		StableExtensionList ret = new StableExtensionList();
 		for(AR ar : args) {
 			if(ar.isConflictFree(framework.getAtt()) && framework.isStableSubset(ar)) {
-				ret.add(ar);
+				ret.add(new StableExtension(ar,framework));
 			}
 		}
 		return ret;

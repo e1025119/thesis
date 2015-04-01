@@ -11,7 +11,7 @@ import logic_extensions.ExtensionList;
 public abstract class ExtensionCalculator<E extends Extension> { 
 	
 	public abstract ExtensionList<E> calculate(AF framework);
-	public abstract ExtensionList<E> createSolution(AR pref,ArrayList<AR> rest,AF af);
+	public abstract ExtensionList<E> createSolution(AR pref,ExtensionList<E> rest,AF af);
 	
 	/** 
 	 * @brief this method calculates the power set of the remaining, undecided arguments for later evaluation. 

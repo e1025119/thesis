@@ -43,6 +43,10 @@ public abstract class Extension {
 		return false;
 	}
 	
+	public int size() {
+		return this.arguments.size();
+	}
+	
 	public String toString() {
 		return arguments.toString();
 	}

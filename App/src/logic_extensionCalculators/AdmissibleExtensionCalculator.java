@@ -9,24 +9,23 @@ public class AdmissibleExtensionCalculator extends ExtensionCalculator<Admissibl
 
 	@Override
 	public AdmissibleExtensionList calculate(AF framework) {
-		ArrayList<AR> admRest = new ArrayList<AR>();
+		AdmissibleExtensionList admRest = new AdmissibleExtensionList();
 		ArrayList<AR> Rest = new ArrayList<AR>();
 		AR rest = new AR();
 		rest.addAll(framework.getAr());
 		powerSet(0,new AR(),rest,Rest);
 		for(AR ar : Rest) {
 			if(framework.isAdmissibleSubset(ar)) {
-				admRest.add(ar);
+				admRest.add(new AdmissibleExtension(ar,framework));
 			}
 		}
 		return createSolution(null,admRest,framework);
 	}
 
 	@Override
-	public AdmissibleExtensionList createSolution(AR pref, ArrayList<AR> admRest, AF af) {
+	public AdmissibleExtensionList createSolution(AR pref, ExtensionList<AdmissibleExtension> admRest, AF af) {
 		AdmissibleExtensionList ret = new AdmissibleExtensionList();
-		for(AR ar : admRest) {
-			AdmissibleExtension ae = new AdmissibleExtension(ar,af);
+		for(AdmissibleExtension ae : admRest.getExtensions()) {
 			ret.add(ae);
 		}
 		return ret;

@@ -29,32 +29,32 @@ public class CompleteExtensionCalculator extends ExtensionCalculator<CompleteExt
 		powerSet(0,new AR(),rest,partSol);
 
 		/* create all valid solutions by building the cross product of pref and partSol*/
-		ArrayList<AR> accRest = acceptable(pref,partSol,framework);
+		CompleteExtensionList accRest = acceptable(pref,partSol,framework);
 		return createSolution(pref,accRest,framework);
 	}
 
 	@Override
-	public CompleteExtensionList createSolution(AR pref, ArrayList<AR> accRest, AF af) {
+	public CompleteExtensionList createSolution(AR pref,ExtensionList<CompleteExtension> accRest, AF af) {
 		CompleteExtensionList ret = new CompleteExtensionList();
-		if(pref.getArguments().isEmpty() && accRest.isEmpty()) {
+		if(pref.getArguments().isEmpty() && accRest.getExtensions().isEmpty()) {
 			return ret;
 		}
-		for(AR ar : accRest) {
+		for(CompleteExtension ce : accRest.getExtensions()) {
 			AR tmp = new AR();
 			tmp.addAll(pref);
-			tmp.addAll(ar);
+			tmp.addAll(ce.getArguments());
 			ret.add(new CompleteExtension(tmp,af));
 		}
 		return ret;
 	}
 
-	public ArrayList<AR> acceptable(AR pref,ArrayList<AR> partSol,AF framework) {
-		ArrayList<AR> ret = new ArrayList<AR>();
+	public CompleteExtensionList acceptable(AR pref,ArrayList<AR> partSol,AF framework) {
+		CompleteExtensionList ret = new CompleteExtensionList();
 		for(AR ar : partSol) {
 			AR tmp = new AR(pref.getArguments());
 			tmp.addAll(ar);
 			if(framework.isAdmissibleSubset(tmp)) {
-				ret.add(tmp);
+				ret.add(new CompleteExtension(tmp,framework));
 			}
 		}
 		return ret;

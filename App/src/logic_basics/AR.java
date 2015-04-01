@@ -78,6 +78,10 @@ public class AR {
 		}
 		return false;
 	}
+
+	public int size() {
+		return this.arguments.size();
+	}
 	
 	public String toString() {
 		String ret = "";
