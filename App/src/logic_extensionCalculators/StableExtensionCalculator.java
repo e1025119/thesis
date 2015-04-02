@@ -47,6 +47,9 @@ public class StableExtensionCalculator extends ExtensionCalculator<StableExtensi
 		StableExtensionList ret = new StableExtensionList();
 		if(pref.getArguments().isEmpty() && stableRest.getExtensions().isEmpty()) {
 			return null;
+		} else if(stableRest.getExtensions().isEmpty()) {
+			ret.add(new StableExtension(pref,af));
+			return ret;
 		}
 		for(StableExtension se : stableRest.getExtensions()) {
 			AR tmp = new AR();

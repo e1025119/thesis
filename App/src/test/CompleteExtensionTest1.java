@@ -535,4 +535,36 @@ public class CompleteExtensionTest1 {
 		CompleteExtensionList p1 = pc1.calculate(af);
 		assertTrue("Passt nicht..",p1.equals(sol));		
 	}
+	
+	@Test
+	public void testWellFoundedCoherentA1() {
+		Argument a = new Argument("a","test a");
+		
+		l1.add(a);
+		AR ar = new AR(l1);
+		Att att = new Att(l2);
+		
+		AF af = new AF(ar,att);
+		
+		assertTrue("Passt nicht..",af.isWellFounded());
+		assertTrue("Passt nicht..",af.isCoherent());
+	}
+	
+	@Test(expected = NullPointerException.class)
+	public void testWellFoundedCoherentA2() {
+		Argument a = new Argument("a","test a");
+		
+		AttackRelation r1 = new AttackRelation(a,a);
+		
+		l1.add(a);
+		AR ar = new AR(l1);
+		l2.add(r1);
+		Att att = new Att(l2);
+		
+		AF af = new AF(ar,att);
+		
+		assertFalse("Passt nicht..",af.isWellFounded());
+		assertFalse("Passt nicht..",af.isCoherent());
+	}
+
 }

@@ -2,6 +2,15 @@ package logic_basics;
 
 import java.util.ArrayList;
 
+import logic_extensionCalculators.CompleteExtensionCalculator;
+import logic_extensionCalculators.GroundedExtensionCalculator;
+import logic_extensionCalculators.PreferredExtensionCalculator;
+import logic_extensionCalculators.StableExtensionCalculator;
+import logic_extensions.CompleteExtensionList;
+import logic_extensions.GroundedExtensionList;
+import logic_extensions.PreferredExtensionList;
+import logic_extensions.StableExtensionList;
+
 public class AF {
 
 	private AR ar;
@@ -67,6 +76,10 @@ public class AF {
 		return ret;
 	}
 
+	/** 
+	 * @brief this method returns all arguments that only attack themselves and are completely 
+	 * 			isolated otherwise.
+	 */
 	public AR getUntouchedSelfies() {
 		AR tmp = new AR(), ret = new AR();
 		tmp.addAll(getSelfies());
@@ -132,6 +145,44 @@ public class AF {
 			}
 		}
 		return true;
+	}
+	
+	/** 
+	 * @brief this method checks if an argument framework is well-founded
+	 *			(preferred, complete, grounded and stable extension coincide).
+	 */
+	public boolean isWellFounded() {
+		CompleteExtensionCalculator c1 = new CompleteExtensionCalculator();
+		PreferredExtensionCalculator p1 = new PreferredExtensionCalculator();
+		GroundedExtensionCalculator g1 = new GroundedExtensionCalculator();
+		StableExtensionCalculator s1 = new StableExtensionCalculator();
+		
+		CompleteExtensionList cl1 = c1.calculate(this);
+		PreferredExtensionList pl1 = p1.calculate(this);
+		GroundedExtensionList gl1 = g1.calculate(this);
+		StableExtensionList sl1 = s1.calculate(this);
+		
+		if(cl1.equals(pl1) && pl1.equals(gl1) && gl1.equals(sl1)) {
+			return true;
+		}
+		return false;
+	}
+	
+	/** 
+	 * @brief this method checks if an argument framework is coherent
+	 * 			(its preferred and stable extension coincide). 
+	 */
+	public boolean isCoherent() throws NullPointerException {
+		PreferredExtensionCalculator p1 = new PreferredExtensionCalculator();
+		StableExtensionCalculator s1 = new StableExtensionCalculator();
+		
+		PreferredExtensionList pl1 = p1.calculate(this);
+		StableExtensionList sl1 = s1.calculate(this);
+		
+		if(sl1.equals(pl1)) {
+			return true;
+		}
+		return false;
 	}
 
 	public boolean equals(AF af) {
