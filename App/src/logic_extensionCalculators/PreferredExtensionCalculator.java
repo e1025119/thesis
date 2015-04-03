@@ -5,148 +5,82 @@ import java.util.ArrayList;
 import logic_basics.*;
 import logic_extensions.*;
 
-public class PreferredExtensionCalculator implements ExtensionCalculator {
-
-	public PreferredExtensionCalculator() {
-	}
+public class PreferredExtensionCalculator extends ExtensionCalculator<PreferredExtension> {
 
 	@Override
-	public ArrayList<PreferredExtension> calculate(AF framework) {
-		ArrayList<PreferredExtension> ret = new ArrayList<PreferredExtension>();
-
-		ArrayList<Argument> pref = new ArrayList<Argument>(),conflicting = new ArrayList<Argument>();
-		ArrayList<Argument> tmp1 = new ArrayList<Argument>(),tmp2 = new ArrayList<Argument>();
-		int count = 0;
+	public PreferredExtensionList calculate(AF framework) {
+		AR pref = new AR(),conflicting = new AR();
 
 		/* deterministic part */
-		pref.addAll(framework.getUnattacked(tmp1));
-		do {
-			count = pref.size();
-			for(Argument a : pref) {
-				tmp1 = framework.getAtt().getAttacked(a);
-				for(Argument b : tmp1) {
-					if(!conflicting.contains(b)) {
-						conflicting.add(b);
-					}
-				}
-				tmp2.addAll(framework.getUnattacked(tmp1));
-			}
-
-			for(Argument a : tmp2) {
-				if(!pref.contains(a)) {
-					pref.add(a);
-				}
-			}
-		} while(count != pref.size());
-		//cleanup
-		for(Argument a : pref) {
-			a.setStatus(1);
-		}
-		for(Argument a : conflicting) {
-			a.setStatus(-1);
-		}
+		pref.addAll(framework.getUntouched());
+		conflicting.addAll(framework.getSelfies());
+		conflicting.addAll(framework.getIndefendables());
 
 		/* non-deterministic part */
-		ArrayList<Argument> rest = new ArrayList<Argument>();
-		ArrayList<ArrayList<Argument>> restSolution = new ArrayList<ArrayList<Argument>>();
+		AR rest = new AR();
 		for(Argument a : framework.getAr().getArguments()) {
 			if(!conflicting.contains(a) && !pref.contains(a)) {
 				rest.add(a);
 			}
 		}
-		for(int i=0; i<rest.size(); i++){
-			for(Argument a: rest) {
-				a.setStatus(0);
-			}
-			rest.get(i).setUsedInCalculation(1);
-			restSolution.add(calculateRest(new AR(new ArrayList<Argument>()),new AR(rest),framework));
-		}
 
-		/* create all valid solutions by permuting the remaining (status = 1) arguments */
-		ret = createSolution(pref,restSolution,framework);
-		return ret;
-	}
+		ArrayList<AR> partSol = new ArrayList<AR>();
+		powerSet(0,new AR(),rest,partSol);
 
-	/** 
-	 * @param arg the deterministic part of the solution.
-	 * 
-	 * @param listArg the different brute-forced parts of the solution.
-	 * 
-	 * @brief creates a new PreferredExtension for each partial solution in listArg by adding arg.
-	 * */
-	public ArrayList<PreferredExtension> createSolution(ArrayList<Argument> arg, ArrayList<ArrayList<Argument>> listArg,AF af) {
-		ArrayList<PreferredExtension> ret = new ArrayList<PreferredExtension>();
-		for(ArrayList<Argument> a : listArg) {
-			ArrayList<Argument> tmp = new ArrayList<Argument>();
-			tmp.addAll(arg);
-			tmp.addAll(a);
-			ret.add(new PreferredExtension(new AR(tmp),af));
-		}
-		return ret;
-	}
-	
-	/** 
-	 * @param ar1 this set of arguments comes in empty and gets filled up, the deeper the recursion goes.
-	 * 			in the end, this is the partial solution.
-	 * 
-	 * @param ar2 this is the starting set of arguments. gets smaller as the recursion goes deeper.
-	 * 
-	 * @param framework framework we are working with, contains all attack relations!
-	 * 
-	 * @brief this method is an entry point for the recursive calculateRest method. Only defines the starting point.
-	 */
-	public ArrayList<Argument> calculateRest(AR ar1,AR ar2,AF af) {
-		ArrayList<Argument> ret = new ArrayList<Argument>();
-
-		for(int i=0; i<ar2.getArguments().size(); i++) {
-			Argument a = ar2.getArguments().get(i);
-			if(a.getUsedInCalculation() == 1) {
-				if(a.isDefendable(ar1,ar2,af)) {
-					a.setStatus(1);
-					ar1.getArguments().add(a);
-				} else {
-					a.setStatus(-1);
-				}
-				ret = calculateRestRecursive(ar1,ar2,af);
-			}
-			a.setUsedInCalculation(0);
-		}
-		return ret;
+		/* create all valid solutions by building the cross product of pref and partSol*/
+		PreferredExtensionList maxRest = maxAdm(partSol,framework);
+		return createSolution(pref,maxRest,framework);
 	}
 
 	/**
-	 * @param ar1 this set of arguments comes in empty and gets filled up, the deeper the recursion goes.
-	 * 			in the end, this is the partial solution.
+	 * @param pref deterministic part of the solution, this is the same for all extensions
 	 * 
-	 * @param ar2 this is the starting set of arguments. gets smaller as the recursion goes deeper.
+	 * @param maxRest these are the partial solutions from the non-deterministic part of the algorithm.
+	 * 			every single one gets combined with the {@code pref}.
 	 * 
-	 * @param framework framework we are working with, contains all attack relations!
-	 * 
-	 * @brief this method calculates a partial solution to the preferred extension for every different argument
-	 * 			in the ar2 set as a starting point. This way, all possible solutions get brute-forced.
-	 * 			Every argument is checked for its acceptability to the status quo solution (ar1) and can then be denied or accepted.
-	 * 			It then is shifted to ar1 and a new recursion is called.
+	 * @brief this method adds every partial solution to the deterministic solution and
+	 * 			by doing so, creates the full solution. If both parameters {@code pref} and {@code maxRest}
+	 * 			are empty, then the solution defaults to the empty set.
 	 */
-	public ArrayList<Argument> calculateRestRecursive(AR ar1,AR ar2,AF af) {
-		ArrayList<Argument> ret = new ArrayList<Argument>();
-
-		for(int i=0; i<ar2.getArguments().size(); i++) {
-			Argument a = ar2.getArguments().get(i);
-			if(a.getStatus() == 0) {
-				if(a.isDefendable(ar1,ar2,af)) {
-					ar1.getArguments().add(a);
-					a.setStatus(1);
-					calculateRestRecursive(ar1,ar2,af);
-				}
-				else{
-					a.setStatus(-1);
-				}
-			}
+	public PreferredExtensionList createSolution(AR pref,ExtensionList<PreferredExtension> maxRest,AF af) {
+		PreferredExtensionList ret = new PreferredExtensionList();
+		if(pref.getArguments().isEmpty() && maxRest.getExtensions().isEmpty()) {
+			return ret;
 		}
-		ret = ar1.getArguments();
+		for(Extension e : maxRest.getExtensions()) {
+			AR tmp = new AR();
+			tmp.addAll(pref);
+			tmp.addAll(e.getArguments());
+			ret.add(new PreferredExtension(tmp,af));
+		}
 		return ret;
 	}
 
+	/** 
+	 * @brief this method checks the power set for maximal admissible sets.
+	 * */
+	public PreferredExtensionList maxAdm(ArrayList<AR> args,AF framework) {
+		PreferredExtensionList ret = new PreferredExtensionList();
+		for(AR ar : args) {
+			if(framework.isAdmissibleSubset(ar)) {
+				ret.add(new PreferredExtension(ar,framework));
+			}
+		}
+		int maxSize = 0;
+		for(PreferredExtension pe : ret.getExtensions()) {
+			if(pe.size() > maxSize) {
+				maxSize = pe.size();
+			}
+		}
+		PreferredExtensionList tmp = new PreferredExtensionList();
+		for(PreferredExtension pe : ret.getExtensions()) {
+			if(pe.size() == maxSize) {
+				tmp.add(pe);
+			}
+		}
+		return tmp;
+	}
+	
 
 }
 

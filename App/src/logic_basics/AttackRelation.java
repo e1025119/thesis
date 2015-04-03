@@ -24,6 +24,13 @@ public class AttackRelation {
 	public void setA2(Argument a2) {
 		this.a2 = a2;
 	}
+
+	public boolean equals(AttackRelation rel) {
+		if(this.a1.equals(rel.getA1()) && this.a2.equals(rel.getA2())) {
+			return true;
+		}
+		return false;
+	}
 	
 	public String toString() {
 		return a1.toString()+ " attacks " + a2.toString();
