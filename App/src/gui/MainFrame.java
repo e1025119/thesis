@@ -14,18 +14,18 @@ public class MainFrame {
 	private JTabbedPane tabs;
 
 	public MainFrame() {
-		this.frame = new JFrame();
+		frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(1080,720);
 		frame.setTitle("KAFFEE");
 		frame.setResizable(false);
 
-		this.tabs = new JTabbedPane();
+		tabs = new JTabbedPane();
 		JPanel definitionTab = new JPanel(new GridLayout(1,2));
 		JPanel extensionTab = new JPanel(new GridLayout(1,2));
 		JPanel displayPanel1 = new JPanel(),displayPanel2 = new JPanel();
 		JPanel definitionForm = new ArgumentationFrameworkForm();
-		JPanel extensionForm = new JPanel();
+		JPanel extensionForm = new ExtensionsForm();
 		tabs.addTab("AF",definitionTab);
 		tabs.addTab("Extensions",extensionTab);
 		

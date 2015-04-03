@@ -1,6 +1,7 @@
 package logic_basics;
 
 import java.util.ArrayList;
+import exceptions.InvalidArgumentException;
 
 public class Att {
 
@@ -60,15 +61,23 @@ public class Att {
 		return false;
 	}
 	
-	public void add(AttackRelation ar) {
-		if(!this.contains(ar)) {
-			this.attacks.add(ar);
+	public void add(AttackRelation rel,AR ar) throws InvalidArgumentException {
+		if(!ar.contains(rel.getA1()) || !ar.contains(rel.getA2())) {
+			throw new InvalidArgumentException("One of those Arguments does not exist.");
+		}
+		else if(!this.contains(rel)) {
+			this.attacks.add(rel);
 		}
 	}
 	
-	public void addAll(Att att) {
+	public void addAll(Att att,AR ar) {
 		for(AttackRelation a : att.getAttacks()) {
-			this.add(a);
+			try {
+				this.add(a,ar);
+			} catch (InvalidArgumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	

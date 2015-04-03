@@ -65,6 +65,15 @@ public class AR {
 			}
 		}
 	}
+	
+	public Argument get(String ref) {
+		for(Argument a : this.arguments) {
+			if(a.getRef().equals(ref)) {
+				return a;
+			}
+		}
+		return null;
+	}
 
 	public void remove(Argument arg) {
 		this.getArguments().remove(arg);
