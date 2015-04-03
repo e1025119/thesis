@@ -2,6 +2,8 @@ package logic_basics;
 
 import java.util.ArrayList;
 
+import exceptions.DuplicateArgumentException;
+
 public class AR {
 
 	private ArrayList<Argument> arguments;
@@ -45,15 +47,22 @@ public class AR {
 		return false;
 	}
 	
-	public void add(Argument arg) {
+	public void add(Argument arg) throws DuplicateArgumentException {
 		if(!this.contains(arg)) {
 			this.arguments.add(arg);
+		} else {
+			throw new DuplicateArgumentException("An argument with the same \"ref\" already exists in this AR");
 		}
 	}
 	
 	public void addAll(AR ar) {
 		for(Argument a : ar.getArguments()) {
-			this.add(a);
+			try {
+				this.add(a);
+			} catch (DuplicateArgumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 

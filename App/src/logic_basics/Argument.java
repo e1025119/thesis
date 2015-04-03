@@ -26,7 +26,7 @@ public class Argument {
 	}
 
 	public boolean equals(Argument a) {
-		if(this.ref.equals(a.getRef()) && this.text.equals(a.getText())) {
+		if(this.ref.equals(a.getRef())) {
 			return true;
 		}
 		return false;

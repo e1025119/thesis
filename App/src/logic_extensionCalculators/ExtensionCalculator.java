@@ -2,6 +2,7 @@ package logic_extensionCalculators;
 
 import java.util.ArrayList;
 
+import exceptions.DuplicateArgumentException;
 import logic_basics.AF;
 import logic_basics.AR;
 import logic_basics.Argument;
@@ -21,7 +22,12 @@ public abstract class ExtensionCalculator<E extends Extension> {
 			Argument a = ar2.getArguments().get(index);
 			AR yes = new AR(), no = new AR();
 			yes.addAll(ar1);
-			yes.add(a);
+			try {
+				yes.add(a);
+			} catch (DuplicateArgumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			no.addAll(ar1);
 			powerSet(index+1,yes,ar2,sol);
 			powerSet(index+1,no,ar2,sol);

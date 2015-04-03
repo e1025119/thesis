@@ -2,6 +2,7 @@ package logic_extensionCalculators;
 
 import java.util.ArrayList;
 
+import exceptions.DuplicateArgumentException;
 import logic_basics.*;
 import logic_extensions.*;
 
@@ -20,7 +21,12 @@ public class PreferredExtensionCalculator extends ExtensionCalculator<PreferredE
 		AR rest = new AR();
 		for(Argument a : framework.getAr().getArguments()) {
 			if(!conflicting.contains(a) && !pref.contains(a)) {
-				rest.add(a);
+				try {
+					rest.add(a);
+				} catch (DuplicateArgumentException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 

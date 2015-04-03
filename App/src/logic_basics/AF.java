@@ -2,6 +2,7 @@ package logic_basics;
 
 import java.util.ArrayList;
 
+import exceptions.DuplicateArgumentException;
 import logic_extensionCalculators.CompleteExtensionCalculator;
 import logic_extensionCalculators.GroundedExtensionCalculator;
 import logic_extensionCalculators.PreferredExtensionCalculator;
@@ -70,7 +71,12 @@ public class AF {
 		AR ret = new AR();
 		for(AttackRelation rel : this.att.getAttacks()) {
 			if(unatt.contains(rel.getA1())) {
-				ret.add(rel.getA2());
+				try {
+					ret.add(rel.getA2());
+				} catch (DuplicateArgumentException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 		return ret;
@@ -85,7 +91,12 @@ public class AF {
 		tmp.addAll(getSelfies());
 		for(Argument a : tmp.getArguments()) {
 			if(this.att.getAttacker(a).getArguments().size() == 1) {
-				ret.add(a);
+				try {
+					ret.add(a);
+				} catch (DuplicateArgumentException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 		return ret;

@@ -37,7 +37,6 @@ public class PreferredExtensionTest1 {
 		AF af = new AF(ar,att);
 		
 		PreferredExtensionCalculator pc1 = new PreferredExtensionCalculator();
-		
 		PreferredExtensionList p1 = pc1.calculate(af);
 		
 		assertFalse("Passt nicht..",p1 == null);		
