@@ -6,17 +6,17 @@ import exceptions.InvalidArgumentException;
 public class Att {
 
 	private ArrayList<AttackRelation> attacks;
-	
+
 	public Att(ArrayList<AttackRelation> attacks) {
 		ArrayList<AttackRelation> tmp = new ArrayList<AttackRelation>();
 		tmp.addAll(attacks);
 		this.attacks = tmp;
 	}
-	
+
 	public Att() {
 		this.attacks = new ArrayList<AttackRelation>();
 	}
-	
+
 	public ArrayList<AttackRelation> getAttacks() {
 		return attacks;
 	}
@@ -25,7 +25,7 @@ public class Att {
 		this.attacks = attacks;
 	}
 
-	
+
 	/** 
 	 * @brief returns the arguments that are attacked by a
 	 */
@@ -38,7 +38,7 @@ public class Att {
 		}
 		return new AR(arg);
 	}
-	
+
 	/** 
 	 * @brief returns the arguments that attack a
 	 */
@@ -60,16 +60,20 @@ public class Att {
 		}
 		return false;
 	}
-	
+
 	public void add(AttackRelation rel,AR ar) throws InvalidArgumentException {
-		if(!ar.contains(rel.getA1()) || !ar.contains(rel.getA2())) {
-			throw new InvalidArgumentException("One of those Arguments does not exist.");
-		}
-		else if(!this.contains(rel)) {
-			this.attacks.add(rel);
+		if(rel.getA1() != null && rel.getA2() != null) {
+			if(!ar.contains(rel.getA1()) || !ar.contains(rel.getA2())) {
+				throw new InvalidArgumentException("One of those Arguments does not exist.");
+			}
+			else if(!this.contains(rel)) {
+				this.attacks.add(rel);
+			}
+		} else {
+			throw new InvalidArgumentException("One of those Arguments does not exist");
 		}
 	}
-	
+
 	public void addAll(Att att,AR ar) {
 		for(AttackRelation a : att.getAttacks()) {
 			try {
@@ -80,7 +84,7 @@ public class Att {
 			}
 		}
 	}
-	
+
 	public Att getRelationsOfArgument(Argument a) {
 		ArrayList<AttackRelation> ret = new ArrayList<AttackRelation>();
 		for(AttackRelation rel : this.attacks) {
@@ -90,7 +94,7 @@ public class Att {
 		}
 		return new Att(ret);
 	}
-	
+
 	public boolean equals(Att att) {
 		if(this.attacks.size() != att.getAttacks().size()) {
 			return false;
@@ -102,7 +106,7 @@ public class Att {
 		}
 		return true;
 	}
-	
+
 	public String toString() {
 		String ret = "";
 		for(AttackRelation a : attacks) {

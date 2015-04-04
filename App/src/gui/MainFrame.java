@@ -24,8 +24,8 @@ public class MainFrame {
 		JPanel definitionTab = new JPanel(new GridLayout(1,2));
 		JPanel extensionTab = new JPanel(new GridLayout(1,2));
 		JPanel displayPanel1 = new JPanel(),displayPanel2 = new JPanel();
-		JPanel definitionForm = new ArgumentationFrameworkForm();
-		JPanel extensionForm = new ExtensionsForm();
+		ArgumentationFrameworkForm definitionForm = new ArgumentationFrameworkForm();
+		ExtensionsForm extensionForm = new ExtensionsForm(definitionForm);
 		tabs.addTab("AF",definitionTab);
 		tabs.addTab("Extensions",extensionTab);
 		

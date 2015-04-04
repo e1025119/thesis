@@ -24,45 +24,31 @@ import logic_basics.*;
 public class ArgumentationFrameworkForm extends JPanel implements ActionListener {
 
 	private AF framework;
-	private JTextField newArgumentRefField,newArgumentTextField,newA1Field,newA2Field;
-	private JLabel newArgumentRefLabel,newArgumentTextLabel,newA1Label,newA2Label;
-	private JLabel argumentsLabel,attacksLabel,errorLabel;
-	private JButton submitArgument,submitAttack;
-	private JTextArea argumentsArea,attacksArea;
+	private JTextField newArgumentRefField = new JTextField(),newArgumentTextField = new JTextField(),newA1Field = new JTextField(),newA2Field = new JTextField();
+	private JLabel newArgumentRefLabel = new JLabel("Ref:"),newArgumentTextLabel = new JLabel("Text:"),newA1Label = new JLabel("A1"),newA2Label = new JLabel("A2");
+	private JLabel argumentsLabel = new JLabel("AR:"),attacksLabel = new JLabel("Att:");
+	private JLabel errorLabel = new JLabel();
+	private JButton submitArgument = new JButton("submit argument"),submitAttack = new JButton("submit attack");
+	private JTextArea argumentsArea = new JTextArea(),attacksArea = new JTextArea();
 
 	public ArgumentationFrameworkForm() {
 		framework = new AF(new AR(),new Att());
 		setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
-		newArgumentRefField = new JTextField();
-		newArgumentTextField = new JTextField();
-		newA1Field = new JTextField();
-		newA2Field = new JTextField();
-		argumentsArea = new JTextArea();
-		attacksArea = new JTextArea();
-		newArgumentRefLabel = new JLabel("Ref:");
-		newArgumentTextLabel = new JLabel("Text:");
-		newA1Label = new JLabel("A1:");
-		newA2Label = new JLabel("A2:");
 		argumentsArea.setEditable(false);
 		attacksArea.setEditable(false);
-		argumentsLabel = new JLabel("AR:");
-		attacksLabel = new JLabel("Att:");
-		submitArgument = new JButton("submit argument");
-		submitAttack = new JButton("submit attack");
-		errorLabel = new JLabel();
 		errorLabel.setForeground(Color.RED);
-
-		JScrollPane scrollArguments = new JScrollPane(argumentsArea);
-		scrollArguments.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		scrollArguments.setPreferredSize(new Dimension(230,360));
-		JScrollPane scrollAttacks = new JScrollPane(attacksArea);
-		scrollAttacks.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		scrollAttacks.setPreferredSize(new Dimension(230,360));
 
 		/* action listener */
 		submitArgument.addActionListener(this);
 		submitAttack.addActionListener(this);
 
+		JScrollPane scrollArguments = new JScrollPane(argumentsArea);
+		scrollArguments.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollArguments.setPreferredSize(new Dimension(230,360));
+		JScrollPane scrollAttacks = new JScrollPane(attacksArea);
+		scrollAttacks.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollAttacks.setPreferredSize(new Dimension(230,360));
+		
 		/* FlowLayout, that holds both BoxLayouts (arguments label/area, attacks label/area) */
 		JPanel textAreas = new JPanel();
 		JPanel argumentsPanel = new JPanel(),attacksPanel = new JPanel();
@@ -118,10 +104,10 @@ public class ArgumentationFrameworkForm extends JPanel implements ActionListener
 		JPanel attackBox = new JPanel(),argumentBox = new JPanel();
 		argumentBox.setLayout(new BoxLayout(argumentBox,BoxLayout.Y_AXIS));
 		attackBox.setLayout(new BoxLayout(attackBox,BoxLayout.Y_AXIS));
-		argumentBox.add(argumentFlow,Box.LEFT_ALIGNMENT);
-		argumentBox.add(submitArgument,Box.LEFT_ALIGNMENT);
-		attackBox.add(attackFlow,Box.LEFT_ALIGNMENT);
-		attackBox.add(submitAttack,Box.LEFT_ALIGNMENT);
+		argumentBox.add(argumentFlow);
+		argumentBox.add(submitArgument);
+		attackBox.add(attackFlow);
+		attackBox.add(submitAttack);
 
 		/* final flowLayout for the textFields general area.. */
 		JPanel textFields = new JPanel(new FlowLayout());
@@ -139,6 +125,16 @@ public class ArgumentationFrameworkForm extends JPanel implements ActionListener
 		this.add(errorBox);
 	}
 
+	public AF getAF() {
+		return framework;
+	}
+
+	public void setAF(AF framework) {
+		this.framework = framework;
+	}
+
+	//TODO Reset der Argument/Att listen bzw. löschen ausgewählter argumente!
+	
 	@Override
 	public void actionPerformed(ActionEvent ae) {
 		if(ae.getSource() == submitArgument) {

@@ -20,7 +20,10 @@ public class GroundedExtensionCalculator extends ExtensionCalculator<GroundedExt
 
 		GroundedExtensionList ret = new GroundedExtensionList();
 		if(cl1.contains(new CompleteExtension(new AR(new ArrayList<Argument>()),af))) {
-			return new GroundedExtensionList();
+			GroundedExtension empty = new GroundedExtension(new AR(),af);
+			GroundedExtensionList emptyList = new GroundedExtensionList();
+			emptyList.add(empty);
+			return emptyList;
 		}
 		
 		AR tmp = new AR(), retAR = new AR();
