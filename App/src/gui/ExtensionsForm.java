@@ -30,8 +30,11 @@ public class ExtensionsForm extends JPanel implements ActionListener {
 	private JComboBox<String> dropDownCB;
 	private JButton calculateExtension = new JButton("calculate");
 	private DefaultListModel<Extension> model = new DefaultListModel<Extension>();
+	private DefaultListModel<String> nullModel = new DefaultListModel<String>();
 	private JList<Extension> extensionList = new JList<Extension>(model);
-
+	private JList<String> nullList = new JList<String>(nullModel);
+	private JScrollPane listScroll = new JScrollPane();
+	
 	public ExtensionsForm(ArgumentationFrameworkForm aff) {
 		this.aff = aff;
 		this.setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
@@ -57,10 +60,10 @@ public class ExtensionsForm extends JPanel implements ActionListener {
 		dropDownFL.add(dropDownBL);
 
 		/* Layout for jlist area */
-		JScrollPane listScroll = new JScrollPane();
 		extensionList.setSelectedIndex(ListSelectionModel.SINGLE_SELECTION);
+		nullList.setSelectedIndex(ListSelectionModel.SINGLE_SELECTION);
 		listScroll.getViewport().add(extensionList);
-		listScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		listScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
 		this.add(dropDownFL);
 		this.add(listScroll);
@@ -82,51 +85,63 @@ public class ExtensionsForm extends JPanel implements ActionListener {
 				case("Admissible Extension"):
 					AdmissibleExtensionCalculator ac1 = new AdmissibleExtensionCalculator();
 					AdmissibleExtensionList al1 = ac1.calculate(framework);
+					model.clear();
 					for(Extension ext : al1.getExtensions()) {
-						model.clear();
 						model.addElement(ext);
 					}
 					extensionList = new JList<Extension>(model);
+					listScroll.getViewport().add(extensionList);
 					break;
 				case("Preferred Extension"):
 					PreferredExtensionCalculator pc1 = new PreferredExtensionCalculator();
 					PreferredExtensionList pl1 = pc1.calculate(framework);
+					model.clear();
 					for(Extension ext : pl1.getExtensions()) {
-						model.clear();
 						model.addElement(ext);
 					}
 					extensionList = new JList<Extension>(model);
+					listScroll.getViewport().add(extensionList);
 					break;
 				case("Stable Extension"):
 					StableExtensionCalculator sc1 = new StableExtensionCalculator();
 					StableExtensionList sl1 = sc1.calculate(framework);
-					for(Extension ext : sl1.getExtensions()) {
-						model.clear();
-						model.addElement(ext);
+					model.clear();
+					try {
+						for(Extension ext : sl1.getExtensions()) {
+							model.addElement(ext);
+							extensionList = new JList<Extension>(model);
+							listScroll.getViewport().add(extensionList);
+						}
+					} catch(NullPointerException e) {
+						nullModel.addElement("There exists no stable extension to this framework.");
+						nullList = new JList<String>(nullModel);
+						listScroll.getViewport().add(nullList);
 					}
-					extensionList = new JList<Extension>(model);
+					
 					break;
 				case("Complete Extension"):
 					CompleteExtensionCalculator cc1 = new CompleteExtensionCalculator();
 					CompleteExtensionList cl1 = cc1.calculate(framework);
+					model.clear();
 					for(Extension ext : cl1.getExtensions()) {
-						model.clear();
 						model.addElement(ext);
 					}
 					extensionList = new JList<Extension>(model);
+					listScroll.getViewport().add(extensionList);
 					break;
 				case("Grounded Extension"):
 					GroundedExtensionCalculator gc1 = new GroundedExtensionCalculator();
 					GroundedExtensionList gl1 = gc1.calculate(framework);
+					model.clear();
 					for(Extension ext : gl1.getExtensions()) {
-						model.clear();
 						model.addElement(ext);
 					}
 					extensionList = new JList<Extension>(model);
+					listScroll.getViewport().add(extensionList);
 					break;
 				default:
 					break;
-				}
+			}
 		}
 	}
 }

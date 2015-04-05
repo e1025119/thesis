@@ -71,4 +71,38 @@ public class StableExtensionTest1 {
 
 		assertTrue("Passt nicht..",s1.equals(sol));		
 	}
+	
+	@Test
+	public void testCalculateTrueABCD1() {
+		Argument a = new Argument("a","test a");
+		Argument b = new Argument("b","test b");
+		Argument c = new Argument("c","test c");
+		Argument d = new Argument("d","test d");
+		
+		AttackRelation r1 = new AttackRelation(d,c);
+		AttackRelation r2 = new AttackRelation(c,b);
+		AttackRelation r3 = new AttackRelation(b,a);
+		
+		l1.add(a);
+		l1.add(b);
+		l1.add(c);
+		l1.add(d);
+		AR ar = new AR(l1);
+		l2.add(r1);
+		l2.add(r2);
+		l2.add(r3);
+		Att att = new Att(l2);
+		
+		AF af = new AF(ar,att);
+
+		ArrayList<Argument> sol2 = new ArrayList<Argument>(Arrays.asList(b,d));
+		
+		StableExtensionCalculator sc1 = new StableExtensionCalculator();
+		
+		StableExtension pb = new StableExtension(new AR(sol2),af);
+		StableExtensionList sol = new StableExtensionList(new ArrayList<StableExtension>(Arrays.asList(pb)));
+		StableExtensionList s1 = sc1.calculate(af);
+		System.out.println("s1: "+s1+", sol: "+sol);
+		assertTrue("Passt nicht..",s1.equals(sol));		
+	}
 }

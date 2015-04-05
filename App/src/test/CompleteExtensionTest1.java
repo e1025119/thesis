@@ -214,18 +214,12 @@ public class CompleteExtensionTest1 {
 		
 		CompleteExtensionCalculator pc1 = new CompleteExtensionCalculator();
 		
-		ArrayList<Argument> sol0 = new ArrayList<Argument>(Arrays.asList(a));
-		ArrayList<Argument> sol1 = new ArrayList<Argument>(Arrays.asList(a,d));
-		ArrayList<Argument> sol2 = new ArrayList<Argument>(Arrays.asList(a,c));
 		ArrayList<Argument> sol3 = new ArrayList<Argument>(Arrays.asList(a,c,d));
 		
-		CompleteExtension pa = new CompleteExtension(new AR(sol0),af);
-		CompleteExtension pb = new CompleteExtension(new AR(sol1),af);
-		CompleteExtension pc = new CompleteExtension(new AR(sol2),af);
 		CompleteExtension pd = new CompleteExtension(new AR(sol3),af);
-		CompleteExtensionList sol = new CompleteExtensionList(new ArrayList<CompleteExtension>(Arrays.asList(pa,pb,pc,pd)));
+		CompleteExtensionList sol = new CompleteExtensionList(new ArrayList<CompleteExtension>(Arrays.asList(pd)));
 		CompleteExtensionList p1 = pc1.calculate(af);
-				
+		
 		assertTrue("Passt nicht..",p1.equals(sol));		
 	}
 
@@ -324,11 +318,9 @@ public class CompleteExtensionTest1 {
 		
 		CompleteExtensionCalculator pc1 = new CompleteExtensionCalculator();
 		ArrayList<Argument> sol1 = new ArrayList<Argument>(Arrays.asList(a,c));
-		ArrayList<Argument> sol2 = new ArrayList<Argument>(Arrays.asList(a));
 		
 		CompleteExtension pc = new CompleteExtension(new AR(sol1),af);
-		CompleteExtension pa = new CompleteExtension(new AR(sol2),af);
-		CompleteExtensionList sol = new CompleteExtensionList(new ArrayList<CompleteExtension>(Arrays.asList(pc,pa)));
+		CompleteExtensionList sol = new CompleteExtensionList(new ArrayList<CompleteExtension>(Arrays.asList(pc)));
 		CompleteExtensionList p1 = pc1.calculate(af);
 				
 		assertTrue("Passt nicht..",p1.equals(sol));		
@@ -369,24 +361,16 @@ public class CompleteExtensionTest1 {
 		
 		CompleteExtensionCalculator pc0 = new CompleteExtensionCalculator();
 		
-		ArrayList<Argument> sol1 = new ArrayList<Argument>(Arrays.asList(a));
-		ArrayList<Argument> sol2 = new ArrayList<Argument>(Arrays.asList(b));
-		ArrayList<Argument> sol3 = new ArrayList<Argument>(Arrays.asList(c));
-		ArrayList<Argument> sol4 = new ArrayList<Argument>(Arrays.asList(d));
 		ArrayList<Argument> sol5 = new ArrayList<Argument>(Arrays.asList(a,c));
 		ArrayList<Argument> sol6 = new ArrayList<Argument>(Arrays.asList(b,d));
 		ArrayList<Argument> sol7 = new ArrayList<Argument>();
 		
-		CompleteExtension p1 = new CompleteExtension(new AR(sol1),af);
-		CompleteExtension p2 = new CompleteExtension(new AR(sol2),af);
-		CompleteExtension p3 = new CompleteExtension(new AR(sol3),af);
-		CompleteExtension p4 = new CompleteExtension(new AR(sol4),af);
 		CompleteExtension p5 = new CompleteExtension(new AR(sol5),af);
 		CompleteExtension p6 = new CompleteExtension(new AR(sol6),af);
 		CompleteExtension p7 = new CompleteExtension(new AR(sol7),af);
-		CompleteExtensionList sol = new CompleteExtensionList(new ArrayList<CompleteExtension>(Arrays.asList(p1,p2,p3,p4,p5,p6,p7)));
+		CompleteExtensionList sol = new CompleteExtensionList(new ArrayList<CompleteExtension>(Arrays.asList(p5,p6,p7)));
 		CompleteExtensionList p0 = pc0.calculate(af);
-			
+
 		assertTrue("Passt nicht..",p0.equals(sol));		
 	}
 	
@@ -533,6 +517,7 @@ public class CompleteExtensionTest1 {
 		CompleteExtension pd = new CompleteExtension(new AR(sol4),af);
 		CompleteExtensionList sol = new CompleteExtensionList(new ArrayList<CompleteExtension>(Arrays.asList(pa,pb,pc,pd)));
 		CompleteExtensionList p1 = pc1.calculate(af);
+
 		assertTrue("Passt nicht..",p1.equals(sol));		
 	}
 	
@@ -565,6 +550,100 @@ public class CompleteExtensionTest1 {
 		
 		assertFalse("Passt nicht..",af.isWellFounded());
 		assertFalse("Passt nicht..",af.isCoherent());
+	}
+
+	@Test
+	public void testCalculateTrueABCD5() {
+		Argument a = new Argument("a","test a");
+		Argument b = new Argument("b","test b");
+		Argument c = new Argument("c","test c");
+		Argument d = new Argument("d","test d");
+		
+		AttackRelation r1 = new AttackRelation(d,c);
+		AttackRelation r2 = new AttackRelation(c,b);
+		AttackRelation r3 = new AttackRelation(b,a);
+		
+		l1.add(a);
+		l1.add(b);
+		l1.add(c);
+		l1.add(d);
+		AR ar = new AR(l1);
+		l2.add(r1);
+		l2.add(r2);
+		l2.add(r3);
+		Att att = new Att(l2);
+		
+		AF af = new AF(ar,att);
+
+		ArrayList<Argument> sol2 = new ArrayList<Argument>(Arrays.asList(b,d));
+		
+		CompleteExtensionCalculator sc1 = new CompleteExtensionCalculator();
+		
+		CompleteExtension pb = new CompleteExtension(new AR(sol2),af);
+		CompleteExtensionList sol = new CompleteExtensionList(new ArrayList<CompleteExtension>(Arrays.asList(pb)));
+		CompleteExtensionList s1 = sc1.calculate(af);
+
+		assertTrue("Passt nicht..",s1.equals(sol));		
+	}
+	
+	@Test
+	public void testCalculateTrueABCDEFGH1() {
+		Argument a = new Argument("a","test a");
+		Argument b = new Argument("b","test b");
+		Argument c = new Argument("c","test c");
+		Argument d = new Argument("d","test d");
+		Argument e = new Argument("e","test e");
+		Argument f = new Argument("f","test f");
+		Argument g = new Argument("g","test g");
+		Argument h = new Argument("h","test h");
+		
+		AttackRelation r1 = new AttackRelation(a,b);
+		AttackRelation r2 = new AttackRelation(b,c);
+		AttackRelation r3 = new AttackRelation(b,d);
+		AttackRelation r4 = new AttackRelation(a,e);
+		AttackRelation r5 = new AttackRelation(a,f);
+		AttackRelation r6 = new AttackRelation(a,g);
+		AttackRelation r7 = new AttackRelation(a,h);
+		AttackRelation r8 = new AttackRelation(e,a);
+		AttackRelation r9 = new AttackRelation(f,a);
+		AttackRelation r10 = new AttackRelation(g,a);
+		AttackRelation r11 = new AttackRelation(h,a);
+		
+		l1.add(a);
+		l1.add(b);
+		l1.add(c);
+		l1.add(d);
+		l1.add(e);
+		l1.add(f);
+		l1.add(g);
+		l1.add(h);
+		AR ar = new AR(l1);
+		l2.add(r1);
+		l2.add(r2);
+		l2.add(r3);
+		l2.add(r4);
+		l2.add(r5);
+		l2.add(r6);
+		l2.add(r7);
+		l2.add(r8);
+		l2.add(r9);
+		l2.add(r10);
+		l2.add(r11);
+		Att att = new Att(l2);
+		
+		AF af = new AF(ar,att);
+		
+		CompleteExtensionCalculator pc1 = new CompleteExtensionCalculator();
+		ArrayList<Argument> sol1 = new ArrayList<Argument>(Arrays.asList(a,c,d));
+		ArrayList<Argument> sol2 = new ArrayList<Argument>(Arrays.asList(b,e,f,g,h));
+		
+		CompleteExtension pl = new CompleteExtension(new AR(),af);
+		CompleteExtension pa = new CompleteExtension(new AR(sol1),af);
+		CompleteExtension pb = new CompleteExtension(new AR(sol2),af);
+		CompleteExtensionList sol = new CompleteExtensionList(new ArrayList<CompleteExtension>(Arrays.asList(pa,pb,pl)));
+		CompleteExtensionList p1 = pc1.calculate(af);
+
+		assertTrue("Passt nicht..",p1.equals(sol));
 	}
 
 }

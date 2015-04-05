@@ -2,7 +2,6 @@ package logic_extensionCalculators;
 
 import java.util.ArrayList;
 
-import exceptions.DuplicateArgumentException;
 import logic_basics.*;
 import logic_extensions.*;
 
@@ -25,7 +24,7 @@ public class GroundedExtensionCalculator extends ExtensionCalculator<GroundedExt
 			emptyList.add(empty);
 			return emptyList;
 		}
-		
+
 		AR tmp = new AR(), retAR = new AR();
 		for(CompleteExtension ce : cl1.getExtensions()) {
 			tmp.addAll(ce.getArguments());
@@ -38,12 +37,7 @@ public class GroundedExtensionCalculator extends ExtensionCalculator<GroundedExt
 				}
 			}
 			if(cont) {
-				try {
-					retAR.add(a);
-				} catch (DuplicateArgumentException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				retAR.add(a);
 			}
 		}
 		GroundedExtension retGE = new GroundedExtension(retAR,af);

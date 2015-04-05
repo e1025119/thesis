@@ -2,7 +2,6 @@ package logic_extensionCalculators;
 
 import java.util.ArrayList;
 
-import exceptions.DuplicateArgumentException;
 import logic_basics.AF;
 import logic_basics.AR;
 import logic_basics.Argument;
@@ -10,10 +9,10 @@ import logic_extensions.Extension;
 import logic_extensions.ExtensionList;
 
 public abstract class ExtensionCalculator<E extends Extension> { 
-	
+
 	public abstract ExtensionList<E> calculate(AF framework);
 	public abstract ExtensionList<E> createSolution(AR pref,ExtensionList<E> rest,AF af);
-	
+
 	/** 
 	 * @brief this method calculates the power set of the remaining, undecided arguments for later evaluation. 
 	 */
@@ -22,12 +21,7 @@ public abstract class ExtensionCalculator<E extends Extension> {
 			Argument a = ar2.getArguments().get(index);
 			AR yes = new AR(), no = new AR();
 			yes.addAll(ar1);
-			try {
-				yes.add(a);
-			} catch (DuplicateArgumentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			yes.add(a);
 			no.addAll(ar1);
 			powerSet(index+1,yes,ar2,sol);
 			powerSet(index+1,no,ar2,sol);

@@ -2,7 +2,6 @@ package logic_extensionCalculators;
 
 import java.util.ArrayList;
 
-import exceptions.DuplicateArgumentException;
 import logic_basics.*;
 import logic_extensions.*;
 
@@ -22,12 +21,7 @@ public class CompleteExtensionCalculator extends ExtensionCalculator<CompleteExt
 		AR rest = new AR();
 		for(Argument a : framework.getAr().getArguments()) {
 			if(!conflicting.contains(a) && !pref.contains(a)) {
-				try {
-					rest.add(a);
-				} catch (DuplicateArgumentException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				rest.add(a);
 			}
 		}
 
@@ -54,16 +48,16 @@ public class CompleteExtensionCalculator extends ExtensionCalculator<CompleteExt
 		return ret;
 	}
 
+	/* admissible falscher ansatz, brauche alle die immer acceptable sind. also neue methode die alle acc. liefert für ein set? */
 	public CompleteExtensionList acceptable(AR pref,ArrayList<AR> partSol,AF framework) {
 		CompleteExtensionList ret = new CompleteExtensionList();
 		for(AR ar : partSol) {
 			AR tmp = new AR(pref.getArguments());
 			tmp.addAll(ar);
-			if(framework.isAdmissibleSubset(tmp)) {
+			if(framework.isMaxAcceptableSubset(tmp)) {
 				ret.add(new CompleteExtension(tmp,framework));
 			}
 		}
 		return ret;
 	}
-
 }

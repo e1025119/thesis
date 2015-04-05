@@ -48,7 +48,7 @@ public class ArgumentationFrameworkForm extends JPanel implements ActionListener
 		JScrollPane scrollAttacks = new JScrollPane(attacksArea);
 		scrollAttacks.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollAttacks.setPreferredSize(new Dimension(230,360));
-		
+
 		/* FlowLayout, that holds both BoxLayouts (arguments label/area, attacks label/area) */
 		JPanel textAreas = new JPanel();
 		JPanel argumentsPanel = new JPanel(),attacksPanel = new JPanel();
@@ -113,11 +113,11 @@ public class ArgumentationFrameworkForm extends JPanel implements ActionListener
 		JPanel textFields = new JPanel(new FlowLayout());
 		textFields.add(argumentBox);
 		textFields.add(attackBox);
-		
+
 		/* errorLabel test */
 		JPanel errorBox = new JPanel(new BorderLayout());
 		errorBox.add(errorLabel,BorderLayout.PAGE_END);
-		
+
 		this.add(textAreas);
 		this.add(Box.createVerticalStrut(10));
 		this.add(textFields);
@@ -134,7 +134,7 @@ public class ArgumentationFrameworkForm extends JPanel implements ActionListener
 	}
 
 	//TODO Reset der Argument/Att listen bzw. löschen ausgewählter argumente!
-	
+
 	@Override
 	public void actionPerformed(ActionEvent ae) {
 		if(ae.getSource() == submitArgument) {
@@ -142,14 +142,8 @@ public class ArgumentationFrameworkForm extends JPanel implements ActionListener
 			String text = newArgumentTextField.getText();
 			if(!ref.equals("") && !text.equals("")) {
 				Argument tmp = new Argument(ref,text);
-				try {
-					framework.getAr().add(tmp);
-					argumentsArea.setText(this.framework.getAr().toString());
-					errorLabel.setVisible(false);
-				} catch (DuplicateArgumentException e) {
-					errorLabel.setText(e.getMessage());
-					errorLabel.setVisible(true);
-				}
+				framework.getAr().add(tmp);
+				argumentsArea.setText(this.framework.getAr().toString());
 			}
 		}
 		else if(ae.getSource() == submitAttack) {

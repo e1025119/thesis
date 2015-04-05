@@ -476,7 +476,64 @@ public class PreferredExtensionTest1 {
 		PreferredExtensionList p1 = pc1.calculate(af);
 
 		assertTrue("Passt nicht..",p1.equals(sol));		
-	}	
+	}
+	
+	@Test
+	public void testCalculateTrueABCDEFGH1() {
+		Argument a = new Argument("a","test a");
+		Argument b = new Argument("b","test b");
+		Argument c = new Argument("c","test c");
+		Argument d = new Argument("d","test d");
+		Argument e = new Argument("e","test e");
+		Argument f = new Argument("f","test f");
+		Argument g = new Argument("g","test g");
+		Argument h = new Argument("h","test h");
+		
+		AttackRelation r1 = new AttackRelation(a,b);
+		AttackRelation r2 = new AttackRelation(b,c);
+		AttackRelation r3 = new AttackRelation(b,d);
+		AttackRelation r4 = new AttackRelation(a,e);
+		AttackRelation r5 = new AttackRelation(a,f);
+		AttackRelation r6 = new AttackRelation(a,g);
+		AttackRelation r7 = new AttackRelation(a,h);
+		AttackRelation r8 = new AttackRelation(e,a);
+		AttackRelation r9 = new AttackRelation(f,a);
+		AttackRelation r10 = new AttackRelation(g,a);
+		AttackRelation r11 = new AttackRelation(h,a);
+		
+		l1.add(a);
+		l1.add(b);
+		l1.add(c);
+		l1.add(d);
+		l1.add(e);
+		l1.add(f);
+		l1.add(g);
+		l1.add(h);
+		AR ar = new AR(l1);
+		l2.add(r1);
+		l2.add(r2);
+		l2.add(r3);
+		l2.add(r4);
+		l2.add(r5);
+		l2.add(r6);
+		l2.add(r7);
+		l2.add(r8);
+		l2.add(r9);
+		l2.add(r10);
+		l2.add(r11);
+		Att att = new Att(l2);
+		
+		AF af = new AF(ar,att);
+		
+		PreferredExtensionCalculator pc1 = new PreferredExtensionCalculator();
+		ArrayList<Argument> sol2 = new ArrayList<Argument>(Arrays.asList(b,e,f,g,h));
+		
+		PreferredExtension pb = new PreferredExtension(new AR(sol2),af);
+		PreferredExtensionList sol = new PreferredExtensionList(new ArrayList<PreferredExtension>(Arrays.asList(pb)));
+		PreferredExtensionList p1 = pc1.calculate(af);
+
+		assertTrue("Passt nicht..",p1.equals(sol));
+	}
 }
 
 

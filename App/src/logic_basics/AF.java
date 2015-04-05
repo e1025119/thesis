@@ -2,7 +2,6 @@ package logic_basics;
 
 import java.util.ArrayList;
 
-import exceptions.DuplicateArgumentException;
 import logic_extensionCalculators.CompleteExtensionCalculator;
 import logic_extensionCalculators.GroundedExtensionCalculator;
 import logic_extensionCalculators.PreferredExtensionCalculator;
@@ -71,12 +70,7 @@ public class AF {
 		AR ret = new AR();
 		for(AttackRelation rel : this.att.getAttacks()) {
 			if(unatt.contains(rel.getA1())) {
-				try {
-					ret.add(rel.getA2());
-				} catch (DuplicateArgumentException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				ret.add(rel.getA2());
 			}
 		}
 		return ret;
@@ -91,17 +85,12 @@ public class AF {
 		tmp.addAll(getSelfies());
 		for(Argument a : tmp.getArguments()) {
 			if(this.att.getAttacker(a).getArguments().size() == 1) {
-				try {
-					ret.add(a);
-				} catch (DuplicateArgumentException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				ret.add(a);
 			}
 		}
 		return ret;
 	}
-	
+
 	/** 
 	 * @brief returns all the arguments in the framework, that are attacking itself.
 	 */
@@ -114,7 +103,7 @@ public class AF {
 		}
 		return new AR(ret);
 	}
-	
+
 	/** 
 	 * @brief this method checks if a given set of arguments is
 	 * 			a stable subset (it attacks all arguments not in the set, conflict-free).
@@ -125,7 +114,7 @@ public class AF {
 		for(Argument a : sub.getArguments()) {
 			others.remove(a);
 		}
-		
+
 		for(Argument a : others.getArguments()) {
 			if(!sub.attacksArgument(a,this.att)) {
 				return false;
@@ -133,7 +122,7 @@ public class AF {
 		}
 		return true;
 	}
-	
+
 	/** 
 	 * @brief this method checks if a given set of arguments is
 	 * 			an admissible subset (it defends every argument it has, conflict-free).
@@ -144,7 +133,7 @@ public class AF {
 		for(Argument a : sub.getArguments()) {
 			others.remove(a);
 		}
-		
+
 		for(AttackRelation  rel : this.att.getAttacks()) {
 			if(sub.contains(rel.getA1()) && sub.contains(rel.getA2())) {
 				return false;
@@ -159,6 +148,38 @@ public class AF {
 	}
 	
 	/** 
+	 * @brief this method checks if for a given set of arguments, every acceptable argument (wrt to the set)
+	 * 			is already part of it. (complete extension)
+	 */
+	public boolean isMaxAcceptableSubset(AR sub) {
+		AR others = new AR();
+		others.addAll(this.ar);
+		for(Argument a : sub.getArguments()) {
+			others.remove(a);
+		}
+		
+		if(sub.isConflictFree(this.att)) {
+			for(Argument a : sub.getArguments()) {
+				AR attA = this.att.getAttacker(a);
+				for(Argument attacker : attA.getArguments()) {
+					AR defA = this.att.getAttacker(attacker);
+					if(sub.disjunctiveSets(defA)) {
+						return false;
+					}
+				}
+			}
+			for(Argument a : others.getArguments()) {
+				if(sub.defends(a,this.att)) {
+					return false;
+				}
+			}
+		} else {
+			return false;
+		}
+		return true;
+	}
+
+	/** 
 	 * @brief this method checks if an argument framework is well-founded
 	 *			(preferred, complete, grounded and stable extension coincide).
 	 */
@@ -167,18 +188,18 @@ public class AF {
 		PreferredExtensionCalculator p1 = new PreferredExtensionCalculator();
 		GroundedExtensionCalculator g1 = new GroundedExtensionCalculator();
 		StableExtensionCalculator s1 = new StableExtensionCalculator();
-		
+
 		CompleteExtensionList cl1 = c1.calculate(this);
 		PreferredExtensionList pl1 = p1.calculate(this);
 		GroundedExtensionList gl1 = g1.calculate(this);
 		StableExtensionList sl1 = s1.calculate(this);
-		
+
 		if(cl1.equals(pl1) && pl1.equals(gl1) && gl1.equals(sl1)) {
 			return true;
 		}
 		return false;
 	}
-	
+
 	/** 
 	 * @brief this method checks if an argument framework is coherent
 	 * 			(its preferred and stable extension coincide). 
@@ -186,10 +207,10 @@ public class AF {
 	public boolean isCoherent() throws NullPointerException {
 		PreferredExtensionCalculator p1 = new PreferredExtensionCalculator();
 		StableExtensionCalculator s1 = new StableExtensionCalculator();
-		
+
 		PreferredExtensionList pl1 = p1.calculate(this);
 		StableExtensionList sl1 = s1.calculate(this);
-		
+
 		if(sl1.equals(pl1)) {
 			return true;
 		}
