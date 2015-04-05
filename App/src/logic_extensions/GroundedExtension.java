@@ -10,6 +10,10 @@ public class GroundedExtension extends Extension {
 	}
 	
 	public String toString() {
+		return super.toString();
+	}
+	
+	public String toStringDeveloper() {
 		String ret = "---Grounded Extension---"+"\n";
 		ret += super.toString();
 		return ret;

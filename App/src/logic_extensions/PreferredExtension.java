@@ -10,6 +10,10 @@ public class PreferredExtension extends Extension {
 	}
 	
 	public String toString() {
+		return super.toString();
+	}
+	
+	public String toStringDeveloper() {
 		String ret = "---Preferred Extension---"+"\n";
 		ret += super.toString();
 		return ret;

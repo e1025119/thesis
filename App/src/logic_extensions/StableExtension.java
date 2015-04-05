@@ -10,6 +10,10 @@ public class StableExtension extends Extension {
 	}
 
 	public String toString() {
+		return super.toString();
+	}
+	
+	public String toStringDeveloper() {
 		String ret = "---Stable Extension---"+"\n";
 		ret += super.toString();
 		return ret;

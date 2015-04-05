@@ -10,9 +10,12 @@ public class AdmissibleExtension extends Extension {
 	}
 
 	public String toString() {
+		return super.toString();
+	}
+	
+	public String toStringDeveloper() {
 		String ret = "---Admissible Extension---"+"\n";
 		ret += super.toString();
 		return ret;
 	}
-
 }

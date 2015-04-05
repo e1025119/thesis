@@ -3,6 +3,8 @@ package gui;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -21,7 +23,7 @@ import logic_extensionCalculators.*;
 import logic_extensions.*;
 
 @SuppressWarnings("serial")
-public class ExtensionsForm extends JPanel implements ActionListener {
+public class ExtensionsForm extends JPanel implements ActionListener,KeyListener {
 
 	private final ArgumentationFrameworkForm aff;
 	private final String[] extensionTypes = {"Admissible Extension","Preferred Extension","Stable Extension","Complete Extension","Grounded Extension"};
@@ -41,7 +43,8 @@ public class ExtensionsForm extends JPanel implements ActionListener {
 
 		/* action listener */
 		calculateExtension.addActionListener(this);
-
+		calculateExtension.addKeyListener(this);
+		
 		/* FlowLayout for the dropDown area */
 		JPanel dropDownFL = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		JPanel dropDownBL = new JPanel();
@@ -77,6 +80,10 @@ public class ExtensionsForm extends JPanel implements ActionListener {
 		this.framework = framework;
 	}
 
+	//TODO Listenelemente (Extensions) müssen wählbar sein, um später im graphen farblich hervorgehoben zu werden.
+	// 		Listener für ListSelection??
+	//TODO Label oder sowas für AF eigenschaften coherence/well-foundedness einführen..
+	
 	@Override
 	public void actionPerformed(ActionEvent ae) {
 		if(ae.getSource() == calculateExtension) {
@@ -113,11 +120,11 @@ public class ExtensionsForm extends JPanel implements ActionListener {
 							listScroll.getViewport().add(extensionList);
 						}
 					} catch(NullPointerException e) {
+						nullModel.clear();
 						nullModel.addElement("There exists no stable extension to this framework.");
 						nullList = new JList<String>(nullModel);
 						listScroll.getViewport().add(nullList);
-					}
-					
+					}					
 					break;
 				case("Complete Extension"):
 					CompleteExtensionCalculator cc1 = new CompleteExtensionCalculator();
@@ -144,4 +151,21 @@ public class ExtensionsForm extends JPanel implements ActionListener {
 			}
 		}
 	}
+	
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+			ActionEvent ae = new ActionEvent(calculateExtension,0,"");
+			actionPerformed(ae);
+		}
+	}
+	@Override
+	public void keyReleased(KeyEvent e) {
+		//do nothing
+	}
+	@Override
+	public void keyTyped(KeyEvent e) {
+		//do nothing
+	}
 }
+ 

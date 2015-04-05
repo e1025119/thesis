@@ -6,14 +6,17 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 
@@ -21,7 +24,7 @@ import exceptions.*;
 import logic_basics.*;
 
 @SuppressWarnings("serial")
-public class ArgumentationFrameworkForm extends JPanel implements ActionListener {
+public class ArgumentationFrameworkForm extends JPanel implements ActionListener,KeyListener {
 
 	private AF framework;
 	private JTextField newArgumentRefField = new JTextField(),newArgumentTextField = new JTextField(),newA1Field = new JTextField(),newA2Field = new JTextField();
@@ -29,23 +32,26 @@ public class ArgumentationFrameworkForm extends JPanel implements ActionListener
 	private JLabel argumentsLabel = new JLabel("AR:"),attacksLabel = new JLabel("Att:");
 	private JLabel errorLabel = new JLabel();
 	private JButton submitArgument = new JButton("submit argument"),submitAttack = new JButton("submit attack");
-	private JTextArea argumentsArea = new JTextArea(),attacksArea = new JTextArea();
+	private DefaultListModel<Argument> argumentModel = new DefaultListModel<Argument>();
+	private DefaultListModel<AttackRelation> attackModel = new DefaultListModel<AttackRelation>();
+	private JList<Argument> argumentsList = new JList<Argument>(argumentModel);
+	private JList<AttackRelation> attacksList = new JList<AttackRelation>(attackModel);
 
 	public ArgumentationFrameworkForm() {
 		framework = new AF(new AR(),new Att());
 		setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
-		argumentsArea.setEditable(false);
-		attacksArea.setEditable(false);
 		errorLabel.setForeground(Color.RED);
-
+		
 		/* action listener */
 		submitArgument.addActionListener(this);
 		submitAttack.addActionListener(this);
+		submitArgument.addKeyListener(this);
+		submitAttack.addKeyListener(this);
 
-		JScrollPane scrollArguments = new JScrollPane(argumentsArea);
+		JScrollPane scrollArguments = new JScrollPane(argumentsList);
 		scrollArguments.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollArguments.setPreferredSize(new Dimension(230,360));
-		JScrollPane scrollAttacks = new JScrollPane(attacksArea);
+		JScrollPane scrollAttacks = new JScrollPane(attacksList);
 		scrollAttacks.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollAttacks.setPreferredSize(new Dimension(230,360));
 
@@ -134,6 +140,7 @@ public class ArgumentationFrameworkForm extends JPanel implements ActionListener
 	}
 
 	//TODO Reset der Argument/Att listen bzw. löschen ausgewählter argumente!
+	//		-> dafür textAreas in Listen umwandeln.
 
 	@Override
 	public void actionPerformed(ActionEvent ae) {
@@ -143,7 +150,11 @@ public class ArgumentationFrameworkForm extends JPanel implements ActionListener
 			if(!ref.equals("") && !text.equals("")) {
 				Argument tmp = new Argument(ref,text);
 				framework.getAr().add(tmp);
-				argumentsArea.setText(this.framework.getAr().toString());
+				argumentModel.clear();
+				for(Argument a : framework.getAr().getArguments()) {
+					argumentModel.addElement(a);
+				}
+				argumentsList = new JList<Argument>(argumentModel);
 			}
 		}
 		else if(ae.getSource() == submitAttack) {
@@ -154,7 +165,11 @@ public class ArgumentationFrameworkForm extends JPanel implements ActionListener
 				AttackRelation tmp = new AttackRelation(arg1,arg2);
 				try {
 					framework.getAtt().add(tmp,framework.getAr());
-					attacksArea.setText(framework.getAtt().toString());
+					attackModel.clear();
+					for(AttackRelation rel : framework.getAtt().getAttacks()) {
+						attackModel.addElement(rel);
+					}
+					attacksList = new JList<AttackRelation>(attackModel);
 					errorLabel.setVisible(false);
 				} catch (InvalidArgumentException e) {
 					errorLabel.setText(e.getMessage());
@@ -162,5 +177,25 @@ public class ArgumentationFrameworkForm extends JPanel implements ActionListener
 				}
 			}
 		}
+	}
+	
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if(e.getSource() == submitArgument && e.getKeyCode() == KeyEvent.VK_ENTER) {
+			ActionEvent ae = new ActionEvent(submitArgument,0,"");
+			actionPerformed(ae);
+		}
+		else if(e.getSource() == submitAttack && e.getKeyCode() == KeyEvent.VK_ENTER) {
+			ActionEvent ae = new ActionEvent(submitAttack,0,"");
+			actionPerformed(ae);
+		}
+	}
+	@Override
+	public void keyReleased(KeyEvent e) {
+		//do nothing
+	}
+	@Override
+	public void keyTyped(KeyEvent e) {
+		//do nothing
 	}
 }
