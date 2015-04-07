@@ -24,8 +24,8 @@ public class MainFrame {
 		tabs = new JTabbedPane();
 		JPanel definitionTab = new JPanel(new GridLayout(1,2));
 		JPanel extensionTab = new JPanel(new GridLayout(1,2));
-		displayPanel1 = new GraphDisplayPanel();
-		displayPanel2 = new GraphDisplayPanel();
+		displayPanel1 = new GraphDisplayPanel(false);
+		displayPanel2 = new GraphDisplayPanel(true);
 		ArgumentationFrameworkForm definitionForm = new ArgumentationFrameworkForm(displayPanel1);
 		ExtensionsForm extensionForm = new ExtensionsForm(definitionForm,displayPanel2);
 		tabs.addTab("AF",definitionTab);

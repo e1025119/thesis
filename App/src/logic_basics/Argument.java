@@ -3,10 +3,19 @@ package logic_basics;
 public class Argument {
 
 	private String text,ref;
-
+	private boolean paintMeDifferent = false;
+	
 	public Argument(String ref,String text) {
 		this.ref = ref;
 		this.text = text;
+	}
+
+	public boolean isPaintMeDifferent() {
+		return paintMeDifferent;
+	}
+
+	public void setPaintMeDifferent(boolean paintMeDifferent) {
+		this.paintMeDifferent = paintMeDifferent;
 	}
 
 	public String getText() {

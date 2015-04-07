@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class AR {
 
 	private ArrayList<Argument> arguments;
-
+	
 	public AR(ArrayList<Argument> arguments) {
 		ArrayList<Argument> tmp = new ArrayList<Argument>();
 		tmp.addAll(arguments);
@@ -112,10 +112,11 @@ public class AR {
 	}
 
 	public String toString() {
-		String ret = "";
+		String ret = "{";
 		for(Argument a : arguments) {
 			ret += a.toString()+"\n";
 		}
+		ret += "}";
 		return ret;
 	}
 }

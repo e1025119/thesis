@@ -99,8 +99,6 @@ public class ExtensionsForm extends JPanel implements ActionListener,KeyListener
 					for(Extension ext : al1.getExtensions()) {
 						model.addElement(ext);
 					}
-					extensionList = new JList<Extension>(model);
-					listScroll.getViewport().add(extensionList);
 					dp.setGraph(framework);
 					dp.revalidate();
 					break;
@@ -111,8 +109,6 @@ public class ExtensionsForm extends JPanel implements ActionListener,KeyListener
 					for(Extension ext : pl1.getExtensions()) {
 						model.addElement(ext);
 					}
-					extensionList = new JList<Extension>(model);
-					listScroll.getViewport().add(extensionList);
 					dp.setGraph(framework);
 					dp.revalidate();
 					break;
@@ -123,14 +119,10 @@ public class ExtensionsForm extends JPanel implements ActionListener,KeyListener
 					try {
 						for(Extension ext : sl1.getExtensions()) {
 							model.addElement(ext);
-							extensionList = new JList<Extension>(model);
-							listScroll.getViewport().add(extensionList);
 						}
 					} catch(NullPointerException e) {
 						nullModel.clear();
 						nullModel.addElement("There exists no stable extension to this framework.");
-						nullList = new JList<String>(nullModel);
-						listScroll.getViewport().add(nullList);
 					}					
 					dp.setGraph(framework);
 					dp.revalidate();
@@ -142,8 +134,6 @@ public class ExtensionsForm extends JPanel implements ActionListener,KeyListener
 					for(Extension ext : cl1.getExtensions()) {
 						model.addElement(ext);
 					}
-					extensionList = new JList<Extension>(model);
-					listScroll.getViewport().add(extensionList);
 					dp.setGraph(framework);
 					dp.revalidate();
 					break;
@@ -154,8 +144,6 @@ public class ExtensionsForm extends JPanel implements ActionListener,KeyListener
 					for(Extension ext : gl1.getExtensions()) {
 						model.addElement(ext);
 					}
-					extensionList = new JList<Extension>(model);
-					listScroll.getViewport().add(extensionList);
 					dp.setGraph(framework);
 					dp.revalidate();
 					break;
@@ -183,7 +171,17 @@ public class ExtensionsForm extends JPanel implements ActionListener,KeyListener
 	
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-		//TODO calculate and display graph
+		if(e.getSource() == extensionList && !e.getValueIsAdjusting() && !extensionList.isSelectionEmpty()) {
+			Extension tmp = extensionList.getSelectedValue();
+			for(Argument a: framework.getAr().getArguments()) {
+				a.setPaintMeDifferent(false);
+				if(tmp.getArguments().contains(a)) {
+					a.setPaintMeDifferent(true);
+				}
+			}
+		}
+		dp.setGraph(framework);
+		dp.revalidate();
 	}
 }
  

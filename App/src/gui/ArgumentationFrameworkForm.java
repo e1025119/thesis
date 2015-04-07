@@ -75,9 +75,6 @@ public class ArgumentationFrameworkForm extends JPanel implements ActionListener
 		textAreas.add(Box.createHorizontalStrut(10));
 		textAreas.add(attacksPanel);
 
-		//argumentsArea.setPreferredSize(new Dimension(230,50));
-		//attacksArea.setPreferredSize(new Dimension(230,360));		
-
 		/* BoxLayouts for each Label/TextField pair */
 		JPanel argumentsRefPanel = new JPanel();
 		argumentsRefPanel.setLayout(new BoxLayout(argumentsRefPanel,BoxLayout.Y_AXIS));
@@ -158,7 +155,6 @@ public class ArgumentationFrameworkForm extends JPanel implements ActionListener
 					argumentModel.addElement(a);
 				}
 			}
-			//TODO calculate and show graph
 			dp.setGraph(framework);
 			dp.revalidate();
 		}
@@ -180,7 +176,6 @@ public class ArgumentationFrameworkForm extends JPanel implements ActionListener
 					errorLabel.setVisible(true);
 				}
 			}
-			//TODO calculate and show graph
 			dp.setGraph(framework);
 			dp.revalidate();
 		}
