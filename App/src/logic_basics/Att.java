@@ -70,7 +70,7 @@ public class Att {
 				this.attacks.add(rel);
 			}
 		} else {
-			throw new InvalidArgumentException("One of those Arguments does not exist");
+			throw new InvalidArgumentException("At least one of those arguments does not exist");
 		}
 	}
 
@@ -83,6 +83,20 @@ public class Att {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public void remove(AttackRelation rel) {
+		this.getAttacks().remove(rel);
+	}
+	
+	public AttackRelation removeArgument(Argument arg) {
+		for(AttackRelation rel : this.getAttacks()) {
+			if(rel.getA1().equals(arg) || rel.getA2().equals(arg)) {
+				remove(rel);
+				return rel;
+			}
+		}
+		return null;
 	}
 
 	public Att getRelationsOfArgument(Argument a) {

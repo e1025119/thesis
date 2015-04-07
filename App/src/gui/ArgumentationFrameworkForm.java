@@ -19,12 +19,14 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import exceptions.*;
 import logic_basics.*;
 
 @SuppressWarnings("serial")
-public class ArgumentationFrameworkForm extends JPanel implements ActionListener,KeyListener {
+public class ArgumentationFrameworkForm extends JPanel implements ActionListener,KeyListener,ListSelectionListener {
 
 	private AF framework;
 	private JTextField newArgumentRefField = new JTextField(),newArgumentTextField = new JTextField(),newA1Field = new JTextField(),newA2Field = new JTextField();
@@ -41,12 +43,14 @@ public class ArgumentationFrameworkForm extends JPanel implements ActionListener
 		framework = new AF(new AR(),new Att());
 		setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
 		errorLabel.setForeground(Color.RED);
-		
+
 		/* action listener */
 		submitArgument.addActionListener(this);
 		submitAttack.addActionListener(this);
 		submitArgument.addKeyListener(this);
 		submitAttack.addKeyListener(this);
+		argumentsList.addListSelectionListener(this);
+		attacksList.addListSelectionListener(this);
 
 		JScrollPane scrollArguments = new JScrollPane(argumentsList);
 		scrollArguments.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -140,7 +144,7 @@ public class ArgumentationFrameworkForm extends JPanel implements ActionListener
 	}
 
 	//TODO Reset der Argument/Att listen bzw. löschen ausgewählter argumente!
-	//		-> dafür textAreas in Listen umwandeln.
+	//		-> dafür ListSelectionListener verwenden
 
 	@Override
 	public void actionPerformed(ActionEvent ae) {
@@ -154,7 +158,6 @@ public class ArgumentationFrameworkForm extends JPanel implements ActionListener
 				for(Argument a : framework.getAr().getArguments()) {
 					argumentModel.addElement(a);
 				}
-				argumentsList = new JList<Argument>(argumentModel);
 			}
 		}
 		else if(ae.getSource() == submitAttack) {
@@ -169,7 +172,6 @@ public class ArgumentationFrameworkForm extends JPanel implements ActionListener
 					for(AttackRelation rel : framework.getAtt().getAttacks()) {
 						attackModel.addElement(rel);
 					}
-					attacksList = new JList<AttackRelation>(attackModel);
 					errorLabel.setVisible(false);
 				} catch (InvalidArgumentException e) {
 					errorLabel.setText(e.getMessage());
@@ -178,7 +180,7 @@ public class ArgumentationFrameworkForm extends JPanel implements ActionListener
 			}
 		}
 	}
-	
+
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if(e.getSource() == submitArgument && e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -197,5 +199,19 @@ public class ArgumentationFrameworkForm extends JPanel implements ActionListener
 	@Override
 	public void keyTyped(KeyEvent e) {
 		//do nothing
+	}
+
+	@Override
+	public void valueChanged(ListSelectionEvent e) {
+		if(e.getSource() == argumentsList && !e.getValueIsAdjusting() && !argumentsList.isSelectionEmpty()) {
+			AttackRelation rel = framework.getAtt().removeArgument(argumentsList.getSelectedValue());
+			attackModel.removeElement(rel);
+			framework.getAr().remove(argumentsList.getSelectedValue());
+			argumentModel.remove(e.getFirstIndex());
+		}
+		else if(e.getSource() == attacksList && !e.getValueIsAdjusting() && !attacksList.isSelectionEmpty()) {
+			framework.getAtt().remove(attacksList.getSelectedValue());
+			attackModel.remove(e.getFirstIndex());
+		}
 	}
 }
