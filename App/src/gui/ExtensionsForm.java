@@ -17,13 +17,15 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import logic_basics.*;
 import logic_extensionCalculators.*;
 import logic_extensions.*;
 
 @SuppressWarnings("serial")
-public class ExtensionsForm extends JPanel implements ActionListener,KeyListener {
+public class ExtensionsForm extends JPanel implements ActionListener,KeyListener,ListSelectionListener {
 
 	private final ArgumentationFrameworkForm aff;
 	private final String[] extensionTypes = {"Admissible Extension","Preferred Extension","Stable Extension","Complete Extension","Grounded Extension"};
@@ -44,6 +46,7 @@ public class ExtensionsForm extends JPanel implements ActionListener,KeyListener
 		/* action listener */
 		calculateExtension.addActionListener(this);
 		calculateExtension.addKeyListener(this);
+		extensionList.addListSelectionListener(this);
 		
 		/* FlowLayout for the dropDown area */
 		JPanel dropDownFL = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -80,8 +83,6 @@ public class ExtensionsForm extends JPanel implements ActionListener,KeyListener
 		this.framework = framework;
 	}
 
-	//TODO Listenelemente (Extensions) müssen wählbar sein, um später im graphen farblich hervorgehoben zu werden.
-	// 		Listener für ListSelection??
 	//TODO Label oder sowas für AF eigenschaften coherence/well-foundedness einführen..
 	
 	@Override
@@ -166,6 +167,11 @@ public class ExtensionsForm extends JPanel implements ActionListener,KeyListener
 	@Override
 	public void keyTyped(KeyEvent e) {
 		//do nothing
+	}
+	
+	@Override
+	public void valueChanged(ListSelectionEvent e) {
+		//TODO calculate and display graph
 	}
 }
  

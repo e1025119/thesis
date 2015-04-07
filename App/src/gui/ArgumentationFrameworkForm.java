@@ -143,9 +143,6 @@ public class ArgumentationFrameworkForm extends JPanel implements ActionListener
 		this.framework = framework;
 	}
 
-	//TODO Reset der Argument/Att listen bzw. löschen ausgewählter argumente!
-	//		-> dafür ListSelectionListener verwenden
-
 	@Override
 	public void actionPerformed(ActionEvent ae) {
 		if(ae.getSource() == submitArgument) {
@@ -159,6 +156,7 @@ public class ArgumentationFrameworkForm extends JPanel implements ActionListener
 					argumentModel.addElement(a);
 				}
 			}
+			//TODO calculate and show graph
 		}
 		else if(ae.getSource() == submitAttack) {
 			String a1 = newA1Field.getText();
@@ -178,6 +176,7 @@ public class ArgumentationFrameworkForm extends JPanel implements ActionListener
 					errorLabel.setVisible(true);
 				}
 			}
+			//TODO calculate and show graph
 		}
 	}
 
