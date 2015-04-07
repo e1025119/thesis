@@ -30,6 +30,7 @@ public class ExtensionsForm extends JPanel implements ActionListener,KeyListener
 	private final ArgumentationFrameworkForm aff;
 	private final String[] extensionTypes = {"Admissible Extension","Preferred Extension","Stable Extension","Complete Extension","Grounded Extension"};
 	private AF framework;
+	private GraphDisplayPanel dp;
 	private JLabel dropDownLabel = new JLabel("Choose Extension:");
 	private JComboBox<String> dropDownCB;
 	private JButton calculateExtension = new JButton("calculate");
@@ -39,8 +40,9 @@ public class ExtensionsForm extends JPanel implements ActionListener,KeyListener
 	private JList<String> nullList = new JList<String>(nullModel);
 	private JScrollPane listScroll = new JScrollPane();
 	
-	public ExtensionsForm(ArgumentationFrameworkForm aff) {
+	public ExtensionsForm(ArgumentationFrameworkForm aff,GraphDisplayPanel dp) {
 		this.aff = aff;
+		this.dp = dp;
 		this.setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
 
 		/* action listener */
@@ -99,6 +101,8 @@ public class ExtensionsForm extends JPanel implements ActionListener,KeyListener
 					}
 					extensionList = new JList<Extension>(model);
 					listScroll.getViewport().add(extensionList);
+					dp.setGraph(framework);
+					dp.revalidate();
 					break;
 				case("Preferred Extension"):
 					PreferredExtensionCalculator pc1 = new PreferredExtensionCalculator();
@@ -109,6 +113,8 @@ public class ExtensionsForm extends JPanel implements ActionListener,KeyListener
 					}
 					extensionList = new JList<Extension>(model);
 					listScroll.getViewport().add(extensionList);
+					dp.setGraph(framework);
+					dp.revalidate();
 					break;
 				case("Stable Extension"):
 					StableExtensionCalculator sc1 = new StableExtensionCalculator();
@@ -126,6 +132,8 @@ public class ExtensionsForm extends JPanel implements ActionListener,KeyListener
 						nullList = new JList<String>(nullModel);
 						listScroll.getViewport().add(nullList);
 					}					
+					dp.setGraph(framework);
+					dp.revalidate();
 					break;
 				case("Complete Extension"):
 					CompleteExtensionCalculator cc1 = new CompleteExtensionCalculator();
@@ -136,6 +144,8 @@ public class ExtensionsForm extends JPanel implements ActionListener,KeyListener
 					}
 					extensionList = new JList<Extension>(model);
 					listScroll.getViewport().add(extensionList);
+					dp.setGraph(framework);
+					dp.revalidate();
 					break;
 				case("Grounded Extension"):
 					GroundedExtensionCalculator gc1 = new GroundedExtensionCalculator();
@@ -146,6 +156,8 @@ public class ExtensionsForm extends JPanel implements ActionListener,KeyListener
 					}
 					extensionList = new JList<Extension>(model);
 					listScroll.getViewport().add(extensionList);
+					dp.setGraph(framework);
+					dp.revalidate();
 					break;
 				default:
 					break;

@@ -12,6 +12,7 @@ public class MainFrame {
 
 	private JFrame frame;
 	private JTabbedPane tabs;
+	private GraphDisplayPanel displayPanel1,displayPanel2;
 
 	public MainFrame() {
 		frame = new JFrame();
@@ -23,9 +24,10 @@ public class MainFrame {
 		tabs = new JTabbedPane();
 		JPanel definitionTab = new JPanel(new GridLayout(1,2));
 		JPanel extensionTab = new JPanel(new GridLayout(1,2));
-		JPanel displayPanel1 = new JPanel(),displayPanel2 = new JPanel();
-		ArgumentationFrameworkForm definitionForm = new ArgumentationFrameworkForm();
-		ExtensionsForm extensionForm = new ExtensionsForm(definitionForm);
+		displayPanel1 = new GraphDisplayPanel();
+		displayPanel2 = new GraphDisplayPanel();
+		ArgumentationFrameworkForm definitionForm = new ArgumentationFrameworkForm(displayPanel1);
+		ExtensionsForm extensionForm = new ExtensionsForm(definitionForm,displayPanel2);
 		tabs.addTab("AF",definitionTab);
 		tabs.addTab("Extensions",extensionTab);
 		

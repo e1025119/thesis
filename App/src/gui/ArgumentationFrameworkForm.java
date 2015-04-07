@@ -29,6 +29,7 @@ import logic_basics.*;
 public class ArgumentationFrameworkForm extends JPanel implements ActionListener,KeyListener,ListSelectionListener {
 
 	private AF framework;
+	private GraphDisplayPanel dp;
 	private JTextField newArgumentRefField = new JTextField(),newArgumentTextField = new JTextField(),newA1Field = new JTextField(),newA2Field = new JTextField();
 	private JLabel newArgumentRefLabel = new JLabel("Ref:"),newArgumentTextLabel = new JLabel("Text:"),newA1Label = new JLabel("A1"),newA2Label = new JLabel("A2");
 	private JLabel argumentsLabel = new JLabel("AR:"),attacksLabel = new JLabel("Att:");
@@ -39,7 +40,8 @@ public class ArgumentationFrameworkForm extends JPanel implements ActionListener
 	private JList<Argument> argumentsList = new JList<Argument>(argumentModel);
 	private JList<AttackRelation> attacksList = new JList<AttackRelation>(attackModel);
 
-	public ArgumentationFrameworkForm() {
+	public ArgumentationFrameworkForm(GraphDisplayPanel dp) {
+		this.dp = dp;
 		framework = new AF(new AR(),new Att());
 		setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
 		errorLabel.setForeground(Color.RED);
@@ -157,6 +159,8 @@ public class ArgumentationFrameworkForm extends JPanel implements ActionListener
 				}
 			}
 			//TODO calculate and show graph
+			dp.setGraph(framework);
+			dp.revalidate();
 		}
 		else if(ae.getSource() == submitAttack) {
 			String a1 = newA1Field.getText();
@@ -177,6 +181,8 @@ public class ArgumentationFrameworkForm extends JPanel implements ActionListener
 				}
 			}
 			//TODO calculate and show graph
+			dp.setGraph(framework);
+			dp.revalidate();
 		}
 	}
 
@@ -207,10 +213,14 @@ public class ArgumentationFrameworkForm extends JPanel implements ActionListener
 			attackModel.removeElement(rel);
 			framework.getAr().remove(argumentsList.getSelectedValue());
 			argumentModel.remove(e.getFirstIndex());
+			dp.setGraph(framework);
+			dp.revalidate();
 		}
 		else if(e.getSource() == attacksList && !e.getValueIsAdjusting() && !attacksList.isSelectionEmpty()) {
 			framework.getAtt().remove(attacksList.getSelectedValue());
 			attackModel.remove(e.getFirstIndex());
+			dp.setGraph(framework);
+			dp.revalidate();
 		}
 	}
 }
