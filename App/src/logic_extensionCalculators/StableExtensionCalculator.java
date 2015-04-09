@@ -58,7 +58,6 @@ public class StableExtensionCalculator extends ExtensionCalculator<StableExtensi
 			tmp.addAll(se.getArguments());
 			ret.add(new StableExtension(tmp,af));
 		}
-		//TODO a,b,c,d,e (a,b),(b,c),(c,d),(d,e),(e,a) -> kein Ergebnis whatsoever..
 		System.out.println("Stable: "+ret);
 		return ret;
 	}

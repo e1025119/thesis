@@ -28,6 +28,11 @@ public class GraphDisplayPanel extends JPanel {
 	}
 
 	public void setGraph(AF framework) {
+		if(framework == null) {
+			this.removeAll();
+			this.repaint();
+			return;
+		}
 		/** nested class for node coloring **/
 		Transformer<Argument,Paint> vertexColor = new Transformer<Argument,Paint>() {
 			public Paint transform(Argument a) {
@@ -37,7 +42,7 @@ public class GraphDisplayPanel extends JPanel {
 		};
 		/** end of nested class **/
 
-		/** nested class for node labelling **/
+		/** nested class for node labeling **/
 		Transformer<Argument,String> vertexLabel = new Transformer<Argument,String>() {
 			public String transform(Argument a) {
 				return a.getRef();
