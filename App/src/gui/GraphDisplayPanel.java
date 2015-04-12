@@ -20,11 +20,12 @@ public class GraphDisplayPanel extends JPanel {
 	private DirectedSparseGraph<Argument,AttackRelation> g;
 	private AF framework;
 	private BasicVisualizationServer<Argument,AttackRelation> vs;
-	private boolean nodeColoring;
+	public enum ColorTab{AFF,EF};
+	private ColorTab tab;
 
-	public GraphDisplayPanel(boolean nodeColoring) {
+	public GraphDisplayPanel(ColorTab tab) {
 		this.setLayout(new BorderLayout());
-		this.nodeColoring = nodeColoring;
+		this.tab = tab;
 	}
 
 	public void setGraph(AF framework) {
@@ -36,7 +37,15 @@ public class GraphDisplayPanel extends JPanel {
 		/** nested class for node coloring **/
 		Transformer<Argument,Paint> vertexColor = new Transformer<Argument,Paint>() {
 			public Paint transform(Argument a) {
-				if(a.isPaintMeDifferent()) return Color.GREEN;
+				if(tab.equals(ColorTab.EF)) {
+					if(a.isPaintEF()) {
+						return Color.GREEN;	
+					}
+				} else if(tab.equals(ColorTab.AFF)) {
+					if(a.isPaintAFF()) {
+						return Color.GREEN;
+					}
+				}
 				return Color.RED;
 			}
 		};
@@ -60,9 +69,7 @@ public class GraphDisplayPanel extends JPanel {
 		}
 		vs = new BasicVisualizationServer<Argument,AttackRelation>(new CircleLayout<Argument,AttackRelation>(g), new Dimension(500,700));
 		vs.getRenderContext().setVertexLabelTransformer(vertexLabel);
-		if(nodeColoring) {
-			vs.getRenderContext().setVertexFillPaintTransformer(vertexColor);
-		}
+		vs.getRenderContext().setVertexFillPaintTransformer(vertexColor);
 		this.removeAll();
 		this.add(vs,BorderLayout.CENTER);
 	}

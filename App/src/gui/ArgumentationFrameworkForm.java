@@ -34,17 +34,20 @@ public class ArgumentationFrameworkForm extends JPanel implements ActionListener
 	private JLabel newArgumentRefLabel = new JLabel("Ref:"),newArgumentTextLabel = new JLabel("Text:"),newA1Label = new JLabel("A1"),newA2Label = new JLabel("A2");
 	private JLabel argumentsLabel = new JLabel("AR:"),attacksLabel = new JLabel("Att:");
 	private JLabel errorLabel = new JLabel();
-	private JButton submitArgument = new JButton("submit argument"),submitAttack = new JButton("submit attack");
+	private JButton submitArgument = new JButton("submit argument"),submitAttack = new JButton("submit attack"),clearAll = new JButton("clear all"),deleteSelection = new JButton("delete selection");
 	private DefaultListModel<Argument> argumentModel = new DefaultListModel<Argument>();
 	private DefaultListModel<AttackRelation> attackModel = new DefaultListModel<AttackRelation>();
 	private JList<Argument> argumentsList = new JList<Argument>(argumentModel);
 	private JList<AttackRelation> attacksList = new JList<AttackRelation>(attackModel);
-
+	private JPanel clearBox = new JPanel(new FlowLayout());
+	
 	public ArgumentationFrameworkForm(GraphDisplayPanel dp) {
 		this.dp = dp;
 		framework = new AF(new AR(),new Att());
 		setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
 		errorLabel.setForeground(Color.RED);
+		clearAll.setVisible(true);
+		deleteSelection.setVisible(false);
 
 		/* action listener */
 		submitArgument.addActionListener(this);
@@ -53,7 +56,12 @@ public class ArgumentationFrameworkForm extends JPanel implements ActionListener
 		submitAttack.addKeyListener(this);
 		argumentsList.addListSelectionListener(this);
 		attacksList.addListSelectionListener(this);
+		clearAll.addActionListener(this);
+		clearAll.addKeyListener(this);
+		deleteSelection.addActionListener(this);
+		deleteSelection.addKeyListener(this);
 
+		/* ScrollPanes for both Lists */
 		JScrollPane scrollArguments = new JScrollPane(argumentsList);
 		scrollArguments.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollArguments.setPreferredSize(new Dimension(230,360));
@@ -61,7 +69,7 @@ public class ArgumentationFrameworkForm extends JPanel implements ActionListener
 		scrollAttacks.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollAttacks.setPreferredSize(new Dimension(230,360));
 
-		/* FlowLayout, that holds both BoxLayouts (arguments label/area, attacks label/area) */
+		/* FlowLayout, that holds both BoxLayouts (arguments label/list, attacks label/list) */
 		JPanel textAreas = new JPanel();
 		JPanel argumentsPanel = new JPanel(),attacksPanel = new JPanel();
 		argumentsPanel.setLayout(new BoxLayout(argumentsPanel,BoxLayout.Y_AXIS));
@@ -123,6 +131,10 @@ public class ArgumentationFrameworkForm extends JPanel implements ActionListener
 		textFields.add(argumentBox);
 		textFields.add(attackBox);
 
+		/* clearAll/deleteSelection button */
+		clearBox.add(clearAll);
+		clearBox.add(deleteSelection);
+		
 		/* errorLabel test */
 		JPanel errorBox = new JPanel(new BorderLayout());
 		errorBox.add(errorLabel,BorderLayout.PAGE_END);
@@ -130,6 +142,8 @@ public class ArgumentationFrameworkForm extends JPanel implements ActionListener
 		this.add(textAreas);
 		this.add(Box.createVerticalStrut(10));
 		this.add(textFields);
+		this.add(Box.createVerticalStrut(40));
+		this.add(clearBox);
 		this.add(Box.createVerticalStrut(10));
 		this.add(errorBox);
 	}
@@ -147,16 +161,11 @@ public class ArgumentationFrameworkForm extends JPanel implements ActionListener
 		if(ae.getSource() == submitArgument) {
 			String ref = newArgumentRefField.getText();
 			String text = newArgumentTextField.getText();
-			if(!ref.equals("") && !text.equals("")) {
+			if(!ref.equals("")) {
 				Argument tmp = new Argument(ref,text);
 				framework.getAr().add(tmp);
-				argumentModel.clear();
-				for(Argument a : framework.getAr().getArguments()) {
-					argumentModel.addElement(a);
-				}
 			}
-			dp.setGraph(framework);
-			dp.revalidate();
+			update(framework);
 		}
 		else if(ae.getSource() == submitAttack) {
 			String a1 = newA1Field.getText();
@@ -166,18 +175,30 @@ public class ArgumentationFrameworkForm extends JPanel implements ActionListener
 				AttackRelation tmp = new AttackRelation(arg1,arg2);
 				try {
 					framework.getAtt().add(tmp,framework.getAr());
-					attackModel.clear();
-					for(AttackRelation rel : framework.getAtt().getAttacks()) {
-						attackModel.addElement(rel);
-					}
 					errorLabel.setVisible(false);
 				} catch (InvalidArgumentException e) {
 					errorLabel.setText(e.getMessage());
 					errorLabel.setVisible(true);
 				}
 			}
-			dp.setGraph(framework);
-			dp.revalidate();
+			update(framework);
+		}
+		else if(ae.getSource() == clearAll) {
+			framework.setAr(new AR());
+			framework.setAtt(new Att());
+			update(framework);
+		}
+		else if(ae.getSource() == deleteSelection) {
+			if(argumentsList.isSelectionEmpty()) {
+				framework.getAtt().remove(attacksList.getSelectedValue());
+				update(framework);
+			}
+			else if(attacksList.isSelectionEmpty()) {
+				framework.getAr().remove(argumentsList.getSelectedValue());
+				framework.getAtt().removeArgument(argumentsList.getSelectedValue());
+				update(framework);
+			}
+			deleteSelection.setVisible(false);
 		}
 	}
 
@@ -191,6 +212,14 @@ public class ArgumentationFrameworkForm extends JPanel implements ActionListener
 			ActionEvent ae = new ActionEvent(submitAttack,0,"");
 			actionPerformed(ae);
 		}
+		else if(e.getSource() == clearAll && e.getKeyCode() == KeyEvent.VK_ENTER) {
+			ActionEvent ae = new ActionEvent(clearAll,0,"");
+			actionPerformed(ae);	
+		}
+		else if(e.getSource() == deleteSelection && e.getKeyCode() == KeyEvent.VK_ENTER) {
+			ActionEvent ae = new ActionEvent(deleteSelection,0,"");
+			actionPerformed(ae);	
+		}
 	}
 	@Override
 	public void keyReleased(KeyEvent e) {
@@ -200,22 +229,39 @@ public class ArgumentationFrameworkForm extends JPanel implements ActionListener
 	public void keyTyped(KeyEvent e) {
 		//do nothing
 	}
-
+	
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
+		framework.getAr().setPaintAffAllFalse();
+		if(!argumentsList.isSelectionEmpty() || !attacksList.isSelectionEmpty()) {
+			deleteSelection.setVisible(true);
+		}
 		if(e.getSource() == argumentsList && !e.getValueIsAdjusting() && !argumentsList.isSelectionEmpty()) {
-			AttackRelation rel = framework.getAtt().removeArgument(argumentsList.getSelectedValue());
-			attackModel.removeElement(rel);
-			framework.getAr().remove(argumentsList.getSelectedValue());
-			argumentModel.remove(e.getFirstIndex());
+			attacksList.clearSelection();
+			argumentsList.getSelectedValue().setPaintAFF(true);
 			dp.setGraph(framework);
 			dp.revalidate();
 		}
 		else if(e.getSource() == attacksList && !e.getValueIsAdjusting() && !attacksList.isSelectionEmpty()) {
-			framework.getAtt().remove(attacksList.getSelectedValue());
-			attackModel.remove(e.getFirstIndex());
+			argumentsList.clearSelection();
+			attacksList.getSelectedValue().getA1().setPaintAFF(true);
+			attacksList.getSelectedValue().getA2().setPaintAFF(true);
 			dp.setGraph(framework);
 			dp.revalidate();
 		}
+	}
+	
+	public void update(AF framework) {
+		this.framework = framework;
+		argumentModel.clear();
+		attackModel.clear();
+		for(Argument a : framework.getAr().getArguments()) {
+			argumentModel.addElement(a);
+		}
+		for(AttackRelation rel : framework.getAtt().getAttacks()) {
+			attackModel.addElement(rel);
+		}
+		dp.setGraph(framework);
+		dp.revalidate();
 	}
 }

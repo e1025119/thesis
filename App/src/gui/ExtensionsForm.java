@@ -31,7 +31,7 @@ public class ExtensionsForm extends JPanel implements ActionListener,KeyListener
 	private final String[] extensionTypes = {"Admissible Extension","Preferred Extension","Stable Extension","Complete Extension","Grounded Extension"};
 	private AF framework;
 	private GraphDisplayPanel dp;
-	private JLabel dropDownLabel = new JLabel("Choose Extension:");
+	private JLabel dropDownLabel = new JLabel("Choose Extension:"),listLabel = new JLabel(),cwfLabel = new JLabel();
 	private JComboBox<String> dropDownCB;
 	private JButton calculateExtension = new JButton("calculate");
 	private DefaultListModel<Extension> model = new DefaultListModel<Extension>();
@@ -74,7 +74,15 @@ public class ExtensionsForm extends JPanel implements ActionListener,KeyListener
 		listScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
 		this.add(dropDownFL);
+		this.add(cwfLabel);
+		this.add(listLabel);
 		this.add(listScroll);
+		dropDownFL.setAlignmentX(LEFT_ALIGNMENT);
+		cwfLabel.setAlignmentX(LEFT_ALIGNMENT);
+		cwfLabel.setVisible(false);
+		listLabel.setAlignmentX(LEFT_ALIGNMENT);
+		listLabel.setVisible(false);
+		listScroll.setAlignmentX(LEFT_ALIGNMENT);
 	}
 
 	public AF getFramework() {
@@ -91,80 +99,90 @@ public class ExtensionsForm extends JPanel implements ActionListener,KeyListener
 	public void actionPerformed(ActionEvent ae) {
 		if(ae.getSource() == calculateExtension) {
 			framework = aff.getAF();
+			String cwf = framework.getAFProp();
+			cwfLabel.setText(cwf);
+			cwfLabel.setVisible(true);
+			
 			switch(dropDownCB.getSelectedItem().toString()) {
 			case("Admissible Extension"):
+				listLabel.setText("All admissible extensions are listed below:");
 				AdmissibleExtensionCalculator ac1 = new AdmissibleExtensionCalculator();
-			AdmissibleExtensionList al1 = ac1.calculate(framework);
-			model.clear();
-			for(Extension ext : al1.getExtensions()) {
-				model.addElement(ext);
-				listScroll.getViewport().removeAll();
-				listScroll.getViewport().add(extensionList);
-			}
-			dp.setGraph(framework);
-			dp.revalidate();
-			break;
-			case("Preferred Extension"):
-				PreferredExtensionCalculator pc1 = new PreferredExtensionCalculator();
-			PreferredExtensionList pl1 = pc1.calculate(framework);
-			model.clear();
-			for(Extension ext : pl1.getExtensions()) {
-				model.addElement(ext);
-				listScroll.getViewport().removeAll();
-				listScroll.getViewport().add(extensionList);
-			}
-			dp.setGraph(framework);
-			dp.revalidate();
-			break;
-			case("Stable Extension"):
-			StableExtensionCalculator sc1 = new StableExtensionCalculator();
-			StableExtensionList sl1 = sc1.calculate(framework);
-			model.clear();
-			try {
-				for(Extension ext : sl1.getExtensions()) {
+				AdmissibleExtensionList al1 = ac1.calculate(framework);
+				model.clear();
+				for(Extension ext : al1.getExtensions()) {
 					model.addElement(ext);
 					listScroll.getViewport().removeAll();
 					listScroll.getViewport().add(extensionList);
 				}
-			} catch(NullPointerException e) {
-				nullModel.clear();
-				nullModel.addElement("There exists no stable extension to this framework.");
-				listScroll.getViewport().removeAll();
-				listScroll.getViewport().add(nullList);
-				dp.setGraph(null);
+				dp.setGraph(framework);
 				dp.revalidate();
 				break;
-			}
-			dp.setGraph(framework);
-			dp.revalidate();
-			break;
+			case("Preferred Extension"):
+				listLabel.setText("All preferred extensions are listed below:");
+				PreferredExtensionCalculator pc1 = new PreferredExtensionCalculator();
+				PreferredExtensionList pl1 = pc1.calculate(framework);
+				model.clear();
+				for(Extension ext : pl1.getExtensions()) {
+					model.addElement(ext);
+					listScroll.getViewport().removeAll();
+					listScroll.getViewport().add(extensionList);
+				}
+				dp.setGraph(framework);
+				dp.revalidate();
+				break;
+			case("Stable Extension"):
+				listLabel.setText("All stable extensions are listed below:");
+				StableExtensionCalculator sc1 = new StableExtensionCalculator();
+				StableExtensionList sl1 = sc1.calculate(framework);
+				model.clear();
+				try {
+					for(Extension ext : sl1.getExtensions()) {
+						model.addElement(ext);
+						listScroll.getViewport().removeAll();
+						listScroll.getViewport().add(extensionList);
+					}
+				} catch(NullPointerException e) {
+					nullModel.clear();
+					nullModel.addElement("There exists no stable extension to this framework.");
+					listScroll.getViewport().removeAll();
+					listScroll.getViewport().add(nullList);
+					dp.setGraph(null);
+					dp.revalidate();
+					break;
+				}
+				dp.setGraph(framework);
+				dp.revalidate();
+				break;
 			case("Complete Extension"):
+				listLabel.setText("All complete extensions are listed below:");
 				CompleteExtensionCalculator cc1 = new CompleteExtensionCalculator();
-			CompleteExtensionList cl1 = cc1.calculate(framework);
-			model.clear();
-			for(Extension ext : cl1.getExtensions()) {
-				model.addElement(ext);
-				listScroll.getViewport().removeAll();
-				listScroll.getViewport().add(extensionList);
-			}
-			dp.setGraph(framework);
-			dp.revalidate();
-			break;
+				CompleteExtensionList cl1 = cc1.calculate(framework);
+				model.clear();
+				for(Extension ext : cl1.getExtensions()) {
+					model.addElement(ext);
+					listScroll.getViewport().removeAll();
+					listScroll.getViewport().add(extensionList);
+				}
+				dp.setGraph(framework);
+				dp.revalidate();
+				break;
 			case("Grounded Extension"):
+				listLabel.setText("All grounded extensions are listed below:");
 				GroundedExtensionCalculator gc1 = new GroundedExtensionCalculator();
-			GroundedExtensionList gl1 = gc1.calculate(framework);
-			model.clear();
-			for(Extension ext : gl1.getExtensions()) {
-				model.addElement(ext);
-				listScroll.getViewport().removeAll();
-				listScroll.getViewport().add(extensionList);
-			}
-			dp.setGraph(framework);
-			dp.revalidate();
-			break;
+				GroundedExtensionList gl1 = gc1.calculate(framework);
+				model.clear();
+				for(Extension ext : gl1.getExtensions()) {
+					model.addElement(ext);
+					listScroll.getViewport().removeAll();
+					listScroll.getViewport().add(extensionList);
+				}
+				dp.setGraph(framework);
+				dp.revalidate();
+				break;
 			default:
 				break;
 			}
+			listLabel.setVisible(true);
 		}
 	}
 
@@ -189,9 +207,9 @@ public class ExtensionsForm extends JPanel implements ActionListener,KeyListener
 		if(e.getSource() == extensionList && !e.getValueIsAdjusting() && !extensionList.isSelectionEmpty()) {
 			Extension tmp = extensionList.getSelectedValue();
 			for(Argument a: framework.getAr().getArguments()) {
-				a.setPaintMeDifferent(false);
+				a.setPaintEF(false);
 				if(tmp.getArguments().contains(a)) {
-					a.setPaintMeDifferent(true);
+					a.setPaintEF(true);
 				}
 			}
 		}
