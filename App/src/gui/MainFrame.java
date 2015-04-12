@@ -96,14 +96,11 @@ public class MainFrame implements ActionListener,KeyListener {
 	@Override
 	public void actionPerformed(ActionEvent ae) {
 		if(ae.getSource() == help1) {
-			//JOptionPane.showInternalMessageDialog(tabs,"https://github.com/e1025119/thesis","Github - Project/Paper",JOptionPane.PLAIN_MESSAGE);
-			HelpDialog hd = new HelpDialog(frame,"Github - Project/Paper","TEST msg here... bla bla");
-			System.out.println("TEST: "+hd.isUndecorated());
-			
+			JOptionPane.showInternalMessageDialog(tabs,"https://github.com/e1025119/thesis","Github - Project/Paper",JOptionPane.PLAIN_MESSAGE);
 		}
 		else if(ae.getSource() == help2) {
 			String mail = "e1025119@student.tuwien.ac.at";
-			JOptionPane.showInternalMessageDialog(tabs,"If you have any questions, ideas etc.,"+"\n"+"make sure to message "+mail,"Contact",JOptionPane.PLAIN_MESSAGE);
+			JOptionPane.showInternalMessageDialog(tabs,"If you have any questions, ideas etc.,"+"\n"+"make sure to mail "+mail,"Contact",JOptionPane.PLAIN_MESSAGE);
 		}
 		else if(ae.getSource() == exmpl1) {
 			Argument s1 = new Argument("s1","Superman is the best hero!");
