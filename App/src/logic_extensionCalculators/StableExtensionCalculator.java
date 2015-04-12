@@ -58,7 +58,6 @@ public class StableExtensionCalculator extends ExtensionCalculator<StableExtensi
 			tmp.addAll(se.getArguments());
 			ret.add(new StableExtension(tmp,af));
 		}
-		System.out.println("Stable: "+ret);
 		return ret;
 	}
 

@@ -11,5 +11,4 @@ public class AdmissibleExtensionList extends ExtensionList<AdmissibleExtension> 
 	public AdmissibleExtensionList() {
 		super();
 	}
-
 }

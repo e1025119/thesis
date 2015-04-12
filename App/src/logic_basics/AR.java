@@ -110,6 +110,12 @@ public class AR {
 	public int size() {
 		return this.arguments.size();
 	}
+	
+	public void setPaintAffAllFalse() {
+		for(Argument a : arguments) {
+			a.setPaintAFF(false);
+		}
+	}
 
 	public String toString() {
 		String ret = "{";

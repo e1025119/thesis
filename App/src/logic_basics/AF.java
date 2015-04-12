@@ -146,7 +146,7 @@ public class AF {
 		}
 		return true;
 	}
-	
+
 	/** 
 	 * @brief this method checks if for a given set of arguments, every acceptable argument (wrt to the set)
 	 * 			is already part of it. (complete extension)
@@ -157,7 +157,7 @@ public class AF {
 		for(Argument a : sub.getArguments()) {
 			others.remove(a);
 		}
-		
+
 		if(sub.isConflictFree(this.att)) {
 			for(Argument a : sub.getArguments()) {
 				AR attA = this.att.getAttacker(a);
@@ -204,16 +204,18 @@ public class AF {
 	 * @brief this method checks if an argument framework is coherent
 	 * 			(its preferred and stable extension coincide). 
 	 */
-	public boolean isCoherent() throws NullPointerException {
+	public boolean isCoherent() {
 		PreferredExtensionCalculator p1 = new PreferredExtensionCalculator();
 		StableExtensionCalculator s1 = new StableExtensionCalculator();
 
 		PreferredExtensionList pl1 = p1.calculate(this);
-		StableExtensionList sl1 = s1.calculate(this);
-
-		if(sl1.equals(pl1)) {
-			return true;
-		}
+		try {
+			StableExtensionList sl1 = s1.calculate(this);
+			if(sl1.equals(pl1)) {
+				return true;
+			}
+		} catch(NullPointerException e) {
+		}		
 		return false;
 	}
 
@@ -222,6 +224,24 @@ public class AF {
 			return true;
 		}
 		return false;
+	}
+
+	public String getAFProp() {
+		String ret = "This AF is ";
+
+		if(isWellFounded() && !isCoherent()) {
+			ret += "wellfounded.";
+		}
+		else if(isCoherent() && !isWellFounded()) {
+			ret += "coherent.";
+		}
+		else if(isCoherent() && isWellFounded()) {
+			ret += "wellfounded and coherent.";
+		}
+		else if(!isCoherent() && !isWellFounded()) {
+			ret += "neither wellfounded nor coherent.";
+		}
+		return ret;
 	}
 
 	public String toString() {
