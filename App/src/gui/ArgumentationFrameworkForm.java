@@ -74,10 +74,14 @@ public class ArgumentationFrameworkForm extends JPanel implements ActionListener
 		JPanel argumentsPanel = new JPanel(),attacksPanel = new JPanel();
 		argumentsPanel.setLayout(new BoxLayout(argumentsPanel,BoxLayout.Y_AXIS));
 		attacksPanel.setLayout(new BoxLayout(attacksPanel,BoxLayout.Y_AXIS));
-		argumentsPanel.add(argumentsLabel,Box.LEFT_ALIGNMENT);
-		argumentsPanel.add(scrollArguments,Box.LEFT_ALIGNMENT);
-		attacksPanel.add(attacksLabel,Box.LEFT_ALIGNMENT);
-		attacksPanel.add(scrollAttacks,Box.LEFT_ALIGNMENT);
+		argumentsPanel.add(argumentsLabel);
+		argumentsPanel.add(scrollArguments);
+		attacksPanel.add(attacksLabel);
+		attacksPanel.add(scrollAttacks);
+		argumentsLabel.setAlignmentX(LEFT_ALIGNMENT);
+		scrollArguments.setAlignmentX(LEFT_ALIGNMENT);
+		attacksLabel.setAlignmentX(LEFT_ALIGNMENT);
+		scrollAttacks.setAlignmentX(LEFT_ALIGNMENT);
 		textAreas.setLayout(new FlowLayout());
 		textAreas.add(argumentsPanel);
 		textAreas.add(Box.createHorizontalStrut(10));
