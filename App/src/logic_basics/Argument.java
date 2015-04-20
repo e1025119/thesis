@@ -3,11 +3,27 @@ package logic_basics;
 public class Argument {
 
 	private String text,ref;
-	private boolean paintEF = false,paintAFF = false;
+	private boolean paintEF = false,paintAFF = false,paintSBSF_green = false,paintSBSF_blue = false;
 	
 	public Argument(String ref,String text) {
 		this.ref = ref;
 		this.text = text;
+	}
+
+	public boolean isPaintSBSF_green() {
+		return paintSBSF_green;
+	}
+
+	public void setPaintSBSF_green(boolean paintSBSF_green) {
+		this.paintSBSF_green = paintSBSF_green;
+	}
+
+	public boolean isPaintSBSF_blue() {
+		return paintSBSF_blue;
+	}
+
+	public void setPaintSBSF_blue(boolean paintSBSF_blue) {
+		this.paintSBSF_blue = paintSBSF_blue;
 	}
 
 	public boolean isPaintEF() {

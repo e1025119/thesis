@@ -27,9 +27,10 @@ public class MainFrame implements ActionListener,KeyListener {
 	private JFrame frame;
 	private ArgumentationFrameworkForm definitionForm;
 	private ExtensionsForm extensionsForm;
+	private StepByStepForm stepByStepForm;
 	private JTabbedPane tabs;
-	private JPanel extensionsTab,definitionTab;
-	private GraphDisplayPanel displayPanel1,displayPanel2;
+	private JPanel extensionsTab,definitionTab,stepByStepTab;
+	private GraphDisplayPanel displayPanel1,displayPanel2,displayPanel3;
 
 	public MainFrame() {
 		frame = new JFrame();
@@ -72,20 +73,27 @@ public class MainFrame implements ActionListener,KeyListener {
 		tabs = new JTabbedPane();
 		JPanel definitionTab = new JPanel(new GridLayout(1,2));
 		JPanel extensionTab = new JPanel(new GridLayout(1,2));
+		JPanel stepByStepTab = new JPanel(new GridLayout(1,2));
 		displayPanel1 = new GraphDisplayPanel(ColorTab.AFF);
 		displayPanel2 = new GraphDisplayPanel(ColorTab.EF);
+		displayPanel3 = new GraphDisplayPanel(ColorTab.SBSF);
 		definitionForm = new ArgumentationFrameworkForm(displayPanel1);
 		extensionsForm = new ExtensionsForm(definitionForm,displayPanel2);
-		tabs.addTab("AF",definitionTab);
+		stepByStepForm = new StepByStepForm(extensionsForm,displayPanel3);
+		tabs.addTab("Argumentation Framework",definitionTab);
 		tabs.addTab("Extensions",extensionTab);
+		tabs.addTab("Step By Step",stepByStepTab);
 		
 		displayPanel1.setBorder(BorderFactory.createLineBorder(new Color((float)0.7,(float)0.79,1),2));
 		displayPanel2.setBorder(BorderFactory.createLineBorder(new Color((float)0.7,(float)0.79,1),2));
+		displayPanel3.setBorder(BorderFactory.createLineBorder(new Color((float)0.7,(float)0.79,1),2));
 		
 		definitionTab.add(definitionForm);
 		definitionTab.add(displayPanel1);
 		extensionTab.add(extensionsForm);
 		extensionTab.add(displayPanel2);
+		stepByStepTab.add(stepByStepForm);
+		stepByStepTab.add(displayPanel3);
 		
 		/* finishing up */
 		frame.setJMenuBar(menu);

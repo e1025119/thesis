@@ -20,7 +20,7 @@ public class GraphDisplayPanel extends JPanel {
 	private DirectedSparseGraph<Argument,AttackRelation> g;
 	private AF framework;
 	private BasicVisualizationServer<Argument,AttackRelation> vs;
-	public enum ColorTab{AFF,EF};
+	public enum ColorTab{AFF,EF,SBSF};
 	private ColorTab tab;
 
 	public GraphDisplayPanel(ColorTab tab) {
@@ -44,6 +44,12 @@ public class GraphDisplayPanel extends JPanel {
 				} else if(tab.equals(ColorTab.AFF)) {
 					if(a.isPaintAFF()) {
 						return Color.GREEN;
+					}
+				} else if(tab.equals(ColorTab.SBSF)) {
+					if(a.isPaintSBSF_green()) {
+						return Color.GREEN;
+					} else if(a.isPaintSBSF_blue()) {
+						return Color.BLUE;
 					}
 				}
 				return Color.RED;
