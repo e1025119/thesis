@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -39,6 +40,9 @@ public class ExtensionsForm extends JPanel implements ActionListener,KeyListener
 	private JList<Extension> extensionList = new JList<Extension>(model);
 	private JList<String> nullList = new JList<String>(nullModel);
 	private JScrollPane listScroll = new JScrollPane();
+	private Component infoVert = Box.createVerticalStrut(300),infoHoriz = Box.createHorizontalStrut(10);
+	private JLabel infoLabel = new JLabel("<html><font color=red>To use this function, please select one of the provided examples<br>"
+			+ "or create your own framework in the tab \"Argumentation Framework\".</font></html>");
 
 	public ExtensionsForm(ArgumentationFrameworkForm aff,GraphDisplayPanel dp) {
 		this.aff = aff;
@@ -77,12 +81,22 @@ public class ExtensionsForm extends JPanel implements ActionListener,KeyListener
 		this.add(cwfLabel);
 		this.add(listLabel);
 		this.add(listScroll);
+		this.add(infoVert);
+		this.add(infoLabel);
+		this.add(infoHoriz);
 		dropDownFL.setAlignmentX(LEFT_ALIGNMENT);
 		cwfLabel.setAlignmentX(LEFT_ALIGNMENT);
 		cwfLabel.setVisible(false);
+		infoVert.setVisible(false);
+		infoHoriz.setVisible(false);
+		infoLabel.setVisible(false);
 		listLabel.setAlignmentX(LEFT_ALIGNMENT);
 		listLabel.setVisible(false);
 		listScroll.setAlignmentX(LEFT_ALIGNMENT);
+	}
+
+	public JList<Extension> getExtensionList() {
+		return extensionList;
 	}
 
 	public AF getFramework() {
@@ -93,8 +107,28 @@ public class ExtensionsForm extends JPanel implements ActionListener,KeyListener
 		this.framework = framework;
 	}
 
-	//TODO Label oder sowas für AF eigenschaften coherence/well-foundedness einführen..
-
+	public void refresh() {
+		framework = aff.getAF();
+		dp.setGraph(framework);
+		dp.revalidate();
+		if(framework.getAr().getArguments().isEmpty()) {
+			for(Component c : this.getComponents()) {
+				c.setVisible(false);
+			}
+			infoVert.setVisible(true);
+			infoHoriz.setVisible(true);
+			infoLabel.setVisible(true);
+		}
+		else {
+			for(Component c : this.getComponents()) {
+				c.setVisible(true);
+			}
+			infoLabel.setVisible(false);
+			infoVert.setVisible(false);
+			infoHoriz.setVisible(false);
+		}
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent ae) {
 		if(ae.getSource() == calculateExtension) {

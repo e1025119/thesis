@@ -15,12 +15,14 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import exceptions.InvalidArgumentException;
 import logic_basics.*;
 import gui.GraphDisplayPanel.ColorTab;
 
-public class MainFrame implements ActionListener,KeyListener {
+public class MainFrame implements ActionListener,KeyListener,ChangeListener {
 
 	private final JMenuBar menu = new JMenuBar();
 	private final JMenuItem help1,help2,exmpl1,exmpl2,exmpl3;
@@ -38,7 +40,9 @@ public class MainFrame implements ActionListener,KeyListener {
 		frame.setSize(1080,720);
 		frame.setTitle("KAFFEE");
 		frame.setResizable(false);
-		
+
+		tabs = new JTabbedPane();
+
 		/* menu bar */
 		JMenu help = new JMenu("HELP");
 		help.setMnemonic('h');
@@ -57,7 +61,8 @@ public class MainFrame implements ActionListener,KeyListener {
 		menu.add(help);
 		menu.add(exmpl);
 		menu.setFocusable(false);
-		
+
+		/* listeners */
 		help1.addActionListener(this);
 		help2.addActionListener(this);
 		exmpl1.addActionListener(this);
@@ -68,9 +73,9 @@ public class MainFrame implements ActionListener,KeyListener {
 		exmpl1.addKeyListener(this);
 		exmpl2.addKeyListener(this);
 		exmpl3.addKeyListener(this);
-		
+		tabs.addChangeListener(this);
+
 		/* tabbed Pane that holds the relevant part of the gui */
-		tabs = new JTabbedPane();
 		JPanel definitionTab = new JPanel(new GridLayout(1,2));
 		JPanel extensionTab = new JPanel(new GridLayout(1,2));
 		JPanel stepByStepTab = new JPanel(new GridLayout(1,2));
@@ -83,24 +88,27 @@ public class MainFrame implements ActionListener,KeyListener {
 		tabs.addTab("Argumentation Framework",definitionTab);
 		tabs.addTab("Extensions",extensionTab);
 		tabs.addTab("Step By Step",stepByStepTab);
-		
+		tabs.getComponent(0).setName("definitionTab");
+		tabs.getComponent(1).setName("extensionTab");
+		tabs.getComponent(2).setName("stepByStepTab");
+
 		displayPanel1.setBorder(BorderFactory.createLineBorder(new Color((float)0.7,(float)0.79,1),2));
 		displayPanel2.setBorder(BorderFactory.createLineBorder(new Color((float)0.7,(float)0.79,1),2));
 		displayPanel3.setBorder(BorderFactory.createLineBorder(new Color((float)0.7,(float)0.79,1),2));
-		
+
 		definitionTab.add(definitionForm);
 		definitionTab.add(displayPanel1);
 		extensionTab.add(extensionsForm);
 		extensionTab.add(displayPanel2);
 		stepByStepTab.add(stepByStepForm);
 		stepByStepTab.add(displayPanel3);
-		
+
 		/* finishing up */
 		frame.setJMenuBar(menu);
 		frame.setContentPane(tabs);
 		frame.setVisible(true);
 	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent ae) {
 		if(ae.getSource() == help1) {
@@ -120,19 +128,19 @@ public class MainFrame implements ActionListener,KeyListener {
 			ar.add(b1);
 			ar.add(s2);
 			ar.add(b2);
-			
+
 			AttackRelation r1 = new AttackRelation(b1,s1);
 			AttackRelation r2 = new AttackRelation(s2,b1);
 			AttackRelation r3 = new AttackRelation(b2,s2);
 			Att att = new Att();
 			try {
-			att.add(r1,ar);
-			att.add(r2,ar);
-			att.add(r3,ar);
+				att.add(r1,ar);
+				att.add(r2,ar);
+				att.add(r3,ar);
 			} catch(InvalidArgumentException iae) {
 				//not gonna happen..
 			}
-			
+
 			AF af = new AF(ar,att);
 			definitionForm.update(af);
 		}
@@ -146,8 +154,8 @@ public class MainFrame implements ActionListener,KeyListener {
 			ar.add(b);
 			Att att = new Att();
 			try {
-			att.add(r1,ar);
-			att.add(r2,ar);
+				att.add(r1,ar);
+				att.add(r2,ar);
 			} catch(InvalidArgumentException iae) {
 				//not gonna happen..
 			}
@@ -162,16 +170,16 @@ public class MainFrame implements ActionListener,KeyListener {
 			ar.add(b);
 			Att att = new Att();
 			try {
-			att.add(r1,ar);
+				att.add(r1,ar);
 			} catch(InvalidArgumentException iae) {
 				//not gonna happen..
 			}
-			
+
 			AF af = new AF(ar,att);
 			definitionForm.update(af);
 		}
 	}
-	
+
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if(e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -186,5 +194,18 @@ public class MainFrame implements ActionListener,KeyListener {
 	@Override
 	public void keyTyped(KeyEvent e) {
 		//do nothing
+	}
+
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		try {
+			if(tabs.getSelectedComponent().getName().equals("extensionTab")) {
+				extensionsForm.refresh();
+			} else if(tabs.getSelectedComponent().getName().equals("stepByStepTab")) {
+				stepByStepForm.refresh();
+			}
+		} catch(NullPointerException n) {
+			//do nothing
+		}
 	}
 }
