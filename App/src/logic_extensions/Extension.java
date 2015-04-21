@@ -10,6 +10,7 @@ public abstract class Extension {
 
 	private AR arguments;
 	private AF framework;
+	public enum ExtensionTypes{Admissible,Preferred,Stable,Grounded,Complete}
 	
 	public Extension(AR arguments,AF framework) {
 		this.arguments = arguments;

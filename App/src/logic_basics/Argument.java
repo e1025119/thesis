@@ -3,11 +3,19 @@ package logic_basics;
 public class Argument {
 
 	private String text,ref;
-	private boolean paintEF = false,paintAFF = false,paintSBSF_green = false,paintSBSF_blue = false;
+	private boolean paintEF = false,paintAFF = false,paintSBSF_green = false,paintSBSF_blue = false,paintSBSF_orange = false;
 	
 	public Argument(String ref,String text) {
 		this.ref = ref;
 		this.text = text;
+	}
+
+	public boolean isPaintSBSF_orange() {
+		return paintSBSF_orange;
+	}
+
+	public void setPaintSBSF_orange(boolean paintSBSF_orange) {
+		this.paintSBSF_orange = paintSBSF_orange;
 	}
 
 	public boolean isPaintSBSF_green() {

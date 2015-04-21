@@ -41,15 +41,21 @@ public class GraphDisplayPanel extends JPanel {
 					if(a.isPaintEF()) {
 						return Color.GREEN;	
 					}
-				} else if(tab.equals(ColorTab.AFF)) {
+				}
+				else if(tab.equals(ColorTab.AFF)) {
 					if(a.isPaintAFF()) {
 						return Color.GREEN;
 					}
-				} else if(tab.equals(ColorTab.SBSF)) {
+				}
+				else if(tab.equals(ColorTab.SBSF)) {
 					if(a.isPaintSBSF_green()) {
 						return Color.GREEN;
-					} else if(a.isPaintSBSF_blue()) {
+					}
+					else if(a.isPaintSBSF_blue()) {
 						return Color.BLUE;
+					}
+					else if(a.isPaintSBSF_orange()) {
+						return Color.ORANGE;
 					}
 				}
 				return Color.RED;
