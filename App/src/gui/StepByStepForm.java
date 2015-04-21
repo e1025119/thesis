@@ -2,6 +2,7 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,9 +12,12 @@ import java.awt.event.KeyListener;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import logic_basics.Argument;
@@ -28,7 +32,8 @@ public class StepByStepForm extends JPanel implements ActionListener,KeyListener
 	private GraphDisplayPanel dp;
 	private Component infoVert = Box.createVerticalStrut(300),infoHoriz = Box.createHorizontalStrut(10);
 	private JTextArea extensionArea;
-	private JComboBox<Argument> argumentDropDown = new JComboBox<Argument>();
+	private JComboBox<String> argumentDropDown = new JComboBox<String>();
+	private JButton prev = new JButton(),next = new JButton();
 	private JLabel infoLabel = new JLabel("<html><font color=red>To use this function, please select one of the calculated extensions<br>"
 			+ "in the tab \"Extensions\".</font></html>");
 
@@ -37,6 +42,12 @@ public class StepByStepForm extends JPanel implements ActionListener,KeyListener
 		this.ext = ext;
 		this.dp = dp;
 		this.setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
+		
+		/* listeners */
+		prev.addActionListener(this);
+		prev.addKeyListener(this);
+		next.addActionListener(this);
+		next.addKeyListener(this);
 		
 		/* no extension selected */
 		this.add(infoVert);
@@ -51,24 +62,38 @@ public class StepByStepForm extends JPanel implements ActionListener,KeyListener
 		extensionArea = new JTextArea();
 		extensionArea.setEditable(false);
 		JPanel extensionBox = new JPanel();
+		JPanel extensionFlow = new JPanel(new FlowLayout());
+		JScrollPane extensionScroll = new JScrollPane(extensionArea);
+		extensionScroll.setPreferredSize(new Dimension(500,200));
 		extensionBox.setLayout(new BorderLayout());
 		extensionBox.add(extensionLabel,BorderLayout.NORTH);
 		extensionBox.add(Box.createVerticalGlue());
-		extensionBox.add(extensionArea,BorderLayout.WEST);
-		JPanel extensionFlow = new JPanel(new FlowLayout());
-		extensionFlow.add(Box.createGlue());
+		extensionBox.add(extensionScroll,BorderLayout.WEST);
 		extensionFlow.add(extensionBox);
-		extensionFlow.add(Box.createGlue());
+		extensionFlow.add(Box.createHorizontalStrut(100));
 		
 		JLabel argumentLabel = new JLabel("Select Argument:");
-		JPanel argumentBox = new JPanel(new BorderLayout());
+		JPanel argumentBox1 = new JPanel(new BorderLayout());
 		JPanel argumentFlow = new JPanel(new FlowLayout());
-		argumentBox.add(argumentLabel);
-		argumentBox.add(argumentDropDown);
-		argumentFlow.add(argumentBox);
+		JPanel argumentBox2 = new JPanel(new FlowLayout());
+		argumentBox1.add(argumentLabel,BorderLayout.NORTH);
+		argumentDropDown.setPreferredSize(new Dimension(150,20));
+		argumentBox1.add(argumentDropDown,BorderLayout.WEST);
+		prev.setIcon(new ImageIcon("left.png"));
+		prev.setPreferredSize(new Dimension(25,25));
+		next.setIcon(new ImageIcon("right.png"));
+		next.setPreferredSize(new Dimension(25,25));
+		argumentBox2.add(prev);
+		argumentBox2.add(Box.createHorizontalStrut(10));
+		argumentBox2.add(next);
+		argumentFlow.add(argumentBox1);
+		argumentFlow.add(Box.createHorizontalStrut(100));
+		argumentFlow.add(argumentBox2);
+		argumentFlow.add(Box.createHorizontalStrut(100));
 		
 		this.add(extensionFlow);
 		this.add(argumentFlow);
+		this.add(Box.createVerticalStrut(300));
 	}
 	
 	public void refresh() {
@@ -91,10 +116,10 @@ public class StepByStepForm extends JPanel implements ActionListener,KeyListener
 			for(Component c : this.getComponents()) {
 				c.setVisible(true);
 			}
-			
-			DefaultComboBoxModel<Argument> argumentModel = new DefaultComboBoxModel<Argument>();
+			DefaultComboBoxModel<String> argumentModel = new DefaultComboBoxModel<String>();
+			argumentModel.addElement("all");
 			for(Argument a : ext.getExtensionList().getSelectedValue().getArguments().getArguments()) {
-				argumentModel.addElement(a);
+				argumentModel.addElement(a.getRef());
 			}
 			argumentDropDown.setModel(argumentModel);
 			extensionArea.setText(ext.getExtensionList().getSelectedValue().toString());
@@ -106,8 +131,13 @@ public class StepByStepForm extends JPanel implements ActionListener,KeyListener
 	}
 	
 	@Override
-	public void keyPressed(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+	public void keyPressed(KeyEvent e) {
+		if(e.getSource() == prev && e.getKeyCode() == KeyEvent.VK_ENTER) {
+			ActionEvent ae = new ActionEvent(prev,0,"");
+		}
+		else if(e.getSource() == next && e.getKeyCode() == KeyEvent.VK_ENTER) {
+			ActionEvent ae = new ActionEvent(next,0,"");
+		}
 	}
 
 	@Override
@@ -122,7 +152,14 @@ public class StepByStepForm extends JPanel implements ActionListener,KeyListener
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		if(e.getSource() == next) {
+			//TODO
+			System.out.println("next");
+		}
+		else if(e.getSource() == prev) {
+			//TODO
+			System.out.println("prev");
+		}
 	}
 
 }
