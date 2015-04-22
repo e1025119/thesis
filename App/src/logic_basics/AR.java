@@ -116,6 +116,21 @@ public class AR {
 			a.setPaintAFF(false);
 		}
 	}
+	
+	public void setPaintSbsfAllFalse() {
+		for(Argument a : arguments) {
+			a.setPaintSBSF_green(false);
+			a.setPaintSBSF_blue(false);
+			a.setPaintSBSF_orange(false);
+			a.setPaintSBSF_cyan(false);
+		}
+	}
+	
+	public void setPaintEfAllFalse() {
+		for(Argument a : arguments) {
+			a.setPaintEF(false);
+		}
+	}
 
 	public String toString() {
 		String ret = "{";

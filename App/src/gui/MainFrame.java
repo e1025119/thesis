@@ -201,7 +201,8 @@ public class MainFrame implements ActionListener,KeyListener,ChangeListener {
 		try {
 			if(tabs.getSelectedComponent().getName().equals("extensionTab")) {
 				extensionsForm.refresh();
-			} else if(tabs.getSelectedComponent().getName().equals("stepByStepTab")) {
+			}
+			else if(tabs.getSelectedComponent().getName().equals("stepByStepTab")) {
 				stepByStepForm.refresh();
 			}
 		} catch(NullPointerException n) {

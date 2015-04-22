@@ -57,6 +57,9 @@ public class GraphDisplayPanel extends JPanel {
 					else if(a.isPaintSBSF_orange()) {
 						return Color.ORANGE;
 					}
+					else if(a.isPaintSBSF_cyan()) {
+						return Color.CYAN;
+					}
 				}
 				return Color.RED;
 			}

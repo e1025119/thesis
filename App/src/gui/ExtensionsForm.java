@@ -126,6 +126,12 @@ public class ExtensionsForm extends JPanel implements ActionListener,KeyListener
 			infoLabel.setVisible(false);
 			infoVert.setVisible(false);
 			infoHoriz.setVisible(false);
+			
+			framework.getAr().setPaintEfAllFalse();
+			cwfLabel.setVisible(false);
+			listLabel.setVisible(false);
+			model.clear();
+			nullModel.clear();
 		}
 	}
 	
