@@ -25,7 +25,7 @@ import gui.GraphDisplayPanel.ColorTab;
 public class MainFrame implements ActionListener,KeyListener,ChangeListener {
 
 	private final JMenuBar menu = new JMenuBar();
-	private final JMenuItem help1,help2,exmpl1,exmpl2,exmpl3;
+	private final JMenuItem help1,help2,exmpl1,exmpl2,exmpl3,exmpl4;
 	private JFrame frame;
 	private ArgumentationFrameworkForm definitionForm;
 	private ExtensionsForm extensionsForm;
@@ -53,11 +53,13 @@ public class MainFrame implements ActionListener,KeyListener,ChangeListener {
 		exmpl1 = new JMenuItem("Example 1.2",'2');
 		exmpl2 = new JMenuItem("Example 1.3",'3');
 		exmpl3 = new JMenuItem("Example 1.4",'4');
+		exmpl4 = new JMenuItem("Example StepByStep",'s');
 		help.add(help1);
 		help.add(help2);
 		exmpl.add(exmpl1);
 		exmpl.add(exmpl2);
 		exmpl.add(exmpl3);
+		exmpl.add(exmpl4);
 		menu.add(help);
 		menu.add(exmpl);
 		menu.setFocusable(false);
@@ -68,11 +70,13 @@ public class MainFrame implements ActionListener,KeyListener,ChangeListener {
 		exmpl1.addActionListener(this);
 		exmpl2.addActionListener(this);
 		exmpl3.addActionListener(this);
+		exmpl4.addActionListener(this);
 		help1.addKeyListener(this);
 		help2.addKeyListener(this);
 		exmpl1.addKeyListener(this);
 		exmpl2.addKeyListener(this);
 		exmpl3.addKeyListener(this);
+		exmpl4.addKeyListener(this);
 		tabs.addChangeListener(this);
 
 		/* tabbed Pane that holds the relevant part of the gui */
@@ -171,6 +175,49 @@ public class MainFrame implements ActionListener,KeyListener,ChangeListener {
 			Att att = new Att();
 			try {
 				att.add(r1,ar);
+			} catch(InvalidArgumentException iae) {
+				//not gonna happen..
+			}
+
+			AF af = new AF(ar,att);
+			definitionForm.update(af);
+		}
+		else if(ae.getSource() == exmpl4) {
+			Argument a = new Argument("a","");
+			Argument b = new Argument("b","");
+			Argument c = new Argument("c","");
+			Argument d = new Argument("d","");
+			Argument e = new Argument("e","");
+			Argument f = new Argument("f","");
+			AR ar = new AR();
+			ar.add(a);
+			ar.add(b);
+			ar.add(c);
+			ar.add(d);
+			ar.add(e);
+			ar.add(f);
+
+			AttackRelation r1 = new AttackRelation(b,a);
+			AttackRelation r2 = new AttackRelation(a,f);
+			AttackRelation r3 = new AttackRelation(f,e);
+			AttackRelation r4 = new AttackRelation(e,d);
+			AttackRelation r5 = new AttackRelation(d,c);
+			AttackRelation r6 = new AttackRelation(c,b);
+			AttackRelation r7 = new AttackRelation(b,e);
+			AttackRelation r8 = new AttackRelation(f,c);
+			AttackRelation r9 = new AttackRelation(d,a);
+			
+			Att att = new Att();
+			try {
+				att.add(r1,ar);
+				att.add(r2,ar);
+				att.add(r3,ar);
+				att.add(r4,ar);
+				att.add(r5,ar);
+				att.add(r6,ar);
+				att.add(r7,ar);
+				att.add(r8,ar);
+				att.add(r9,ar);
 			} catch(InvalidArgumentException iae) {
 				//not gonna happen..
 			}

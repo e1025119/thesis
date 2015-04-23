@@ -31,7 +31,6 @@ import logic_extensions.Extension;
 @SuppressWarnings("serial")
 public class StepByStepForm extends JPanel implements ActionListener,KeyListener,ItemListener {
 
-	private Extension.ExtensionTypes extensionType;
 	private ExtensionsForm ext;
 	private Extension extension;
 	private AF framework;
@@ -39,14 +38,13 @@ public class StepByStepForm extends JPanel implements ActionListener,KeyListener
 	private Component infoVert = Box.createVerticalStrut(300),infoHoriz = Box.createHorizontalStrut(10);
 	private JTextArea extensionArea;
 	private JComboBox<String> argumentDropDown = new JComboBox<String>();
-	private JButton prev = new JButton(),next = new JButton(),startSBS = new JButton("start \"Step by Step\"");
-	private JLabel infoLabel = new JLabel("<html><font color=red>To use this function, please select one of the calculated extensions<br>"
-			+ "in the tab \"Extensions\".</font></html>");
-
+	private JButton next = new JButton(),startSBS = new JButton("start \"Step by Step\"");
+	private JLabel infoLabel = new JLabel("<html><font color=red>To use this function, please select one of the calculated admissible extensions"
+			+ " in the tab \"Extensions\".</font></html>");
 
 	/* list for StepByStep algorithm */
 	private AR arguments,attackers;
-	private int cntSteps,cntAtt;
+	private int cntSteps = 0,cntAtt = 0,cntArg = 0;
 
 	public StepByStepForm(ExtensionsForm ext,GraphDisplayPanel dp) {
 		this.ext = ext;
@@ -54,8 +52,6 @@ public class StepByStepForm extends JPanel implements ActionListener,KeyListener
 		this.setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
 
 		/* listeners */
-		prev.addActionListener(this);
-		prev.addKeyListener(this);
 		next.addActionListener(this);
 		next.addKeyListener(this);
 		startSBS.addActionListener(this);
@@ -88,21 +84,15 @@ public class StepByStepForm extends JPanel implements ActionListener,KeyListener
 		JLabel argumentLabel = new JLabel("Select Argument:");
 		JPanel argumentBox1 = new JPanel(new BorderLayout());
 		JPanel argumentFlow = new JPanel(new FlowLayout());
-		JPanel argumentNextPrev = new JPanel(new FlowLayout());
 		JPanel argumentBox2 = new JPanel(new BorderLayout());
 		argumentBox1.add(argumentLabel,BorderLayout.NORTH);
 		argumentDropDown.setPreferredSize(new Dimension(150,20));
 		argumentDropDown.setEditable(false);
 		argumentBox1.add(argumentDropDown,BorderLayout.WEST);
-		prev.setIcon(new ImageIcon("left.png"));
-		prev.setPreferredSize(new Dimension(25,25));
 		next.setIcon(new ImageIcon("right.png"));
 		next.setPreferredSize(new Dimension(25,25));
-		argumentNextPrev.add(prev);
-		argumentNextPrev.add(Box.createHorizontalStrut(10));
-		argumentNextPrev.add(next);
 		argumentBox2.add(startSBS,BorderLayout.NORTH);
-		argumentBox2.add(argumentNextPrev,BorderLayout.CENTER);
+		argumentBox2.add(next,BorderLayout.CENTER);
 		argumentFlow.add(argumentBox1);
 		argumentFlow.add(Box.createHorizontalStrut(100));
 		argumentFlow.add(argumentBox2);
@@ -121,7 +111,7 @@ public class StepByStepForm extends JPanel implements ActionListener,KeyListener
 		ext.refresh();
 		framework = ext.getFramework();
 		extension = ext.getExtensionList().getSelectedValue();
-		if(extension == null) {
+		if(extension == null || !(extension instanceof AdmissibleExtension)) {
 			for(Component c : this.getComponents()) {
 				c.setVisible(false);
 			}
@@ -130,10 +120,6 @@ public class StepByStepForm extends JPanel implements ActionListener,KeyListener
 			infoHoriz.setVisible(true);
 		}
 		else {
-			if(extension instanceof AdmissibleExtension){
-				extensionType = Extension.ExtensionTypes.Admissible;
-			}
-
 			dp.setGraph(framework);
 			dp.revalidate();
 			for(Component c : this.getComponents()) {
@@ -154,8 +140,12 @@ public class StepByStepForm extends JPanel implements ActionListener,KeyListener
 	}
 
 	public void initStepByStepAll() {
+		cntArg = 0;
+		cntAtt = 0;
+		cntSteps = 0;
 		framework.getAr().setPaintSbsfAllFalse();
 		arguments = new AR();
+		attackers = new AR();
 		for(Argument a : extension.getArguments().getArguments()) {
 			a.setPaintSBSF_green(true);
 			arguments.add(a);
@@ -168,10 +158,8 @@ public class StepByStepForm extends JPanel implements ActionListener,KeyListener
 		cntSteps = 0;
 		cntAtt = 0;
 		framework.getAr().setPaintSbsfAllFalse();
-		arguments = new AR();
 		attackers = new AR();
 		chosen.setPaintSBSF_blue(true);
-		arguments.add(chosen);
 		attackers.addAll(framework.getAtt().getAttacker(chosen));
 		dp.setGraph(framework);
 		dp.revalidate();
@@ -179,28 +167,33 @@ public class StepByStepForm extends JPanel implements ActionListener,KeyListener
 
 	public void resetStepByStep() {
 		cntSteps = 0;
+		cntAtt = 0;
+		arguments = new AR();
+		attackers = new AR();
 		framework.getAr().setPaintSbsfAllFalse();
 		dp.setGraph(framework);
 		dp.revalidate();
 	}
 
-	/* all arguments mode: 
-	 * 	- 0: select blue argument (defendee)
-	 * 		- 1: select orange argument (attacker)
-	 * 		- 2: select all cyan arguments (defenders)
-	 * 		- 3: goto 1 until list is empty
-	 * 	- 4: goto 0 until list is empty
-	 * 
-	 * specific mode:
-	 * 	- 0: select orange argument (attacker)
-	 * 	- 1: select all cyan arguments (defenders)
-	 * 	- 2: goto 0 until list is empty
-	 */
-	public void nextStep(boolean all) {
+	/** 
+	 * @param all represents the mode that is used by StepByStep at the moment:
+	 * 				false -> specific argument mode: one argument is selected and defended against all attackers (if possible).
+	 * 				true  -> all arguments mode: every argument in the admissible extension is defended if possible. 
+	 * @brief this method lets the user take the next step in the StepByStep visualization of admissible extension calculation.
+	 * 			depending on counters and lists, this method takes each (or a specified, single) argument and defends it against all
+	 * 			attackers.
+	 * */
+	public void nextStep(boolean all) throws NullPointerException {
+		/* specific mode */
 		if(!all && cntAtt < attackers.size()) {
 			switch(cntSteps % 2){
 			case 0:
 				if(cntAtt != 0) {
+					for(Argument a : extension.getArguments().getArguments()) {
+						if(a.isPaintSBSF_cyan()) {
+							a.setPaintSBSF_cyan(false);
+						}
+					}
 					attackers.getArguments().get(cntAtt-1).setPaintSBSF_orange(false);
 				}
 				attackers.getArguments().get(cntAtt).setPaintSBSF_orange(true);
@@ -221,31 +214,107 @@ public class StepByStepForm extends JPanel implements ActionListener,KeyListener
 				dp.revalidate();
 				break;
 			default:
-				//shouldnt happen
+				//shouldn't happen
 			}
 			cntSteps++;
+		}
+		/* all arguments mode */
+		else if(all && cntArg < arguments.size()) {
+			Argument chosen = arguments.getArguments().get(cntArg);
+			attackers = new AR();
+			attackers.addAll(framework.getAtt().getAttacker(chosen));
+
+			if(cntAtt >= attackers.size() && attackers.size() != 0) {
+				cntAtt = 0;
+				cntSteps = 0;
+				cntArg++;
+				for(Argument a : attackers.getArguments()) {
+					a.setPaintSBSF_orange(false);
+				}
+				for(Argument a : arguments.getArguments()) {
+					if(a.equals(chosen)) {
+						a.setPaintSBSF_green(false);
+						a.setPaintSBSF_blue(true);
+						a.setPaintSBSF_cyan(false);
+					}
+					else {
+						a.setPaintSBSF_blue(false);
+						a.setPaintSBSF_green(true);
+						a.setPaintSBSF_cyan(false);
+					}
+				}
+				nextStep(true);
+				return;
+			}
+			else if(cntAtt < attackers.size() && attackers.size() != 0) {
+				switch(cntSteps % 2){
+				case 0:
+					for(Argument a : arguments.getArguments()) {
+						if(!a.equals(chosen)) {
+							a.setPaintSBSF_cyan(false);
+							a.setPaintSBSF_green(true);
+							a.setPaintSBSF_blue(false);						
+						}
+						else if(a.equals(chosen)) {
+							a.setPaintSBSF_cyan(false);
+							a.setPaintSBSF_green(false);
+							a.setPaintSBSF_blue(true);
+						}
+					}
+					if(cntAtt != 0) {
+						attackers.getArguments().get(cntAtt-1).setPaintSBSF_orange(false);
+					}
+					attackers.getArguments().get(cntAtt).setPaintSBSF_orange(true);
+					dp.setGraph(framework);
+					dp.revalidate();
+					break;
+				case 1:
+					for(Argument a : extension.getArguments().getArguments()) {
+						if(framework.getAtt().getAttacker(attackers.getArguments().get(cntAtt)).contains(a) && !a.equals(chosen)) {
+							a.setPaintSBSF_cyan(true);
+							a.setPaintSBSF_green(false);
+						}
+						else if(framework.getAtt().getAttacker(attackers.getArguments().get(cntAtt)).contains(a) && a.equals(chosen)) {
+							a.setPaintSBSF_cyan(true);
+							a.setPaintSBSF_blue(false);
+						}
+					}
+					cntAtt++;
+					dp.setGraph(framework);
+					dp.revalidate();
+					break;
+				default:
+					//shouldn't happen
+				}
+				cntSteps++;
+			}
+			else if(attackers.size() == 0) {
+				for(Argument a : arguments.getArguments()) {
+					if(a.equals(chosen)) {
+						a.setPaintSBSF_green(false);
+						a.setPaintSBSF_blue(true);
+						a.setPaintSBSF_cyan(false);
+					}
+					else {
+						a.setPaintSBSF_blue(false);
+						a.setPaintSBSF_green(true);
+						a.setPaintSBSF_cyan(false);
+					}
+				}
+				dp.setGraph(framework);
+				dp.revalidate();
+				cntArg++;
+			}
 		}
 		else {
 			resetStepByStep();
 		}
 	}
 
-	public void prevStep() {
-
-	}
-
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if(e.getSource() == prev && e.getKeyCode() == KeyEvent.VK_ENTER) {
-			ActionEvent ae = new ActionEvent(prev,0,"");
-			actionPerformed(ae);
-		}
-		else if(e.getSource() == next && e.getKeyCode() == KeyEvent.VK_ENTER) {
-			ActionEvent ae = new ActionEvent(next,0,"");
-			actionPerformed(ae);
-		}
-		else if(e.getSource() == startSBS && e.getKeyCode() == KeyEvent.VK_ENTER) {
-			ActionEvent ae = new ActionEvent(startSBS,0,"");
+		if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+			ActionEvent ae = new ActionEvent(e.getSource(),0,"");
 			actionPerformed(ae);
 		}
 	}
@@ -264,15 +333,16 @@ public class StepByStepForm extends JPanel implements ActionListener,KeyListener
 	public void actionPerformed(ActionEvent e) {
 		String tmp = (String)argumentDropDown.getSelectedItem();
 		if(e.getSource() == next) {
-			if(tmp.equals("all")) {
-				nextStep(true);
+			try {
+				if(tmp.equals("all")) {
+					nextStep(true);
+				}
+				else {
+					nextStep(false);
+				}
+			} catch(NullPointerException n) {
+				//do nothing
 			}
-			else {
-				nextStep(false);
-			}
-		}
-		else if(e.getSource() == prev) {
-			prevStep();
 		}
 		else if(e.getSource() == startSBS) {
 			if(tmp.equals("all")) {

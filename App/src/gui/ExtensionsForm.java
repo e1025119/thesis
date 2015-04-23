@@ -127,11 +127,12 @@ public class ExtensionsForm extends JPanel implements ActionListener,KeyListener
 			infoVert.setVisible(false);
 			infoHoriz.setVisible(false);
 			
-			framework.getAr().setPaintEfAllFalse();
-			cwfLabel.setVisible(false);
-			listLabel.setVisible(false);
-			model.clear();
-			nullModel.clear();
+			//TODO wenn extensionForm refresh alles resettet.. kann man im stepByStep nix mehr machen -> DTO?
+			//framework.getAr().setPaintEfAllFalse();
+			//cwfLabel.setVisible(false);
+			//listLabel.setVisible(false);
+			//model.clear();
+			//nullModel.clear();
 		}
 	}
 	
