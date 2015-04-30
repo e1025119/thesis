@@ -131,7 +131,6 @@ Finally I will append the documentation of an application specifically written d
 When talking about nonmonotonic reasoning, one is referring to the process of deducing knowledge within a formal logic,
 whose consequence relation does not fulfill the requirements of monotonicity.
 
-%Definition of Monotonicity :TODO evtl. noch ein bsp. einbauen? auf default logic verweisen?
 \begin{elab}[Monotonicity]
 If for a given set of formulas $\bm{\psi}$ and a formula $\bm{A}$ the logical consequence $\bm{\psi \vdash A}$ holds,\\ then $\bm{\psi,B \vdash A}$ still holds.
 \end{elab}
@@ -146,7 +145,7 @@ Therefore arguments are modeled as formulas which might or might not attack each
 For instance, the most believeable argument out of two, so to say the "winner", 
 would be the one, that attacks the other argument, and at the same time, does not get attacked by said argument.\\
 In the following chapter, I will provide all the necessary definitions to achieve the above mentioned aim.
-Most of the definitions used in this thesis were originally introduced in \cite{Dung}, some more intuitive forms were found in \cite{Egly}.
+%Most of the definitions used in this thesis were originally introduced in \cite{Dung}, some more intuitive forms were found in \cite{Egly}.
 
 \newpage	
 
@@ -181,8 +180,11 @@ An argument $\bm{a \in AR}$ is acceptable with respect to a set \textbf{S}, iff 
 If for said argument $\bm{a}$ is not being attacked by any $\bm{b \in AR}$, then it is acceptable with even the empty set.
 \end{myfrmrk}
 
+
+\addcontentsline{toc}{subsection}{Admissible Extensions}
 \begin{mydefn}[Admissibility]
 A conflict-free Set \textbf{S} is said to be admissible, iff each argument $\bm{a \in S}$ is acceptable with respect to \textbf{S}.
+Often, \textbf{S} is also called an admissible extension.
 \label{admissible}
 \end{mydefn}
 
@@ -193,9 +195,8 @@ Before we discuss those extensions and their implications on argumentation theor
 
 \newpage
 
-%extensions in prediacte logic
 \begin{myelab}[Extensions]
-For any n-ary predicate $\bm{\Phi}$, its extension can be written as $\bm{\{(x_{1},...,x_{n})|\Phi(x_{1},...,x_{n})\}}$.\\
+For any n-ary predicate $\bm{\Phi}$, its extension can be written as $\bm{\{(x_{1},...,x_{n}) \vert \Phi(x_{1},...,x_{n})\}}$.\\
 So, the extension of a predicate is nothing other than the maximum set of tuples \\ fulfilling said predicate.
 \end{myelab}
 
@@ -207,6 +208,7 @@ From here on, we will use $\bm{E_{i}}$ to denote an arbitrary but fixed extensio
 Also, if we want to talk about the set of all extensions of one specific type, we will use $\bm{i(AF)}$.
 \end{myrmrk}
 
+\addcontentsline{toc}{subsection}{Preferred Extensions}
 \begin{mydefn}[Preferred Extensions]
 $\bm{E_{p}}$ is a preferred extension of \textbf{AF}, iff $\bm{E_{p}}$ is a maximum admissible set of \textbf{AF}.
 \end{mydefn}
@@ -233,9 +235,11 @@ On the other hand, $\bm{c \text{ and } a}$ are both acceptable with respect to $
 \newpage
 
 Another approach would be the \textit{stable extension}, which is defined as follows:
+
+\addcontentsline{toc}{subsection}{Stable Extensions}
 \begin{mydefn}[Stable Extensions]
 The conflict-free set $\bm{E_{s}}$ is a stable extension of \textbf{AF}, iff $\bm{E_{s}}$ attacks each argument $\bm{a \notin E_{s}}$; which is equivalent to
-$\bm{\{a|a}$ is not attacked by $\bm{E_{s}\}}$.
+$\bm{\{a \vert a}$ is not attacked by $\bm{E_{s}\}}$.
 \end{mydefn}
 
 Apparently, the stable extension contains all arguments that it does not attack itself. Therefore it has to be a conflict-free, admissible set.\\
@@ -243,18 +247,38 @@ We will explore the differences between those extensions in a later chapter.
 
 For now, there are two more types of extensions, which have to be introduced.
 
+\addcontentsline{toc}{subsection}{Complete Extensions}
 \begin{mydefn}[Complete Extensions]
 The admissible set $\bm{E_{c}}$ is a complete extension of \textbf{AF}, iff every argument which is acceptable with respect to $\bm{E_{c}}$, is included in $\bm{E_{c}}$.
 \end{mydefn}
 
 It is easy to see that many different complete extensions can exist, depending on $E_{c}$. That leads directly to the \textit{grounded extension}.
 
+\addcontentsline{toc}{subsection}{Grounded Extensions}
 \begin{mydefn}[Grounded Extensions]
-The intersection of all complete extensions is called the grounded extension. $\bm{E_{g} := \bigcap{comp(AF)}}$
+The intersection of all complete extensions is called the grounded extension.\\ $\bm{E_{g} := \bigcap{comp(AF)}}$
 \label{ground ext}
 \end{mydefn}
 
+All those types of extensions can be originally found in \cite{Dung}.
+Next, we will take a look at two more extensions, one originally introduced in \cite{Caminada}, the other found in \cite{Dung2}.
+
+\addcontentsline{toc}{subsection}{Semi-stable Extension}
+\begin{mydefn}[Semi-stable Extensions]
+A set $\bm{E_{ss}}$ is a semi-stable extensions, if it is a complete extension and the set $\bm{E_{ss} \cup \{a \in AR \vert E_{ss} \text{ attacks }a\}}$
+is maximal (with respect to set inclusion).
+\label{semi ext}
+\end{mydefn}
+
+\addcontentsline{toc}{subsection}{Ideal Extension}
+\begin{mydefn}[Ideal Extensions]
+A set $\bm{E_{i}}$ is an ideal extension, if it is the maximal admissible set, that is contained in every preferred extension.
+\label{ideal ext}
+\end{mydefn}
+
 Since all the necessary, basic definitions of argumentation frameworks have been laid out, I will go on and provide the promised examples.
+
+\newpage
 
 \subsection{Examples of different Extensions}
 By expanding example 1.1 with a few more arguments, we now have to consider the following example.
@@ -314,6 +338,8 @@ Following extensions can be calculated
 
 The following example (on the contrary to the above) has different preferred and stable extensions.
 
+\newpage
+
 \begin{myexmpl}
 $\bm{b=}$"Batman is Clark Kent."\\
 $\bm{AR=\{b\}}$, $\bm{att=\{(b,b)\}}$
@@ -329,18 +355,88 @@ The corresponding graph looks like follows.
 \caption{graph of AF (example \ref{b loop ex})}
 \end{figure}
 
-For this last example here, the extensions would look as follows.
+For this example, the extensions would look as follows.
 \begin{itemize}
 	\item{$\bm{E_{P}=E_{C}=E_{G}=\{\{\emptyset\}\}}$}
 	\item{$\bm{E_{S}=\{\emptyset\}}$}
 \end{itemize}
+
+\begin{myexmpl}
+Another good example, specifically showing that not every semi-stable extension is also stable, was provided in \cite{Caminada}.\\
+In the following graph, the set $\bm{E_{ss}=\{b,d\}}$ is semi-stable but not stable.
+\label{stable != semi-stable}
+\end{myexmpl}
+\begin{figure}[h!]
+\begin{center}\begin{tikzpicture}
+	\node[state](c){$c$};
+	\node[state](a)[above left = of c]{$a$};
+	\node[state](b)[below left = of c]{$b$};
+	\node[state](d)[right = of c]{$d$};
+	\path[->,thick](a) edge[loop left] (a);
+	\path[->,thick](a) edge (c);
+	\path[->,thick](b) edge (c);
+	\path[->,thick](c) edge (d);
+\end{tikzpicture}\end{center}
+\caption{semi-stable but not stable (example \ref{stable != semi-stable})}
+\end{figure}
+
+\newpage
+
+\begin{myexmpl}
+The following example illustrates ideal extensions (and how they differ from e.g. grounded extensions).\\
+In the following graph, the set $\bm{E_{i}=\{b\}}$ is an ideal extension. This example can also be found in \cite{Dung2}.
+\label{ideal extension}
+\end{myexmpl}
+\begin{figure}[h!]
+\begin{center}\begin{tikzpicture}
+	\node[state](a){$a$};
+	\node[state](b)[right = of a]{$b$};
+	\node[state](c)[above right = of b]{$c$};
+	\node[state](d)[below right = of b]{$d$};
+	\node[state](e)[below right = of c]{$e$};
+	\node[state](f)[right = of e]{$f$};
+	\path[->,thick](a) edge[loop left] (a);
+	\path[->,thick](a) edge (b);
+	\path[->,thick](c) edge[bend left] (d);
+	\path[->,thick](d) edge[bend left] (c);
+	\path[->,thick](c) edge (e);
+	\path[->,thick](d) edge (e);
+	\path[->,thick](e) edge (f);
+\end{tikzpicture}\end{center}
+\caption{ideal extension (example \ref{ideal extension})}
+\end{figure}
+
+As we can see, the ideal extension $\bm{E_{i}=\{b\}}$ is a subset of every preferred extension ($\bm{\{b,cf\},\{b,d,f\}}$).
 
 \chapter{Conclusions and Implications}
 
 Now that we have established the basic definitions, it is time to travel further down the rabbit hole and explore the meaning of what we just defined.
 
 \section{Relations between different Extensions}
-First off, I want to clarify a few relations between those aforementioned extensions, since they can be reused in later proofs.
+The following, simple tree graph (borrowed from \cite{Hunter}) shows the hierarchy of extension types better than words ever could describe it.
+\begin{figure}[h!]
+\begin{center}\begin{tikzpicture}[node distance=0.5cm, auto,
+	mynode/.style={rectangle,draw=black}]
+	\node[mynode] (stable) {$stable$};
+	\node[mynode] (semi-stable) [above right = of stable] {$semi-stable$};
+	\node[mynode] (preferred) [above right = of semi-stable] {$preferred$};
+	\node[mynode] (complete) [above right = of preferred] {$complete$};
+	\node[mynode] (grounded) [below = of complete] {$grounded$};
+	\node[mynode] (ideal) [below right = of complete] {$ideal$};
+	\node[mynode] (admissible) [above right = of complete] {$admissible$};
+	\path[-] (stable) edge (semi-stable);
+	\path[-] (semi-stable) edge (preferred);
+	\path[-] (preferred) edge (complete);
+	\path[-] (grounded) edge (complete);
+	\path[-] (ideal) edge (complete);
+	\path[-] (complete) edge (admissible);
+\end{tikzpicture}\end{center}
+\caption{hierarchy of extension types}
+\end{figure}
+
+\newpage
+
+Next, I want to clarify a few relations between those aforementioned extensions, since they can be reused in later proofs.
 
 \begin{mylem}
 %latex interprets the first item of the list as a sentence, therefore this "bogus" first sentence.
@@ -363,8 +459,6 @@ $\bm{\implies \exists E_{c}: E_{c} \in E_{C} \land E_{c} \notin E_{P} \implies \
 \begin{myprf}[2]
 Proof for this lemma follows directly from definition \ref{ground ext}.
 \end{myprf}
-
-\newpage
 
 \section{Properties of Argumentation Frameworks}
 Up to now, we have only talked about sets of arguments and their properties. Now we will focus on the whole argumentation framework and 
@@ -393,8 +487,6 @@ If $\bm{a}$ is not acceptable with respect to $\bm{E_{g}}$, this means that ther
 which is also not attacked by $\bm{E_{g}}$. \\ Therefore an infinite sequence of arguments like $\bm{a \text{ and }c}$ has to exist $\implies \text{\Lightning}$.
 \end{myprf}
 
-\newpage
-
 \subsection{Coherent Argumentation Frameworks}
 If an AF has a preferred extension, which is not a stable one too, that indicates some sort of "anomaly" in the framework (see example \ref{b loop ex}).\\
 So what we want to do next, is to find out what criteria has to be met so that preferred and stable extension coincide.
@@ -410,15 +502,17 @@ It follows directly from the definition, that there always exists at least one s
 \chapter{Argumentation Theory and Nonmonotonic Reasoning}
 \section{Default Logic}
 
-\chapter{Applications in Real Life}
+\chapter{Further Topics}
 
-\chapter{Documentation: Application}
-
+\chapter{Documentation - KAFFEE}
 
 %Bibliography - references to papers
 \begin{thebibliography}{1}
-	\bibitem[\textbf{Dung}]{Dung} "On the acceptability of arguments and its fundamental role in nonmonotonic reasoning,...";\\Phan Minh Dung; 1995
-	\bibitem[\textbf{EgGaWo}]{Egly} "Answer-Set Programming Encodings for Argumentation Frameworks"; Uwe Egly, Alice Gaggl, Stefan Woltran; 2010  
+	\bibitem[\textbf{Dung}]{Dung} "On the acceptability of arguments and its fundamental role in nonmonotonic reasoning,..."\\Phan Minh Dung; 1995
+	\bibitem[\textbf{CaCaDu}]{Caminada} "Semi-stable Semantics"\\Martin Caminada, Walter Carnielli, Paul Dunne; 2006
+	\bibitem[\textbf{DuMaTo}]{Dung2} "Computing ideal sceptical argumentation"\\Phan Minh Dung, Paolo Mancarella, Francesca Toni; 2007
+	\bibitem[\textbf{EgGaWo}]{Egly} "Answer-Set Programming Encodings for Argumentation Frameworks"\\Uwe Egly, Alice Gaggl, Stefan Woltran; 2010  
+	\bibitem[\textbf{HuGo}]{Hunter} "Instantiating abstract argumentation with classical logic arguments"\\Anthony Hunter, Nikos Gorogiannis; 2011
 \end{thebibliography}
 
 \end{document}
