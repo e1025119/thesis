@@ -151,7 +151,7 @@ In the following chapter, I will provide all the necessary definitions to achiev
 
 \subsection{Argumentation Frameworks}
 \begin{mydefn}[Argumentation Framework]
-$\bm{AF:=(AR,att)}$
+$\bm{AF:=\langle AR,att \rangle}$
 \end{mydefn}
 
 An argumentation framework AF is defined as a tuple, consisting of a set of arguments and a set of attack relations.
@@ -196,7 +196,7 @@ Before we discuss those extensions and their implications on argumentation theor
 \newpage
 
 \begin{myelab}[Extensions]
-For any n-ary predicate $\bm{\Phi}$, its extension can be written as $\bm{\{(x_{1},...,x_{n}) \vert \Phi(x_{1},...,x_{n})\}}$.\\
+For any n-ary predicate $\bm{\Phi}$, its extension can be written as $\bm{\{(x_{1},\textbf{\dots},x_{n}) \vert \Phi(x_{1},\textbf{\dots},x_{n})\}}$.\\
 So, the extension of a predicate is nothing other than the maximum set of tuples \\ fulfilling said predicate.
 \end{myelab}
 
@@ -436,7 +436,7 @@ The following, simple tree graph (borrowed from \cite{Hunter}) shows the hierarc
 
 \newpage
 
-Next, I want to clarify a few relations between those aforementioned extensions, since they can be reused in later proofs.
+Now I want to show a few specific relations between those aforementioned extensions, since they will be reused in later proofs.
 
 \begin{mylem}
 %latex interprets the first item of the list as a sentence, therefore this "bogus" first sentence.
@@ -467,7 +467,7 @@ make a connection between its properties and extensions.
 \subsection{Well-Founded Argumentation Frameworks}
 The first new property establishes a coherence between preferred, grounded and stable extensions.
 \begin{mydefn}[Well-Founded Argumentation Frameworks]
-An argumentation framework is considered well-founded, iff there exists no infinit sequence of arguments $A_{0},A_{1},...,A_{n},...$ where each $A_{i+1}$ attacks $A_{i}$.
+An argumentation framework is considered well-founded, iff there exists no infinit sequence of arguments $A_{0},A_{1},\dots,A_{n},\dots$ where each $A_{i+1}$ attacks $A_{i}$.
 \end{mydefn}
 
 \begin{myfrmrk}
@@ -500,14 +500,182 @@ It follows directly from the definition, that there always exists at least one s
 \end{myrmrk}
 
 \chapter{Argumentation Theory and Nonmonotonic Reasoning}
+
+One reason why argumentation frameworks are important and useful is the fact that they can easily be used to model other
+logical constructs, often making working with those less complex.\\
+For instance, the nonmonotonic "Default Logic", which is briefly described in the following section.
+
 \section{Default Logic}
+In classical logic, it is not possible to conclude new knowledge from uncertain/unknown information. One scenario for instance, would be the modeling of a default property,
+which could be assigned to any object as long as we do not have any contradicting facts.\\
+This is where default logic comes in handy.
+
+\begin{mydefn}[Default Logic]
+A default theory is a pair $\bm{\langle W,D \rangle}$.
+$\bm{W}$ is the knowledge base, consisting of logical formulas, $\bm{D}$ is a set of \textit{default rules}.
+Each default rule has following form: \[\bm{\frac{Prerequisite : Justification_{1},\dots,Justification_{n}}{Conclusion}}\]
+\end{mydefn}
+
+A simple (and maybe overused) example is the following.
+\begin{myexmpl}
+\[\bm{D = \frac{Bird(tweety): Flies(Tweety)}{Flies(Tweety)}}\]
+$\bm{W_{1} = \{Bird(tweety)\}}$
+$\bm{W_{2} = \{Bird(tweety),Penguin(tweety),Penguin(X) \implies \lnot Flies(X)\}}$
+\end{myexmpl}
+As we can see, as long as no facts, that negate one of the justifications, can be deduced from our knowledge base, we can infere the conclusion that Tweety can fly
+(which would be the case with $\bm{W_{1}}$).\\
+On the other hand (with $\bm{W_{2}}$), we could deduce $\bm{\lnot Flies(Tweety)}$, therefore the Justifications would not be met and the default would be overruled by
+the more important fact.
+
+Furthermore we have to define the so-called "Reiter's extension" (or R-extension).
+\begin{mydefn}
+A R-extension of a default theory $\bm{\langle W,D \rangle}$ is a set of formulas $\bm{E_{R}}$, that satisfies following conditions:
+\begin{itemize}
+	\item{$\bm{E_{R} = \bigcup \{W_{i} \vert i \text{ is a natural number}\}}$}
+	\item{$\bm{W_{0} = W}$}
+	\item{$\bm{W_{i+1} = Th(W_{i}) \cup \{w \vert \exists(p:j_{1},\text{\dots},j_{k}/w) \text{ in } D \text{ so that } \{j_{n}\} \cup E \text{ consistent for } k \geq n \geq 1,
+		\text{ and } p \in W_{i}\}}$}
+\end{itemize}
+$Th(T)$ denotes the first order closure of a theory $T$.
+\end{mydefn}
+
+The interested reader may want to check \cite{Reiter}, where these ideas were originally introduced.
+
+\section{Default Logic \& Argumentation Frameworks}
+As \cite{Dung} points out, a default theory $\bm{T = \langle W,D \rangle}$ can be interpreted as an argumentation framework $\bm{AF_{d} = \langle AR,Att \rangle}$.\\
+From here on out, we let $\bm{just(D)}$ denote the set of justifications of a default theory.
+
+The following two criteria are necessary to build the interpretation:
+\begin{itemize}
+	\item{$\bm{AF_{d} = \{(K,k) \vert K \subseteq just(D)\}}$, so that $\bm{K}$ is a support of the well-formed, closed formula $\bm{k}$ with respect to $\bm{T}$}
+	\item{$\bm{(K,k)}$ attacks $\bm{(K',k')}$ iff $\bm{\lnot k \in K'}$}
+\end{itemize}
+
+The following lemma shows that this interpretation is not just a coincidence.
+
+\begin{mylem}
+Let $\bm{E_{a}}$ be an admissible subset of $\bm{AF_{d} \text{ and } H = \bigcup \{K \vert (K,k) \in E_{a}\}}$.
+Then $\bm{T,H}$ holds, iff $\bm{T}$ is consistent.
+\end{mylem}
+
+\begin{myprf}
+From left to right, this should be obvious, so we are only going to take a look at the second part of the proof.
+To achieve this, we assume the contrary:\\There exists a subset $\bm{K \text{ of } H \text{, so that } T,K \vdash \bot}$.
+Thus, for every $\bm{k \text{, }(K,k) \in AR}$. Also, let $\bm{(K',k') \in E_{a}}$ so that $\bm{K'}$ is not empty.
+Now $\bm{(K,k)}$ represents an attack on $\bm{(K',k')}$.\\Given the admissibility of $\bm{E_{a}}$, there has to be some argument $\bm{a = (H',h') \in E_{a}}$, so that
+$\bm{\lnot h' \in K}$; in other words, since $\bm{(K,k),(K',k') \in E_{a}}$ and the admissibility of $\bm{E_{a} \text{, the set cant be conflict-free} \implies \text{\Lightning}}$ 
+\end{myprf}
+
+Now that we have established the possibility to interprete default theories as argumentation frameworks, we want to examine this relationship more closely.
+There is a correspondence between the R-extensions of a default theory and the stable extensions of an argumentation framework.\\
+To show this, we need some more definitions:
+
+\begin{mydefn}
+Let $\bm{S}$ be a first order theory and $\bm{S'}$ be a set of arguments of $\bm{AF_{d}}$. Then, we define:\\
+\begin{itemize}
+	\item{$arg(S) = \{(K,k) \in AR \vert \forall j \in K: \{j\} \cup S \text{ is consistent}\}$}
+	\item{$flat(S') = \{k \vert \exists(K,k) \in S'\}$}
+\end{itemize}
+\end{mydefn}
+
+Together with the definition of the R-extension, the following lemmata become obvious:\\
+\begin{mylem}
+If $\bm{T}$ is a default theory and $\bm{E}$ is a first order theory. Then, $\bm{E}$ is a R-extension of $\bm{T}$ iff $\bm{E = flat(arg(E))}$.
+\end{mylem}
+
+\begin{mylem}
+$\bm{T = \langle W,D \rangle}$ be a default theory, $\bm{E}$ a R-extension of $\bm{T}$ and $\bm{E'}$ a stable extension of $\bm{AF_{d}}$.
+Then \\
+\begin{enumerate}
+	\item{$\bm{arg(E)}$ is a stable extension of $\bm{AF_{d}}$}
+	\item{$\bm{flat(E')}$ is a R-extension of $\bm{T}$}
+\end{enumerate}
+\end{mylem}
+
+Apparently, the preferred extension semantics of $\bm{AF_{d}}$ generalizes the R-extension semantics of $\bm{T}$.
+Also it captures the intuitive idea of default logic more naturally and thus makes it a bit easier to model and understand.
+This was just one of the many applications of argumentation frameworks, the interested reader could either get more examples in \cite{Dung} or
+head on to the "Further Topics" chapter for more information.
 
 \chapter{Further Topics}
+%TODO
 
 \chapter{Documentation - KAFFEE}
 
+As mentioned in the abstract, a software tool was written to accompany the reader through this paper and provide the necessary environment to playfully learn more about
+the several extensions and their relationships.\\
+The \textbf{K}AFFEE \textbf{A}rgumentation \textbf{F}ramework \textbf{F}or \textbf{E}ngineers and \textbf{E}nthusiasts offers following functions:
+\begin{itemize}
+	\item{Defining new argumentation frameworks}
+	\item{Import prepared examples}
+	\item{Select different types of extensions}
+	\item{Visualize whole AFs as well as subsets}
+	\item{Step-by-Step function that explains how an admissible set is created}
+\end{itemize}
+
+\bigskip
+There are a few built-in shortcuts that make the usage of \textbf{KAFFEE} a little easier:
+\begin{description}
+	\item{\textbf{ALT+h} \dots\dots\dots Help menu}
+	\begin{itemize}
+		\item{\textbf{ALT+g} \dots link to the gibhub project containing all the sources, code etc}
+		\item{\textbf{ALT+c} \dots feel free to email me}
+	\end{itemize}
+	\item{\textbf{ALT+e} \dots\dots\dots Examples menu}
+	\begin{itemize}
+		\item{\textbf{ALT+2} \dots import example \ref{s1 s2 b1 b2 ex}}
+		\item{\textbf{ALT+3} \dots import example \ref{s b ex}}
+		\item{\textbf{ALT+4} \dots import example \ref{b loop ex}}
+		\item{\textbf{ALT+s} \dots import example "Step By Step"}
+	\end{itemize}
+\end{description}
+
+\newpage
+
+The general idea of how to use \textbf{KAFFEE} is simple. The tool is made up of three tabs, which are sequentially dependant on the one before.
+That requires the user to work in tab \#1 first, the "Argumentation Framework" tab.\\Here, the user has to create/import an argumentation framework.
+Once that is done, the user can either have a look at the visual representation of his/her framework, or continue and switch to the "Extensions" tab.
+In this tab, one can choose from a list of possible extensions to be calculated for the given AF. This time, the visual representation on the right will
+provide coloring of the selected subset, depending on the chosen extension.\\
+The last (and optional) tab is the "Step By Step" tab. Here, one can get a better explanation, in a walkthrough kind of style, of how admissible sets are created.
+
+\bigskip
+One iteration while working with \textbf{KAFFEE} could be depicted by following graph.
+
+\begin{figure}[h!]
+\begin{center}\begin{tikzpicture}[node distance=1cm, auto,
+	mynode/.style={rectangle,draw=black}]
+	\node[mynode] (AFTab) {\textbf{Tab "Argumentation Framework"}};
+	\node[mynode] (EXTab) [right = of AFTab] {\textbf{Tab "Extensions"}};
+	\node[mynode] (STSTab) [right = of EXTab] {\textbf{Tab "Step By Step"}};
+	\path[->] (AFTab) edge (EXTab);
+	\path[->] (EXTab) edge (STSTab);
+\end{tikzpicture}\end{center}
+\caption{Workflow in KAFFEE}
+\end{figure}
+
+\bigskip
+\begin{figure}[h!]
+	\begin{center}\includegraphics[scale=0.4]{Screenshot_KAFFEE_Tab1.png}
+	\end{center}
+\caption{Tab "Argumentation Framework"}
+\end{figure}
+\bigskip
+\begin{figure}[h!]
+	\begin{center}\includegraphics[scale=0.4]{Screenshot_KAFFEE_Tab2.png}
+	\end{center}
+\caption{Tab "Argumentation Framework"}
+\end{figure}
+\bigskip
+\begin{figure}[h!]
+	\begin{center}\includegraphics[scale=0.4]{Screenshot_KAFFEE_Tab3.png}
+	\end{center}
+\caption{Tab "Argumentation Framework"}
+\end{figure}
+
 %Bibliography - references to papers
 \begin{thebibliography}{1}
+	\bibitem[\textbf{Reiter}]{Reiter} "A Logic for Default Reasoning"\\Raymond Reiter; 1980
 	\bibitem[\textbf{Dung}]{Dung} "On the acceptability of arguments and its fundamental role in nonmonotonic reasoning,..."\\Phan Minh Dung; 1995
 	\bibitem[\textbf{CaCaDu}]{Caminada} "Semi-stable Semantics"\\Martin Caminada, Walter Carnielli, Paul Dunne; 2006
 	\bibitem[\textbf{DuMaTo}]{Dung2} "Computing ideal sceptical argumentation"\\Phan Minh Dung, Paolo Mancarella, Francesca Toni; 2007
