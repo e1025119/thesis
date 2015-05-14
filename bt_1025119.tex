@@ -89,6 +89,9 @@
 %Table of Contents
 \tableofcontents{}
 
+%List of Figures
+\listoffigures
+
 %Statutory Declaration
 \chapter*{Statutory Declaration}
 \addcontentsline{toc}{chapter}{Statutory Declaration}
@@ -265,14 +268,14 @@ Next, we will take a look at two more extensions, one originally introduced in \
 
 \addcontentsline{toc}{subsection}{Semi-stable Extension}
 \begin{mydefn}[Semi-stable Extensions]
-A set $\bm{E_{ss}}$ is a semi-stable extensions, if it is a complete extension and the set $\bm{E_{ss} \cup \{a \in AR \vert E_{ss} \text{ attacks }a\}}$
+A set $\bm{E_{SS}}$ is a semi-stable extensions, if it is a complete extension and the set $\bm{E_{ss} \cup \{a \in AR \vert E_{SS} \text{ attacks }a\}}$
 is maximal (with respect to set inclusion).
 \label{semi ext}
 \end{mydefn}
 
 \addcontentsline{toc}{subsection}{Ideal Extension}
 \begin{mydefn}[Ideal Extensions]
-A set $\bm{E_{i}}$ is an ideal extension, if it is the maximal admissible set, that is contained in every preferred extension.
+A set $\bm{E_{I}}$ is an ideal extension, if it is the maximal admissible set, that is contained in every preferred extension.
 \label{ideal ext}
 \end{mydefn}
 
@@ -363,7 +366,7 @@ For this example, the extensions would look as follows.
 
 \begin{myexmpl}
 Another good example, specifically showing that not every semi-stable extension is also stable, was provided in \cite{Caminada}.\\
-In the following graph, the set $\bm{E_{ss}=\{b,d\}}$ is semi-stable but not stable.
+In the following graph, the set $\bm{E_{SS}=\{b,d\}}$ is semi-stable but not stable.
 \label{stable != semi-stable}
 \end{myexmpl}
 \begin{figure}[h!]
@@ -384,7 +387,7 @@ In the following graph, the set $\bm{E_{ss}=\{b,d\}}$ is semi-stable but not sta
 
 \begin{myexmpl}
 The following example illustrates ideal extensions (and how they differ from e.g. grounded extensions).\\
-In the following graph, the set $\bm{E_{i}=\{b\}}$ is an ideal extension. This example can also be found in \cite{Dung2}.
+In the following graph, the set $\bm{E_{I}=\{b\}}$ is an ideal extension. This example can also be found in \cite{Dung2}.
 \label{ideal extension}
 \end{myexmpl}
 \begin{figure}[h!]
@@ -406,7 +409,63 @@ In the following graph, the set $\bm{E_{i}=\{b\}}$ is an ideal extension. This e
 \caption{ideal extension (example \ref{ideal extension})}
 \end{figure}
 
-As we can see, the ideal extension $\bm{E_{i}=\{b\}}$ is a subset of every preferred extension ($\bm{\{b,cf\},\{b,d,f\}}$).
+As we can see, the ideal extension $\bm{E_{I}=\{b\}}$ is a subset of every preferred extension ($\bm{\{b,cf\},\{b,d,f\}}$).
+
+\newpage
+
+\begin{myexmpl}
+Last but not least, we are going to take a look on a slightly more complex example, that gives a deeper insight
+in the relations between the extensions. It should be considered along with \textbf{Figure \ref{hierarchy graph}}.\\
+In the graph below, following different extensions can be ovserved:
+\begin{itemize}
+	\item{semi-stable extension $\bm{E_{ss}=\{d,e\}}$}
+	\item{preferred extension $\bm{E_{p}=\{b,c\}}$}
+	\item{complete extension $\bm{E_{c}=\{j\}}$}
+	\item{grounded extension $\bm{E_{g}=\emptyset}$}
+\end{itemize}
+\label{relations of extensions}
+\end{myexmpl}
+\begin{figure}[h!]
+\begin{center}\begin{tikzpicture}
+	\node[state](a){$a$};
+	\node[state](b)[above right = of a]{$b$};
+	\node[state](c)[below right = of a]{$c$};
+	\node[state](d)[right = of b]{$d$};
+	\node[state](e)[right = of c]{$e$};
+	\node[state](f)[above right = of d]{$f$};
+	\node[state](g)[right = of d]{$g$};
+	\node[state](h)[right = of e]{$h$};
+	\node[state](i)[below right = of e]{$i$};
+	\node[state](j)[above right = of b,above left = of d]{$j$};
+	\path[->,thick](a) edge[loop left] (a);
+	\path[->,thick](f) edge[loop right] (f);
+	\path[->,thick](g) edge[loop right] (g);
+	\path[->,thick](h) edge[loop right] (h);
+	\path[->,thick](i) edge[loop right] (i);
+	\path[->,thick](a) edge[bend left] (b);
+	\path[->,thick](b) edge[bend left] (a);
+	\path[->,thick](a) edge (c);
+	\path[->,thick](b) edge[bend left] (d);
+	\path[->,thick](b) edge[bend left] (e);
+	\path[->,thick](d) edge[bend left] (b);
+	\path[->,thick](e) edge[bend left] (b);
+	\path[->,thick](d) edge (f);
+	\path[->,thick](d) edge (g);
+	\path[->,thick](d) edge (h);
+	\path[->,thick](d) edge (i);
+	\path[->,thick](e) edge (f);
+	\path[->,thick](e) edge (g);
+	\path[->,thick](e) edge (h);
+	\path[->,thick](e) edge (i);
+	\path[->,thick](b) edge (j);
+	\path[->,thick](j) edge (b);
+	\path[->,thick](d) edge (j);
+	\path[->,thick](j) edge (d);
+	\path[->,thick](e) edge (j);
+	\path[->,thick](j) edge (e);
+\end{tikzpicture}\end{center}
+\caption{relations of extensions (example \ref{relations of extensions})}
+\end{figure}
 
 \chapter{Conclusions and Implications}
 
@@ -424,14 +483,16 @@ The following, simple tree graph (borrowed from \cite{Hunter}) shows the hierarc
 	\node[mynode] (grounded) [below = of complete] {$grounded$};
 	\node[mynode] (ideal) [below right = of complete] {$ideal$};
 	\node[mynode] (admissible) [above right = of complete] {$admissible$};
-	\path[-] (stable) edge (semi-stable);
-	\path[-] (semi-stable) edge (preferred);
-	\path[-] (preferred) edge (complete);
-	\path[-] (grounded) edge (complete);
-	\path[-] (ideal) edge (complete);
-	\path[-] (complete) edge (admissible);
+	\path[->] (stable) edge (semi-stable);
+	\path[->] (semi-stable) edge (preferred);
+	\path[->] (preferred) edge (complete);
+	\path[->] (grounded) edge (complete);
+	\path[->] (ideal) edge (complete);
+	\path[->] (complete) edge (admissible);
 \end{tikzpicture}\end{center}
-\caption{hierarchy of extension types}
+\caption[hierarchy of extension types]{hierarchy of extension types - 
+	An arrow from X to Y denotes that an X-extension is also a Y-extension.}
+\label{hierarchy graph}
 \end{figure}
 
 \newpage
@@ -664,13 +725,13 @@ One iteration while working with \textbf{KAFFEE} could be depicted by following 
 \begin{figure}[h!]
 	\begin{center}\includegraphics[scale=0.4]{Screenshot_KAFFEE_Tab2.png}
 	\end{center}
-\caption{Tab "Argumentation Framework"}
+\caption{Tab "Extensions"}
 \end{figure}
 \bigskip
 \begin{figure}[h!]
 	\begin{center}\includegraphics[scale=0.4]{Screenshot_KAFFEE_Tab3.png}
 	\end{center}
-\caption{Tab "Argumentation Framework"}
+\caption{Tab "Step By Step"}
 \end{figure}
 
 %Bibliography - references to papers
