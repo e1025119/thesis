@@ -14,7 +14,8 @@
 \usepackage{amssymb,amsthm,amsmath,bm,marvosym}	% bm = "bold math", marvosym = \Lightning
 \usepackage{tikz}								% provides automata/graph library
 \usepackage[labelfont=bf]{caption}				% bold captions on figures
-%\usepackage{hyperref}							% \autoref instead of \ref
+\usepackage[hidelinks,linktoc=section]{hyperref}% url (no rectangles around links)
+\hypersetup{colorlinks}							% color the links..
 
 \usetikzlibrary{automata,positioning}
 %auto-numbering figures per chapter
@@ -86,11 +87,13 @@
 \end{titlepage}
 \restoregeometry{}
 
+\begingroup{}
 %Table of Contents
 \tableofcontents{}
 
 %List of Figures
 \listoffigures
+\endgroup{}
 
 %Statutory Declaration
 \chapter*{Statutory Declaration}
@@ -112,18 +115,23 @@ Christoph Groß\\
 \chapter*{Acknowledgements}
 \addcontentsline{toc}{chapter}{Acknowledgements}
 
-$D := \{Friends,Family,University\}$\\
-$Friends = \{\text{Max,Pia,Lea,Tobi,Johannes}\}$, \\ $Family = \{\text{Sabine,Gerald,Angelika,Johann,Johanna,Patrick}\}$, \\ $University = \{\text{Prof.Fermüller}\}$
-
+$D := \{Friends,Family,University,christoph\}$\\
+$Friends = \{\text{Max,Pia,Lea,Tobi,Johannes}\}$, \\ $Family = \{\text{Sabine,Gerald,Angelika,Johann,Johanna,Patrick}\}$, \\ $University = \{\text{Prof.Fermüller}\}$ \\
+\[\forall x \in D: (proofread(x) \lor listenToWhining(x) \lor help(x)) \implies thanks(christoph,x)\]
 
 %Abstract
 \chapter*{Abstract}
 \addcontentsline{toc}{chapter}{Abstract}
 
-Throughout this thesis, I am going to explore the applications of argumentation theory in the context of nonmonotonic reasoning.\\
+Throughout this thesis, I am going to explore the applications of argumentation theory in general and particularily in the context of nonmonotonic reasoning.\\
 First off, I will introduce the necessary formal definitions, give a few easy examples as clarification and draw the theoretical conclusions.\\
-In the next step, the reader is given an overview over the real-life applications of argumentation theory.\\
+Then I try to show the link between argumentation frameworks and default theory as an example of how argumentation theory can be used for dealing with nonmonotonic reasoning.\\
+In the next step, the reader receives information about things that have not been dealt with in this thesis, some examples of real-life applications and also 
+pointers to the needed sources to get a deeper understanding of the subject.\\
 Finally I will append the documentation of an application specifically written during the course of this thesis, which purpose is to graphically help understanding the subject.\\
+
+This thesis, including all the cited sources and the application (source code as well as an executable jar file) can be found on \href{https://github.com/e1025119/thesis}{github}.
+Should any questions or ideas for improvement arise, do not hesitate to write to \href{mailto:e1025119@student.tuwien.ac.at}{e1025119@student.tuwien.ac.at}
 
 \raggedright %left-align whole text
 %Chapter 1, Introduction
@@ -148,7 +156,6 @@ Therefore arguments are modeled as formulas which might or might not attack each
 For instance, the most believeable argument out of two, so to say the "winner", 
 would be the one, that attacks the other argument, and at the same time, does not get attacked by said argument.\\
 In the following chapter, I will provide all the necessary definitions to achieve the above mentioned aim.
-%Most of the definitions used in this thesis were originally introduced in \cite{Dung}, some more intuitive forms were found in \cite{Egly}.
 
 \newpage	
 
@@ -263,7 +270,7 @@ The intersection of all complete extensions is called the grounded extension.\\ 
 \label{ground ext}
 \end{mydefn}
 
-All those types of extensions can be originally found in \cite{Dung}.
+All those types of extensions can be originally found in \cite{Dung}, the more intuitive version of the grounded extension was found in \cite{Egly}.
 Next, we will take a look at two more extensions, one originally introduced in \cite{Caminada}, the other found in \cite{Dung2}.
 
 \addcontentsline{toc}{subsection}{Semi-stable Extension}
@@ -659,7 +666,17 @@ This was just one of the many applications of argumentation frameworks, the inte
 head on to the "Further Topics" chapter for more information.
 
 \chapter{Further Topics}
-%TODO
+To anyone who made it this far into the paper, congratulations.\\
+At this point, some interested reader might have noticed that we have been dealing with the abstract concept of argumentation frameworks almost exclusively.
+Since this is a bachelor's thesis, I had to focus on one single aspect in order to not get lost in the process of writing it.\\
+Therefore, the idea of this fourth chapter is providing you with pointers to related subjects, sources of deeper understanding and real-life applications to tamper with.
+
+\section{Related Subjects}
+A very interesting thing is the structure of arguments and how they are extracted. We only used arguments as abstract objects with no underlying structure. 
+If we were trying to solve real problems by implementing them as an argumentation framework, this step would be a necessary one though.
+To gain more insight on the structure of arguments, one could read \cite{HunterBesnard} or \cite{Prakken}.
+
+\section{Real-life Applications}
 
 \chapter{Documentation - KAFFEE}
 
@@ -740,8 +757,10 @@ One iteration while working with \textbf{KAFFEE} could be depicted by following 
 	\bibitem[\textbf{Dung}]{Dung} "On the acceptability of arguments and its fundamental role in nonmonotonic reasoning,..."\\Phan Minh Dung; 1995
 	\bibitem[\textbf{CaCaDu}]{Caminada} "Semi-stable Semantics"\\Martin Caminada, Walter Carnielli, Paul Dunne; 2006
 	\bibitem[\textbf{DuMaTo}]{Dung2} "Computing ideal sceptical argumentation"\\Phan Minh Dung, Paolo Mancarella, Francesca Toni; 2007
+	\bibitem[\textbf{BeHu}]{HunterBesnard} "Elements of Argumentation"\\Philippe Besnard, Anthony Hunter; 2008
 	\bibitem[\textbf{EgGaWo}]{Egly} "Answer-Set Programming Encodings for Argumentation Frameworks"\\Uwe Egly, Alice Gaggl, Stefan Woltran; 2010  
 	\bibitem[\textbf{HuGo}]{Hunter} "Instantiating abstract argumentation with classical logic arguments"\\Anthony Hunter, Nikos Gorogiannis; 2011
+	\bibitem[\textbf{Prakken}]{Prakken} "Some reflections on two current trends in formal argumentation"\\Henry Prakken; 2012
 \end{thebibliography}
 
 \end{document}
