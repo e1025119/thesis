@@ -116,7 +116,7 @@ Christoph Groß\\
 \addcontentsline{toc}{chapter}{Acknowledgements}
 
 $D := \{Friends,Family,University,christoph\}$\\
-$Friends = \{\text{Max,Pia,Lea,Tobi,Johannes}\}$, \\ $Family = \{\text{Sabine,Gerald,Angelika,Johann,Johanna,Patrick}\}$, \\ $University = \{\text{Prof.Fermüller}\}$ \\
+$Friends = \{\text{Max,Pia,Lea,Tobi,Johannes}\}$, \\ $Family = \{\text{Sabine,Gerald,Angelika,Johann,Johanna}\}$, \\ $University = \{\text{Prof.Fermüller}\}$ \\
 \[\forall x \in D: (proofread(x) \lor listenToWhining(x) \lor help(x)) \implies thanks(christoph,x)\]
 
 %Abstract
@@ -148,14 +148,15 @@ If for a given set of formulas $\bm{\psi}$ and a formula $\bm{A}$ the logical co
 As one can see, nonmonotonic sets of formulas might change their deducable knowledge as new facts are added. 
 
 \section{Argumentation Theory}
-In a human context, we (hopefully) argue to reach a sound conclusion. We do that by claiming statements based on premisses, and usually, due to different perception and other factors,
+In a human context, we (hopefully) argue to reach a sound conclusion. We do that by claiming statements 
+based on premisses, and usually, due to different perception of subjects as well as other factors,
 these statements tend to vary in their degree of believability.
 
 Argumentation Theory, from a logical point of view, tries to formalize these strategies and introduces rules to that purpose. 
 Therefore arguments are modeled as formulas which might or might not attack each other.
 For instance, the most believeable argument out of two, so to say the "winner", 
 would be the one, that attacks the other argument, and at the same time, does not get attacked by said argument.\\
-In the following chapter, I will provide all the necessary definitions to achieve the above mentioned aim.
+In the following chapter, I will provide all the necessary definitions to achieve this goal.
 
 \newpage	
 
@@ -474,9 +475,24 @@ In the graph below, following different extensions can be ovserved:
 \caption{relations of extensions (example \ref{relations of extensions})}
 \end{figure}
 
+\medskip
+\begin{myrmrk}
+Now it comes to attention that there are no stable and semi-stable extensions in the above example at the same time.
+That is because it is not possible for distinctive stable and semi-stable extensions to coexist in a single AF. 
+We will take a quick look at the reasons for this particular relation.
+\end{myrmrk}
+\begin{myprf}
+Assume the contrary, i.e. there exists a stable extension $\bm{E_{s}}$ and a (only) semi-stable extension $\bm{E_{ss}}$.
+From the definitions of stable and semi-stable extensions follows\\
+$\bm{E_{s} \cup \{a \vert E_{s} \text{ attacks } a\} = AR}$. Since every semi-stable extension has to fulfill 
+$\bm{E_{ss} \cup \{a \vert E_{ss} \text{ attacks } a\} \textbf{ is maximal with respect to set inclusion}}$,
+it is clear that $\bm{E_{ss}}$ has to attack every argument outside of itself, in order to achieve maximum set inclusion.\\
+This directly contradicts the assumption $\bm{E_{s} \notin \{E \vert \text{ E is a stable extension }\} \implies \text{\Lightning}}$.
+\end{myprf}
+
 \chapter{Conclusions and Implications}
 
-Now that we have established the basic definitions, it is time to travel further down the rabbit hole and explore the meaning of what we just defined.
+Now that we have established the necessary definitions, it is time to travel further down the rabbit hole and explore the meaning of what we just defined.
 
 \section{Relations between different Extensions}
 The following, simple tree graph (borrowed from \cite{Hunter}) shows the hierarchy of extension types better than words ever could describe it.
@@ -677,14 +693,25 @@ If we were trying to solve real problems by implementing them as an argumentatio
 To gain more insight on the structure of arguments, one could read \cite{HunterBesnard} or \cite{Prakken}.\\
 If the reader is more interested in how arguments are extracted from knowledge, a process which ideally follows certain rules, then \cite{Pollock} could be a good source.
 
+\newpage 
+
 \section{Real-life Applications}
-A question that I myself have heard several times from parents, friends and anyone else kind enough to listen to my rambling about argumentation frameworks, is\\
+A question that I have been asked several times from parents, friends and anyone else kind enough to listen to my rambling about argumentation frameworks, is\\
 \medskip
 \textit{"What's the point of all this? How can you use that in real life?"}.\\
 \medskip
 I usually just quoted a professor from my university to get them off my back 
 (\textit{"As a university that is oriented towards fundamental research, that question should not even come up."}), but since this thesis is written to benefit software engineers too,
-this is a valid question and deserves some clarification.
+this is a valid question and deserves some attention.\\
+Since we have already established, that argumentation frameworks can be used to model other logical constructs, it is clear that they can also be a useful tool in various proofs.\\
+\medskip
+This is, of course, of very little use in the daily life of a software engineer. In general, the areas where logical applications shine, are for instance \textbf{planning},
+\textbf{scheduling} or \textbf{software verification}, all areas with a high potential to save some company a lot of money.\\
+If one would like to gain more knowledge on these topics, I would like to point him towards the respective \href{http://en.wikipedia.org/}{wikipedia} articles as a starting point.\\
+\medskip
+An interesting tool for creating, exploring and evaluating argumentation frameworks is being developed and maintained from the \textit{"database and artificial intelligence group"}
+at Vienna Technical University (\href{http://www.dbai.tuwien.ac.at/research/project/argumentation/}{ASPARTIX}).\\
+A much simpler (and less powerful) approach is provided within the next chapter.
 
 \chapter{Documentation - KAFFEE}
 
