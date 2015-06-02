@@ -25,7 +25,7 @@ import gui.GraphDisplayPanel.ColorTab;
 public class MainFrame implements ActionListener,KeyListener,ChangeListener {
 
 	private final JMenuBar menu = new JMenuBar();
-	private final JMenuItem help1,help2,exmpl1,exmpl2,exmpl3,exmpl4;
+	private final JMenuItem help1,help2,exmpl0,exmpl1,exmpl2,exmpl3,exmpl4;
 	private JFrame frame;
 	private ArgumentationFrameworkForm definitionForm;
 	private ExtensionsForm extensionsForm;
@@ -50,12 +50,14 @@ public class MainFrame implements ActionListener,KeyListener,ChangeListener {
 		help2 = new JMenuItem("Contact",'c');
 		JMenu exmpl = new JMenu("EXAMPLES");
 		exmpl.setMnemonic('e');
-		exmpl1 = new JMenuItem("Example 1.2",'2');
-		exmpl2 = new JMenuItem("Example 1.3",'3');
-		exmpl3 = new JMenuItem("Example 1.4",'4');
+		exmpl0 = new JMenuItem("Example 1.1",'1');
+		exmpl1 = new JMenuItem("Example 1.4",'4');
+		exmpl2 = new JMenuItem("Example 1.5",'5');
+		exmpl3 = new JMenuItem("Example 1.6",'6');
 		exmpl4 = new JMenuItem("Example StepByStep",'s');
 		help.add(help1);
 		help.add(help2);
+		exmpl.add(exmpl0);
 		exmpl.add(exmpl1);
 		exmpl.add(exmpl2);
 		exmpl.add(exmpl3);
@@ -67,12 +69,14 @@ public class MainFrame implements ActionListener,KeyListener,ChangeListener {
 		/* listeners */
 		help1.addActionListener(this);
 		help2.addActionListener(this);
+		exmpl0.addActionListener(this);
 		exmpl1.addActionListener(this);
 		exmpl2.addActionListener(this);
 		exmpl3.addActionListener(this);
 		exmpl4.addActionListener(this);
 		help1.addKeyListener(this);
 		help2.addKeyListener(this);
+		exmpl0.addKeyListener(this);
 		exmpl1.addKeyListener(this);
 		exmpl2.addKeyListener(this);
 		exmpl3.addKeyListener(this);
@@ -121,6 +125,40 @@ public class MainFrame implements ActionListener,KeyListener,ChangeListener {
 		else if(ae.getSource() == help2) {
 			String mail = "e1025119@student.tuwien.ac.at";
 			JOptionPane.showInternalMessageDialog(tabs,"If you have any questions, ideas etc.,"+"\n"+"make sure to mail "+mail,"Contact",JOptionPane.PLAIN_MESSAGE);
+		}
+		else if(ae.getSource() == exmpl0) {
+			Argument s = new Argument("s","Superman is the best hero!");
+			Argument b = new Argument("b","Batman is way cooler..");
+			Argument a = new Argument("a","Only Aquaman rules over the seas.");
+			Argument r = new Argument("r","Robin is Batman's sidekick.");
+			AR ar = new AR();
+			ar.add(s);
+			ar.add(b);
+			ar.add(a);
+			ar.add(r);
+			
+			AttackRelation r1 = new AttackRelation(b,a);
+			AttackRelation r2 = new AttackRelation(b,s);
+			AttackRelation r3 = new AttackRelation(b,r);
+			AttackRelation r4 = new AttackRelation(a,b);
+			AttackRelation r5 = new AttackRelation(a,s);
+			AttackRelation r6 = new AttackRelation(s,a);
+			AttackRelation r7 = new AttackRelation(s,b);
+			Att att = new Att();
+			try {
+				att.add(r1,ar);
+				att.add(r2,ar);
+				att.add(r3,ar);
+				att.add(r4,ar);
+				att.add(r5,ar);
+				att.add(r6,ar);
+				att.add(r7,ar);
+			} catch(InvalidArgumentException iae) {
+				//not gonna happen..
+			}
+
+			AF af = new AF(ar,att);
+			definitionForm.update(af);
 		}
 		else if(ae.getSource() == exmpl1) {
 			Argument s1 = new Argument("s1","Superman is the best hero!");
