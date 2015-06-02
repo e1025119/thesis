@@ -173,9 +173,9 @@ The following example shows that an argumentation framework can either be writte
 \newpage
 
 \begin{myexmpl}
-$\bm{s=}$"Superman is the best superhero!", $\bm{b=}$"Batman is way cooler..",\\$\bm{a=}$"Only Aquaman rules over the seas."\\
-$\bm{AR = \{a,b,s\}}$, $\bm{att=\{(b,s),(b,a),(a,s),(a,b),(s,b),(s,a)\}}$
-\label{a b s}
+$\bm{s=}$"Superman is the best superhero!", $\bm{b=}$"Batman is way cooler..",\\$\bm{a=}$"Only Aquaman rules over the seas.", $\bm{r=}$"Robin is Batman's sidekick."\\
+$\bm{AR = \{a,b,s\}}$, $\bm{att=\{(b,s),(b,a),(a,s),(a,b),(s,b),(s,a),(b,r)\}}$
+\label{a b s r}
 \end{myexmpl}
 
 \begin{figure}[h!]
@@ -183,14 +183,16 @@ $\bm{AR = \{a,b,s\}}$, $\bm{att=\{(b,s),(b,a),(a,s),(a,b),(s,b),(s,a)\}}$
 	\node[state](a){$a$};
 	\node[state](s)[above right=of a]{$s$};
 	\node[state](b)[below right=of s]{$b$};
+	\node[state](r)[right=of b]{$r$};
 	\path[->,thick](s) edge[bend left] (b);
 	\path[->,thick](s) edge[bend left] (a);
 	\path[->,thick](a) edge[bend left] (b);
 	\path[->,thick](a) edge[bend left] (s);
 	\path[->,thick](b) edge[bend left] (a);
 	\path[->,thick](b) edge[bend left] (s);
+	\path[->,thick](b) edge[bend left] (r);
 \end{tikzpicture}\end{center}
-\caption{graph of AF (example \ref{a b s})}
+\caption{graph of AF (example \ref{a b s r})}
 \end{figure}
 
 %Properties of argumentation frameworks
@@ -217,6 +219,9 @@ A conflict-free Set \textbf{S} is said to be admissible, iff each argument $\bm{
 Often, \textbf{S} is also called an admissible extension.
 \label{admissible}
 \end{mydefn}
+\begin{myrmrk}
+In example \ref{a b s r}, the admissible extensions would be $\bm{E_A = \{\emptyset,\{a\},\{b\},\{s\},\{r,a\},\{r,s\}\}}$. 
+\end{myrmrk}
 
 These are the basic properties that can be fulfilled by arguments or sets of arguments. Based on them, we will now introduce a few more interesting definitions.
 For instance, argumentation frameworks know a number of different extensions, which can be used to capture the semantics of their subsets. 
@@ -224,7 +229,7 @@ For instance, argumentation frameworks know a number of different extensions, wh
 \newpage
 If not explicitly marked, all the following extensions can also be originally found in \cite{Dung}.
 
-\begin{myrmrk}
+\begin{myrmrk}[\textbf{Notation of extensions}]
 From here on, we will use $\bm{E_{i}}$ to denote an arbitrary but fixed extension of type $\bm{i \text{, while } E_{I}}$ denotes the set of all extensions of type $\bm{i}$.\\
 Also, if we want to talk about the set of all extensions of one specific type, we will use $\bm{i(AF)}$.
 \end{myrmrk}
@@ -235,6 +240,10 @@ The first of those extensions takes a rather gullible approach to things; the so
 \begin{mydefn}[Preferred Extensions]
 $\bm{E_{p}}$ is a preferred extension of \textbf{AF}, iff $\bm{E_{p}}$ is a maximum admissible set of \textbf{AF}.
 \end{mydefn}
+
+\begin{myrmrk}
+In example \ref{a b s r}, the preferred extensions would be $\bm{E_{P} = \{\{r,a\},\{r,s\}\}}$.
+\end{myrmrk}
 
 As you can see, the preferred extension is made up of the biggest, conflict-free set of arguments, that can be defended against all other arguments not in the set.\\
 The following lemma will be useful later on.
@@ -263,8 +272,9 @@ The conflict-free set $\bm{E_{s}}$ is a stable extension of \textbf{AF}, iff $\b
 $\bm{\{a \vert a}$ is not attacked by $\bm{E_{s}\}}$.
 \end{mydefn}
 
-Apparently, the stable extension contains all arguments that it does not attack itself. Therefore it has to be a conflict-free, admissible set.\\
-We will explore the differences between those extensions in a later chapter. 
+\begin{myrmrk}
+In example \ref{a b s r}, the stable extensions would be $\bm{E_{S} = \{\{b\},\{r,a\},\{r,s\}\}}$.
+\end{myrmrk}
 
 \newpage
 
@@ -272,6 +282,10 @@ We will explore the differences between those extensions in a later chapter.
 \begin{mydefn}[Complete Extensions]
 The admissible set $\bm{E_{c}}$ is a complete extension of \textbf{AF}, iff every argument which is acceptable with respect to $\bm{E_{c}}$, is included in $\bm{E_{c}}$.
 \end{mydefn}
+
+\begin{myrmrk}
+In example \ref{a b s r}, the complete extensions would be $\bm{E_{C} = \{\emptyset,\{b\},\{r,a\},\{r,s\}\}}$.
+\end{myrmrk}
 
 It is easy to see that many different complete extensions can exist, depending on $E_{c}$. That leads directly to the \textit{grounded extension}.
 
@@ -281,6 +295,10 @@ The intersection of all complete extensions is called the grounded extension.\\ 
 \label{ground ext}
 \end{mydefn}
 
+\begin{myrmrk}
+In example \ref{a b s r}, the only grounded extension would be $\bm{E_{g} = \emptyset}$.
+\end{myrmrk}
+
 \addcontentsline{toc}{subsection}{Semi-stable Extension}
 \begin{mydefn}[Semi-stable Extensions - \cite{Caminada}]
 A set $\bm{E_{SS}}$ is a semi-stable extensions, if it is a complete extension and the set $\bm{E_{ss} \cup \{a \in AR \vert E_{SS} \text{ attacks }a\}}$
@@ -288,99 +306,8 @@ is maximal (with respect to set inclusion).
 \label{semi ext}
 \end{mydefn}
 
-\addcontentsline{toc}{subsection}{Ideal Extension}
-\begin{mydefn}[Ideal Extensions - \cite{Dung2}]
-A set $\bm{E_{I}}$ is an ideal extension, if it is the maximal admissible set, that is contained in every preferred extension.
-\label{ideal ext}
-\end{mydefn}
-
-Since all the necessary, basic definitions of argumentation frameworks have been laid out, I will go on and provide the promised examples.
-
-\newpage
-
-\subsection{Examples of different Extensions}
-By expanding example 1.1 with a few more arguments, we now have to consider the following example.
-
 \begin{myexmpl}
-$\bm{s_{1}=}$"Superman is the best superhero!", $\bm{b_{1}=}$"Batman is way cooler..",\\
-$\bm{s_{2}=}$"But Superman is stronger.", $\bm{b_{2}=}$"Batman possesses genius-level intellect."\\
-$\bm{AR = \{s_{1},s_{2},b_{1},b_{2}\}}$, $\bm{att = \{(b_{1},s_{1}),(s_{2},b_{1}),(b_{2},s_{2})\}}$
-\label{s1 s2 b1 b2 ex}
-\end{myexmpl}
-
-This argumentation framework could also be depicted by following graph.
-
-\begin{figure}[h!]
-\begin{center}\begin{tikzpicture}
-	\node[state](s1){$s_{1}$};
-	\node[state](b1)[right=of s1]{$b_{1}$};
-	\node[state](s2)[right=of b1]{$s_{2}$};
-	\node[state](b2)[right=of s2]{$b_{2}$};
-	\path[->,thick] (b2) edge (s2);
-	\path[->,thick] (s2) edge (b1);
-	\path[->,thick] (b1) edge (s1);
-\end{tikzpicture}\end{center}
-\caption{graph of AF (example \ref{s1 s2 b1 b2 ex})}
-\end{figure}
-
-The extensions of this example would be 
-\begin{itemize}
-	\item{$\bm{E_{P}=E_{S}=E_{C}=E_{G}=\{\{b_{1},b_{2}\}\}}$}
-\end{itemize}
-
-\bigskip
-The next example is going to be a little more interesting in its outcome.
-\begin{myexmpl}
-$\bm{s=}$"Superman was born a hero.", $\bm{b=}$"Batman trained hard to become a hero."\\
-$\bm{AR=\{s,b\}}$, $\bm{att=\{(s,b),(b,s)\}}$
-\label{s b ex}
-\end{myexmpl}
-
-This examples graph looks like this.
-\begin{figure}[h!]
-\begin{center}\begin{tikzpicture}
-	\node[state](s){$s$};
-	\node[state](b)[right=of s]{$b$};
-	\path[->,thick](s) edge[bend left] (b);
-	\path[->,thick](b) edge[bend left] (s);
-\end{tikzpicture}\end{center}
-\caption{graph of AF (example \ref{s b ex})}
-\end{figure}
-
-Following extensions can be calculated
-\begin{itemize}
-	\item{$\bm{E_{P}=E_{S}=\{\{s\},\{b\}\}}$}
-	\item{$\bm{E_{C}=\{\{\emptyset\},\{s\},\{b\}\}}$}
-	\item{$\bm{E_{G}=\{\{\emptyset\}\}}$}
-\end{itemize}
-
-The following example (on the contrary to the above) has different preferred and stable extensions.
-
-\newpage
-
-\begin{myexmpl}
-$\bm{b=}$"Batman is Clark Kent."\\
-$\bm{AR=\{b\}}$, $\bm{att=\{(b,b)\}}$
-\label{b loop ex}
-\end{myexmpl}
-
-The corresponding graph looks like follows.
-\begin{figure}[h!]
-\begin{center}\begin{tikzpicture}
-	\node[state](b){$b$};
-	\path[->,thick](b) edge[loop left] (b);
-\end{tikzpicture}\end{center}
-\caption{graph of AF (example \ref{b loop ex})}
-\end{figure}
-
-For this example, the extensions would look as follows.
-\begin{itemize}
-	\item{$\bm{E_{P}=E_{C}=E_{G}=\{\{\emptyset\}\}}$}
-	\item{$\bm{E_{S}=\{\emptyset\}}$}
-\end{itemize}
-
-\begin{myexmpl}
-Another good example, specifically showing that not every semi-stable extension is also stable, was provided in \cite{Caminada}.\\
+A very good example, specifically showing that not every semi-stable extension is also stable, was provided in \cite{Caminada}.\\
 In the following graph, the set $\bm{E_{SS}=\{b,d\}}$ is semi-stable but not stable.
 \label{stable != semi-stable}
 \end{myexmpl}
@@ -399,6 +326,12 @@ In the following graph, the set $\bm{E_{SS}=\{b,d\}}$ is semi-stable but not sta
 \end{figure}
 
 \newpage
+
+\addcontentsline{toc}{subsection}{Ideal Extension}
+\begin{mydefn}[Ideal Extensions - \cite{Dung2}]
+A set $\bm{E_{I}}$ is an ideal extension, if it is the maximal admissible set, that is contained in every preferred extension.
+\label{ideal ext}
+\end{mydefn}
 
 \begin{myexmpl}
 The following example illustrates ideal extensions (and how they differ from e.g. grounded extensions).\\
@@ -425,6 +358,87 @@ In the following graph, the set $\bm{E_{I}=\{b\}}$ is an ideal extension. This e
 \end{figure}
 
 As we can see, the ideal extension $\bm{E_{I}=\{b\}}$ is a subset of every preferred extension ($\bm{\{b,cf\},\{b,d,f\}}$).
+
+\subsection{Examples of different Extensions}
+Contrary to the previous section, where different aspects of one example were used to accompany the definitions of extensions, 
+here I am going to provide examples which simply are interesting in their respective results.
+
+\begin{myexmpl}
+$\bm{s_{1}=}$"Superman is the best superhero!", $\bm{b_{1}=}$"Batman is way cooler..",\\
+$\bm{s_{2}=}$"But Superman is stronger.", $\bm{b_{2}=}$"Batman possesses genius-level intellect."\\
+$\bm{AR = \{s_{1},s_{2},b_{1},b_{2}\}}$, $\bm{att = \{(b_{1},s_{1}),(s_{2},b_{1}),(b_{2},s_{2})\}}$
+\label{s1 s2 b1 b2 ex}
+\end{myexmpl}
+
+This argumentation framework could also be depicted by following graph.
+
+\begin{figure}[h!]
+\begin{center}\begin{tikzpicture}
+	\node[state](s1){$s_{1}$};
+	\node[state](b1)[right=of s1]{$b_{1}$};
+	\node[state](s2)[right=of b1]{$s_{2}$};
+	\node[state](b2)[right=of s2]{$b_{2}$};
+	\path[->,thick] (b2) edge (s2);
+	\path[->,thick] (s2) edge (b1);
+	\path[->,thick] (b1) edge (s1);
+\end{tikzpicture}\end{center}
+\caption{graph of AF (example \ref{s1 s2 b1 b2 ex})}
+\end{figure}
+
+\newpage
+
+The extensions of this example would be 
+\begin{itemize}
+	\item{$\bm{E_{P}=E_{S}=E_{C}=E_{G}=\{\{b_{1},b_{2}\}\}}$}
+\end{itemize}
+
+The next example is going to be a little more interesting in its outcome.
+\begin{myexmpl}
+$\bm{s=}$"Superman was born a hero.", $\bm{b=}$"Batman trained hard to become a hero."\\
+$\bm{AR=\{s,b\}}$, $\bm{att=\{(s,b),(b,s)\}}$
+\label{s b ex}
+\end{myexmpl}
+
+This examples graph looks like this.
+\begin{figure}[h!]
+\begin{center}\begin{tikzpicture}
+	\node[state](s){$s$};
+	\node[state](b)[right=of s]{$b$};
+	\path[->,thick](s) edge[bend left] (b);
+	\path[->,thick](b) edge[bend left] (s);
+\end{tikzpicture}\end{center}
+\caption{graph of AF (example \ref{s b ex})}
+\end{figure}
+
+Following extensions can be calculated
+\begin{itemize}
+	\item{$\bm{E_{P}=E_{S}=\{\{s\},\{b\}\}}$}
+	\item{$\bm{E_{C}=\{\emptyset,\{s\},\{b\}\}}$}
+	\item{$\bm{E_{G}=\{\emptyset\}}$}
+\end{itemize}
+
+The following example (on the contrary to the above) has different preferred and stable extensions.
+
+\begin{myexmpl}
+$\bm{b=}$"Batman is Clark Kent."\\
+$\bm{AR=\{b\}}$, $\bm{att=\{(b,b)\}}$
+\label{b loop ex}
+\end{myexmpl}
+
+The corresponding graph looks like follows.
+\begin{figure}[h!]
+\begin{center}\begin{tikzpicture}
+	\node[state](b){$b$};
+	\path[->,thick](b) edge[loop left] (b);
+\end{tikzpicture}\end{center}
+\caption{graph of AF (example \ref{b loop ex})}
+\end{figure}
+
+For this example, the extensions would look as follows.
+\begin{itemize}
+	\item{$\bm{E_{P}=E_{C}=E_{G}=\{\emptyset\}}$}
+	\item{$\bm{E_{S} = \emptyset}$}
+\end{itemize}
 
 \newpage
 
@@ -564,6 +578,8 @@ An argumentation framework is considered well-founded, iff there exists no infin
 \begin{myfrmrk}
 This infinite sequence of arguments can be formed by a finite set of arguments (for instance $AR=\{a,b\}$, $att={(a,b),(b,a)}$).
 \end{myfrmrk}
+
+\newpage
 
 Although it might not be the most intuitive observation, following lemma can be extracted from this definition.
 \begin{mylem}[\cite{Dung}]
