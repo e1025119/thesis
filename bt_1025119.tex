@@ -240,14 +240,15 @@ The first of those extensions takes a rather gullible approach to things; the so
 
 \addcontentsline{toc}{subsection}{Preferred Extensions}
 \begin{mydefn}[Preferred Extensions]
-$\bm{E_{p}}$ is a preferred extension of \textbf{AF}, iff $\bm{E_{p}}$ is a maximum admissible set of \textbf{AF}.
+$\bm{E_{p}}$ is a preferred extension of \textbf{AF}, iff $\bm{E_{p}}$ is a maximum admissible set (with respect to set inclusion) of \textbf{AF}.
 \end{mydefn}
 
 \begin{myrmrk}
-In example \ref{a b s r}, the preferred extensions would be $\bm{E_{P} = \{\{r,a\},\{r,s\}\}}$.
+In example \ref{a b s r}, the preferred extensions would be $\bm{E_{P} = \{\{b\},\{r,a\},\{r,s\}\}}$.
 \end{myrmrk}
 
-As you can see, the preferred extension is made up of the biggest, conflict-free set of arguments, that can be defended against all other arguments not in the set.\\
+To avoid any confusions, the alternative definition for preferred extensions in \cite{Egly} can be useful.\\
+As it is pointed out there, every admissible set that is not a true subset of any other admissible set, is in fact a preferred extension.\\
 The following lemma will be useful later on.
 \begin{mylem}[\cite{Dung}]
 For every AF, there exists at least one preferred extension.
@@ -268,6 +269,8 @@ On the other hand, $\bm{c \text{ and } a}$ are both acceptable with respect to $
 
 Another approach would be the \textit{stable extension}, which is defined as follows:
 
+\newpage
+
 \addcontentsline{toc}{subsection}{Stable Extensions}
 \begin{mydefn}[Stable Extensions]
 The conflict-free set $\bm{E_{s}}$ is a stable extension of \textbf{AF}, iff $\bm{E_{s}}$ attacks each argument $\bm{a \notin E_{s}}$; which is equivalent to
@@ -277,8 +280,6 @@ $\bm{\{a \vert a}$ is not attacked by $\bm{E_{s}\}}$.
 \begin{myrmrk}
 In example \ref{a b s r}, the stable extensions would be $\bm{E_{S} = \{\{b\},\{r,a\},\{r,s\}\}}$.
 \end{myrmrk}
-
-\newpage
 
 \addcontentsline{toc}{subsection}{Complete Extensions}
 \begin{mydefn}[Complete Extensions]
@@ -309,6 +310,8 @@ is maximal (with respect to set inclusion).
 \label{semi ext}
 \end{mydefn}
 
+\newpage
+
 \begin{myexmpl}
 A very good example, specifically showing that not every semi-stable extension is also stable, was provided in \cite{Caminada}.\\
 In the following graph, the set $\bm{E_{SS}=\{b,d\}}$ is semi-stable but not stable.
@@ -327,8 +330,6 @@ In the following graph, the set $\bm{E_{SS}=\{b,d\}}$ is semi-stable but not sta
 \end{tikzpicture}\end{center}
 \caption{semi-stable but not stable (example \ref{stable != semi-stable})}
 \end{figure}
-
-\newpage
 
 \addcontentsline{toc}{subsection}{Ideal Extension}
 \begin{mydefn}[Ideal Extensions - \cite{Dung2}]
@@ -350,7 +351,8 @@ In the following graph, the set $\bm{E_{I}=\{b\}}$ is an ideal extension. This e
 	\node[state](e)[below right = of c]{$e$};
 	\node[state](f)[right = of e]{$f$};
 	\path[->,thick](a) edge[loop left] (a);
-	\path[->,thick](a) edge (b);
+	\path[->,thick](a) edge[bend left] (b);
+	\path[->,thick](b) edge[bend left] (a);
 	\path[->,thick](c) edge[bend left] (d);
 	\path[->,thick](d) edge[bend left] (c);
 	\path[->,thick](c) edge (e);
@@ -360,7 +362,9 @@ In the following graph, the set $\bm{E_{I}=\{b\}}$ is an ideal extension. This e
 \caption{ideal extension (example \ref{ideal extension})}
 \end{figure}
 
-As we can see, the ideal extension $\bm{E_{I}=\{b\}}$ is a subset of every preferred extension ($\bm{\{b,cf\},\{b,d,f\}}$).
+As we can see, the ideal extension $\bm{E_{I}=\{b\}}$ is a subset of every preferred extension ($\bm{\{b,c,f\},\{b,d,f\}}$).
+
+\newpage
 
 \subsection{Examples of different Extensions}
 Contrary to the previous section, where different aspects of one example were used to accompany the definitions of extensions, 
@@ -387,8 +391,6 @@ This argumentation framework could also be depicted by following graph.
 \end{tikzpicture}\end{center}
 \caption{graph of AF (example \ref{s1 s2 b1 b2 ex})}
 \end{figure}
-
-\newpage
 
 The extensions of this example would be 
 \begin{itemize}
@@ -420,7 +422,10 @@ Following extensions can be calculated
 	\item{$\bm{E_{G}=\{\emptyset\}}$}
 \end{itemize}
 
+\medskip
 The following example (on the contrary to the above) has different preferred and stable extensions.
+
+\newpage
 
 \begin{myexmpl}
 $\bm{b=}$"Batman is Clark Kent."\\
@@ -439,8 +444,7 @@ The corresponding graph looks like follows.
 
 For this example, the extensions would look as follows.
 \begin{itemize}
-	\item{$\bm{E_{P}=E_{C}=E_{G}=\{\emptyset\}}$}
-	\item{$\bm{E_{S} = \emptyset}$}
+	\item{$\bm{E_{p}=E_{c}=E_{g}=E_{s}=\emptyset}$}
 \end{itemize}
 
 \newpage
@@ -451,9 +455,10 @@ in the relations between the extensions. It should be considered along with \tex
 In the graph below, following different extensions can be ovserved:
 \begin{itemize}
 	\item{semi-stable extension $\bm{E_{ss}=\{d,e\}}$}
-	\item{preferred extension $\bm{E_{p}=\{b,c\}}$}
-	\item{complete extension $\bm{E_{c}=\{j\}}$}
+	\item{preferred extensions $\bm{E_{P}=\{\{b,c\},\{d,e\}\}}$}
+	\item{complete extensions $\bm{E_{C}=\{\{b,c\},\{d,e\},\{j\}\}}$}
 	\item{grounded extension $\bm{E_{g}=\emptyset}$}
+	\item{ideal extension $\bm{E_{i}=\emptyset}$}
 \end{itemize}
 \label{relations of extensions}
 \end{myexmpl}
@@ -674,6 +679,8 @@ Thus, for every $\bm{k \text{, }(K,k) \in AR}$. Also, let $\bm{(K',k') \in E_{a}
 Now $\bm{(K,k)}$ represents an attack on $\bm{(K',k')}$.\\Given the admissibility of $\bm{E_{a}}$, there has to be some argument $\bm{a = (H',h') \in E_{a}}$, so that
 $\bm{\lnot h' \in K}$; in other words, since $\bm{(K,k),(K',k') \in E_{a}}$ and the admissibility of $\bm{E_{a} \text{, the set cant be conflict-free} \implies \text{\Lightning}}$ 
 \end{myprf}
+
+\newpage
 
 Now that we have established the possibility to interprete default theories as argumentation frameworks, we want to examine this relationship more closely.
 There is a correspondence between the R-extensions of a default theory and the stable extensions of an argumentation framework.\\
