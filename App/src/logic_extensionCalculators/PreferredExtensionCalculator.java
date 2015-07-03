@@ -59,6 +59,8 @@ public class PreferredExtensionCalculator extends ExtensionCalculator<PreferredE
 	/** 
 	 * @brief this method checks the power set for maximal admissible sets.
 	 * */
+	//TODO Error lies here: AR={a,b,c} Att={(a,b),(a,c),(c,a)} => prefExt = {{b,c},{a}}!!
+	
 	public PreferredExtensionList maxAdm(ArrayList<AR> args,AF framework) {
 		PreferredExtensionList ret = new PreferredExtensionList();
 		for(AR ar : args) {
@@ -83,25 +85,3 @@ public class PreferredExtensionCalculator extends ExtensionCalculator<PreferredE
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
