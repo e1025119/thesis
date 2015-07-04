@@ -63,7 +63,7 @@ public class PreferredExtensionCalculator extends ExtensionCalculator<PreferredE
 	
 	public PreferredExtensionList maxAdm(ArrayList<AR> args,AF framework) {
 		PreferredExtensionList ret = new PreferredExtensionList();
-		boolean peb = true;
+		boolean peb;
 		ArrayList<AR> temp = new ArrayList<AR>();
 		for(AR ar : args) {
 			if(framework.isAdmissibleSubset(ar)) {
@@ -71,6 +71,7 @@ public class PreferredExtensionCalculator extends ExtensionCalculator<PreferredE
 			}
 		}
 		for(AR ar1 : temp) {
+			peb = true;
 			for(AR ar2 : temp) {
 				if(ar1.trueSubsetOf(ar2)) {
 					peb = false;

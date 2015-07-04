@@ -89,7 +89,7 @@ public class StepByStepForm extends JPanel implements ActionListener,KeyListener
 		argumentDropDown.setPreferredSize(new Dimension(150,20));
 		argumentDropDown.setEditable(false);
 		argumentBox1.add(argumentDropDown,BorderLayout.WEST);
-		next.setIcon(new ImageIcon("right.png"));
+		next.setText("\u25B6");
 		next.setPreferredSize(new Dimension(25,25));
 		argumentBox2.add(startSBS,BorderLayout.NORTH);
 		argumentBox2.add(next,BorderLayout.CENTER);
