@@ -834,8 +834,17 @@ provide coloring of the selected subset, depending on the chosen extension.\\
 
 \newpage
 
-The last (and optional) tab is the "Step By Step" tab. Here, one can get a better explanation, in a walkthrough kind of style, of how admissible sets are created.
-
+The last (and optional) tab is the "Step By Step" tab. Here, one can get a better explanation, in a walkthrough kind of style, of how admissible sets are created.\\
+In the field "select arguments", the user can choose between going through all elements of the extension, or specific ones to save time.\\
+The color coding is as follows:
+\begin{itemize}
+	\item{\textcolor{red}{red}: the argument is neither part of the extension, nor attacking the argument in question.}
+	\item{\textcolor{green}{green}: the argument is part of the extension but currently not active.}
+	\item{\textcolor{blue}{blue}: the argument is part of the extension and currently being defended.}
+	\item{\textcolor{yellow}{beige}: the argument is attacking the argument currently in question.}
+	\item{\textcolor{cyan}{cyan}: the argument is defending the argument currently in question.}
+\end{itemize}
+ 
 \bigskip
 \begin{figure}[h!]
 	\begin{center}\includegraphics[scale=0.35]{Images/Screenshot_KAFFEE_Tab3.png}
