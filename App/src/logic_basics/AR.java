@@ -44,6 +44,18 @@ public class AR {
 		}
 		return false;
 	}
+	
+	public boolean trueSubsetOf(AR ar) {
+		for(Argument arg : this.arguments) {
+			if(!ar.contains(arg)) {
+				return false;
+			}
+		}
+		if(this.equals(ar)) {
+			return false;
+		}
+		return true;
+	}
 
 	public void add(Argument arg) {
 		if(!this.contains(arg)) {

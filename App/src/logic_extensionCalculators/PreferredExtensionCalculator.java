@@ -59,49 +59,30 @@ public class PreferredExtensionCalculator extends ExtensionCalculator<PreferredE
 	/** 
 	 * @brief this method checks the power set for maximal admissible sets.
 	 * */
+	//TODO Error lies here: AR={a,b,c} Att={(a,b),(a,c),(c,a)} => prefExt = {{b,c},{a}}!!
+	
 	public PreferredExtensionList maxAdm(ArrayList<AR> args,AF framework) {
 		PreferredExtensionList ret = new PreferredExtensionList();
+		boolean peb = true;
+		ArrayList<AR> temp = new ArrayList<AR>();
 		for(AR ar : args) {
 			if(framework.isAdmissibleSubset(ar)) {
-				ret.add(new PreferredExtension(ar,framework));
+				temp.add(ar);
 			}
 		}
-		int maxSize = 0;
-		for(PreferredExtension pe : ret.getExtensions()) {
-			if(pe.size() > maxSize) {
-				maxSize = pe.size();
+		for(AR ar1 : temp) {
+			for(AR ar2 : temp) {
+				if(ar1.trueSubsetOf(ar2)) {
+					peb = false;
+					break;
+				}
+			}
+			if(peb) {
+				ret.add(new PreferredExtension(ar1,framework));
 			}
 		}
-		PreferredExtensionList tmp = new PreferredExtensionList();
-		for(PreferredExtension pe : ret.getExtensions()) {
-			if(pe.size() == maxSize) {
-				tmp.add(pe);
-			}
-		}
-		return tmp;
+		return ret;
 	}
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
