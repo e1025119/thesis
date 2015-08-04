@@ -1,4 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %	Bachelor's Thesis			%
 %	Christoph Groß, 1025119		%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -71,7 +72,7 @@
 	\vspace{2cm}\\
 	
 	%title
-	\Huge \textbf{Argumentation Theory}\\ \large \textbf{Nonmonotonic Reasoning}\\
+	\Huge \textbf{Argumentation Theory,}\\ \Large \textbf{a gentle Introduction}\\
 	\vspace{2cm}
 	{\large \textbf{BACHELOR'S THESIS}} \vspace{2.5mm}\\ {\small submitted in partial fulfillment of the requirements for the degree of} \vspace{2.5mm}\\ 
 	{\large \textbf{Bachelor of Science}} \vspace{2.5mm}\\ {\small in} \vspace{2.5mm}\\ {\large Software- and Information Engineering} \vspace{2.5mm}\\
@@ -118,7 +119,7 @@ Christoph Groß\\
 \chapter*{Acknowledgements}
 \addcontentsline{toc}{chapter}{Acknowledgements}
 
-$D := \{Friends,Family,University,christoph\}$\\
+$D := \mbox{Friends} \cup \mbox{Family} \cup \mbox{University} \cup \{christoph\}$\\
 $Friends = \{\text{Max,Pia,Lea,Tobi,Johannes}\}$, \\ $Family = \{\text{Sabine,Gerald,Angelika,Johann,Johanna}\}$, \\ $University = \{\text{Prof.Fermüller}\}$ \\
 \[\forall x \in D: (proofread(x) \lor listenToWhining(x) \lor help(x)) \implies thanks(christoph,x)\]
 
@@ -126,15 +127,12 @@ $Friends = \{\text{Max,Pia,Lea,Tobi,Johannes}\}$, \\ $Family = \{\text{Sabine,Ge
 \chapter*{Abstract}
 \addcontentsline{toc}{chapter}{Abstract}
 
-Throughout this thesis, I am going to explore the applications of argumentation theory in general and particularily in the context of nonmonotonic reasoning.\\
-First off, I will introduce the necessary formal definitions, give a few easy examples as clarification and draw the theoretical conclusions.\\
-Then I try to show the link between argumentation frameworks and default theory as an example of how argumentation theory can be used for dealing with nonmonotonic reasoning.\\
-In the next step, the reader receives information about things that have not been dealt with in this thesis, some examples of real-life applications and also 
+This thesis explores the concepts of argumentation theory in general and particularily in the context of nonmonotonic reasoning.\\
+First off, the necessary formal definitions are introduced, a few easy examples are given as clarification and then the theoretical conclusions are drawn.\\
+Then, the link between argumentation frameworks and default theory will be shown as an example of how argumentation theory can be used for dealing with nonmonotonic reasoning.\\
+In the next step, the reader receives information about things that have not been dealt with in this thesis, some exemplary tools and systems and also
 pointers to the needed sources to get a deeper understanding of the subject.\\
-Finally I will append the documentation of an application specifically written during the course of this thesis, which purpose is to graphically help understanding the subject.\\
-
-This thesis, including all the cited sources and the application (source code as well as an executable jar file) can be found on \href{https://github.com/e1025119/thesis}{github}.
-Should any questions or ideas for improvement arise, do not hesitate to write to \href{mailto:e1025119@student.tuwien.ac.at}{e1025119@student.tuwien.ac.at}
+Finally, the documentation of an application specifically written during the course of this thesis is appended whith the purpose to graphically help understanding the subject.\\
 
 \raggedright %left-align whole text
 %Chapter 1, Introduction
@@ -154,28 +152,32 @@ these statements tend to vary in their degree of believability.
 
 Argumentation theory in general, is the interdisciplinary study of how conclusions can be reached  through logical reasoning.
 Since this is a very wide field, I can not hope to discuss all of it here.\\
- The \href{http://en.wikipedia.org/wiki/Argumentation_theory}{wikipedia} article provides a good overview
+ The \href{http://en.wikipedia.org/wiki/Argumentation_theory}{http://en.wikipedia.org/wiki/Argumentation\_theory} article provides a good overview
 for interested readers.
 
-This thesis focuses on the logical approach made by Dung in his milestone paper from 1995 (\cite{Dung}),
+This thesis focuses on the logical approach by Dung in his milestone paper from 1995 \cite{Dung},
 the so called "argumentation frameworks".
 Argumentation Frameworks try to formalize arguments and their semantics.
 To this purpose, there are two main components. First, there are arguments modeled as formulas and second, there are attack relations between said arguments.
 
 \subsection{Argumentation Frameworks}
 \begin{mydefn}[Argumentation Framework - \cite{Dung}]
-An argumentation framework $\bm{AF}$ is defined as a tuple, consisting of a set of arguments ($\bm{AR}$) and a 
+An argumentation framework $\bm{AF}$ is defined as a tuple, consisting of a finite set of arguments ($\bm{AR}$) and a 
 set of attack relations ($\bm{att}$).\\
 Attack relations are tuples of two arguments where the first argument attacks the second one.
 $\bm{AF:=\langle AR,att \rangle}$
 \end{mydefn}
+
+\begin{myrmrk}
+It is also possible for a set of arguments to attack an argument: $\bm{S \text{ attacks } a \text{ iff } \exists a' \in S: a' \text{ attacks } a}$
+\end{myrmrk}
 
 The following example shows that an argumentation framework can either be written in a form according to this definition, or visualized as a directed graph.
 
 \newpage
 
 \begin{myexmpl}
-$\bm{s=}$"Superman is the best superhero!", $\bm{b=}$"Batman is way cooler..",\\$\bm{a=}$"Only Aquaman rules over the seas.", $\bm{r=}$"Robin is Batman's sidekick."\\
+$\bm{s=}$"Superman is the best superhero!", $\bm{b=}$"Batman is the best superhero!",\\$\bm{a=}$"Only Aquaman rules over the seas.", $\bm{r=}$"Robin is Batman's sidekick."\\
 $\bm{AR = \{a,b,s\}}$, $\bm{att=\{(b,s),(b,a),(a,s),(a,b),(s,b),(s,a),(b,r)\}}$
 \label{a b s r}
 \end{myexmpl}
@@ -208,16 +210,16 @@ A set \textbf{S} of arguments is said to be conflict-free, if for any argument $
 \end{mydefn}
 
 \begin{mydefn}[Acceptability]
-An argument $\bm{a \in AR}$ is acceptable with respect to a set \textbf{S}, iff \textbf{S} attacks any argument $\bm{b \in AR}$ that attacks \textbf{a}. 
+An argument $\bm{a \in AR}$ is acceptable with respect to a set \textbf{S}, iff \textbf{S} attacks each argument $\bm{b \in AR}$ that attacks \textbf{a}. 
 \end{mydefn}
 
 \begin{myfrmrk}
-If for said argument $\bm{a}$ is not being attacked by any $\bm{b \in AR}$, then it is acceptable with even the empty set.
+If for said argument $\bm{a}$ is not being attacked by any $\bm{b \in AR}$, then it is acceptable even with respect to the empty set.
 \end{myfrmrk}
 
 \addcontentsline{toc}{subsection}{Admissible Extensions}
 \begin{mydefn}[Admissibility]
-A conflict-free Set \textbf{S} is said to be admissible, iff each argument $\bm{a \in S}$ is acceptable with respect to \textbf{S}.
+A conflict-free set \textbf{S} is said to be admissible, iff each argument $\bm{a \in S}$ is acceptable with respect to \textbf{S}.
 Often, \textbf{S} is also called an admissible extension.
 \label{admissible}
 \end{mydefn}
@@ -233,14 +235,13 @@ If not explicitly marked, all the following extensions can also be originally fo
 
 \begin{myrmrk}[\textbf{Notation of extensions}]
 From here on, we will use $\bm{E_{i}}$ to denote an arbitrary but fixed extension of type $\bm{i \text{, while } E_{I}}$ denotes the set of all extensions of type $\bm{i}$.\\
-Also, if we want to talk about the set of all extensions of one specific type, we will use $\bm{i(AF)}$.
 \end{myrmrk}
 
 The first of those extensions takes a rather gullible approach to things; the so called \textit{preferred extension} is defined as follows:
 
 \addcontentsline{toc}{subsection}{Preferred Extensions}
 \begin{mydefn}[Preferred Extensions]
-$\bm{E_{p}}$ is a preferred extension of \textbf{AF}, iff $\bm{E_{p}}$ is a maximum admissible set (with respect to set inclusion) of \textbf{AF}.
+$\bm{E_{p}}$ is a preferred extension of \textbf{AF}, iff $\bm{E_{p}}$ is a maximal admissible set (with respect to set inclusion) of \textbf{AF}.
 \end{mydefn}
 
 \begin{myrmrk}
@@ -255,13 +256,13 @@ For every AF, there exists at least one preferred extension.
 \end{mylem}
 
 \begin{myprf}
-The proof will be depending on two different properties of admissible sets:
+The proof depends on two different properties of admissible sets:
 \begin{enumerate}
 	\item{The empty set is always admissible.}
-	\item{Given an admissible Set $\bm{S}$ and an argument $\bm{a}$, which is acceptable with respect to $\bm{S}$, the unification $\bm{S \cup a}$ is also admissible.}
+	\item{Given an admissible Set $\bm{S}$ and an argument $\bm{\{a\}}$, which is acceptable with respect to $\bm{S \cup \{a\}}$, the unification $\bm{S \cup a}$ is also admissible.}
 \end{enumerate}
 $(1)$ directly follows from the definition \ref{admissible}\\
-$(2)$ We just have to show, that $\bm{S \cup a}$ is conflict-free. To achieve that, we assume the contrary:\\ 
+$(2)$ We just have to show, that $\bm{S \cup \{a\}}$ is conflict-free. To achieve that, we assume the contrary:\\ 
 There exists an argument $\bm{b \in S \text{ so that either } (a,b) \text{ or } (b,a)}$ holds.
 There has to be an argument $\bm{c \in S}$, so that either $\bm{(c,a) \text{ or } (c,b) \text{. We know, that } S \text{ is conflict-free, so } (c,b) \implies \text{\Lightning}}$\\
 On the other hand, $\bm{c \text{ and } a}$ are both acceptable with respect to $\bm{S \text{; } (c,a) \implies \text{\Lightning}}$.  
@@ -273,8 +274,7 @@ Another approach would be the \textit{stable extension}, which is defined as fol
 
 \addcontentsline{toc}{subsection}{Stable Extensions}
 \begin{mydefn}[Stable Extensions]
-The conflict-free set $\bm{E_{s}}$ is a stable extension of \textbf{AF}, iff $\bm{E_{s}}$ attacks each argument $\bm{a \notin E_{s}}$; which is equivalent to
-$\bm{\{a \vert a}$ is not attacked by $\bm{E_{s}\}}$.
+The conflict-free set $\bm{E_{s}}$ is a stable extension of \textbf{AF}, iff $\bm{E_{s}}$ attacks each argument $\bm{a \notin E_{s}}$.
 \end{mydefn}
 
 \begin{myrmrk}
@@ -283,14 +283,14 @@ In example \ref{a b s r}, the stable extensions would be $\bm{E_{S} = \{\{b\},\{
 
 \addcontentsline{toc}{subsection}{Complete Extensions}
 \begin{mydefn}[Complete Extensions]
-The admissible set $\bm{E_{c}}$ is a complete extension of \textbf{AF}, iff every argument which is acceptable with respect to $\bm{E_{c}}$, is included in $\bm{E_{c}}$.
+The admissible set $\bm{E_{c}}$ is a complete extension of \textbf{AF} iff every argument which is acceptable with respect to $\bm{E_{c}}$ is included in $\bm{E_{c}}$.
 \end{mydefn}
 
 \begin{myrmrk}
 In example \ref{a b s r}, the complete extensions would be $\bm{E_{C} = \{\emptyset,\{b\},\{r,a\},\{r,s\}\}}$.
 \end{myrmrk}
 
-It is easy to see that many different complete extensions can exist, depending on $E_{c}$. That leads directly to the \textit{grounded extension}.
+It is easy to see that many different complete extensions can exist. That leads directly to the \textit{grounded extension}.
 
 \addcontentsline{toc}{subsection}{Grounded Extensions}
 \begin{mydefn}[Grounded Extensions - \cite{Egly}]
@@ -305,7 +305,7 @@ In example \ref{a b s r}, the only grounded extension would be $\bm{E_{g} = \emp
 
 \addcontentsline{toc}{subsection}{Semi-stable Extension}
 \begin{mydefn}[Semi-stable Extensions - \cite{Caminada}]
-A set $\bm{E_{SS}}$ is a semi-stable extensions, if it is a complete extension and the set $\bm{E_{ss} \cup \{a \in AR \vert E_{SS} \text{ attacks }a\}}$
+A set $\bm{E_{ss}}$ is a semi-stable extension, if it is a complete extension and the set $\bm{E_{ss} \cup \{a \in AR \vert E_{ss} \text{ attacks }a\}}$
 is maximal (with respect to set inclusion).
 \label{semi ext}
 \end{mydefn}
@@ -313,8 +313,8 @@ is maximal (with respect to set inclusion).
 \newpage
 
 \begin{myexmpl}
-A very good example, specifically showing that not every semi-stable extension is also stable, was provided in \cite{Caminada}.\\
-In the following graph, the set $\bm{E_{SS}=\{b,d\}}$ is semi-stable but not stable.
+The following example from \cite{Caminada} illustrates that not every semi-stable extension is also stable.\\
+In the following graph, the set $\bm{E_{ss}=\{b,d\}}$ is semi-stable but not stable\\(because $\bm{a}$ is not attacked by $\bm{E_{ss}}$).
 \label{stable != semi-stable}
 \end{myexmpl}
 \begin{figure}[h!]
@@ -333,13 +333,16 @@ In the following graph, the set $\bm{E_{SS}=\{b,d\}}$ is semi-stable but not sta
 
 \addcontentsline{toc}{subsection}{Ideal Extension}
 \begin{mydefn}[Ideal Extensions - \cite{Dung2}]
-A set $\bm{E_{I}}$ is an ideal extension, if it is the maximal admissible set, that is contained in every preferred extension.
+A set $\bm{E_{i}}$ is the ideal extension, if it is a maximal admissible set, that is contained in every preferred extension.
 \label{ideal ext}
 \end{mydefn}
 
 \begin{myexmpl}
 The following example illustrates ideal extensions (and how they differ from e.g. grounded extensions).\\
-In the following graph, the set $\bm{E_{I}=\{b\}}$ is an ideal extension. This example can also be found in \cite{Dung2}.
+In the following graph, the set $\bm{E_{I}=\{\{b\}\}}$ contains the only ideal extension.
+As we can see, $\bm{E_{i}}$ is a subset of every preferred extension ($\bm{\{b,c,f\},\{b,d,f\}}$).
+This example can also be found in \cite{Dung2}.
+
 \label{ideal extension}
 \end{myexmpl}
 \begin{figure}[h!]
@@ -362,7 +365,6 @@ In the following graph, the set $\bm{E_{I}=\{b\}}$ is an ideal extension. This e
 \caption{ideal extension (example \ref{ideal extension})}
 \end{figure}
 
-As we can see, the ideal extension $\bm{E_{I}=\{b\}}$ is a subset of every preferred extension ($\bm{\{b,c,f\},\{b,d,f\}}$).
 
 \newpage
 
@@ -399,36 +401,33 @@ The extensions of this example would be
 
 The next example is going to be a little more interesting in its outcome.
 \begin{myexmpl}
-$\bm{s=}$"Superman was born a hero.", $\bm{b=}$"Batman trained hard to become a hero."\\
-$\bm{AR=\{s,b\}}$, $\bm{att=\{(s,b),(b,s)\}}$
-\label{s b ex}
+$\bm{s1=}$"Superman was born a hero.", $\bm{s2=}$"Superman trained hard to become a hero."\\
+$\bm{AR=\{s1,s2\}}$, $\bm{att=\{(s1,s2),(s2,s1)\}}$
+\label{s1 s2 ex}
 \end{myexmpl}
 
 This examples graph looks like this.
 \begin{figure}[h!]
 \begin{center}\begin{tikzpicture}
-	\node[state](s){$s$};
-	\node[state](b)[right=of s]{$b$};
-	\path[->,thick](s) edge[bend left] (b);
-	\path[->,thick](b) edge[bend left] (s);
+	\node[state](s1){$s1$};
+	\node[state](s2)[right=of s1]{$s2$};
+	\path[->,thick](s1) edge[bend left] (s2);
+	\path[->,thick](s2) edge[bend left] (s1);
 \end{tikzpicture}\end{center}
-\caption{graph of AF (example \ref{s b ex})}
+\caption{graph of AF (example \ref{s1 s2 ex})}
 \end{figure}
 
 Following extensions can be calculated
 \begin{itemize}
-	\item{$\bm{E_{P}=E_{S}=\{\{s\},\{b\}\}}$}
-	\item{$\bm{E_{C}=\{\emptyset,\{s\},\{b\}\}}$}
+	\item{$\bm{E_{P}=E_{S}=\{\{s1\},\{s2\}\}}$}
+	\item{$\bm{E_{C}=\{\emptyset,\{s1\},\{s2\}\}}$}
 	\item{$\bm{E_{G}=\{\emptyset\}}$}
 \end{itemize}
-
-\medskip
-The following example (on the contrary to the above) has different preferred and stable extensions.
 
 \newpage
 
 \begin{myexmpl}
-$\bm{b=}$"Batman is Clark Kent."\\
+$\bm{b=}$"The superhero Batman is human. No humans are superheros."\\
 $\bm{AR=\{b\}}$, $\bm{att=\{(b,b)\}}$
 \label{b loop ex}
 \end{myexmpl}
@@ -528,13 +527,13 @@ The following, simple tree graph (borrowed from \cite{Hunter}) shows the hierarc
 \begin{figure}[h!]
 \begin{center}\begin{tikzpicture}[node distance=0.5cm, auto,
 	mynode/.style={rectangle,draw=black}]
-	\node[mynode] (stable) {$stable$};
-	\node[mynode] (semi-stable) [above right = of stable] {$semi-stable$};
-	\node[mynode] (preferred) [above right = of semi-stable] {$preferred$};
-	\node[mynode] (complete) [above right = of preferred] {$complete$};
-	\node[mynode] (grounded) [below = of complete] {$grounded$};
-	\node[mynode] (ideal) [below right = of complete] {$ideal$};
-	\node[mynode] (admissible) [above right = of complete] {$admissible$};
+	\node[mynode] (stable) {stable};
+	\node[mynode] (semi-stable) [above right = of stable] {semi-stable};
+	\node[mynode] (preferred) [above right = of semi-stable] {preferred};
+	\node[mynode] (complete) [above right = of preferred] {complete};
+	\node[mynode] (grounded) [below = of complete] {grounded};
+	\node[mynode] (ideal) [below right = of complete] {ideal};
+	\node[mynode] (admissible) [above right = of complete] {admissible};
 	\path[->] (stable) edge (semi-stable);
 	\path[->] (semi-stable) edge (preferred);
 	\path[->] (preferred) edge (complete);
@@ -561,9 +560,7 @@ Now I want to show a few specific relations between those aforementioned extensi
 \end{mylem}
 
 \begin{myprf}[1]
-It is obvious that every preferred extension (maximum admissible set) is a complete extension. So we only need to show that the other way round is not true.
-
-Assumption: Every complete extension is also a preferred extension.\\
+It is obvious that every preferred extension (maximum admissible set) is a complete extension.\\
 Let $\bm{AR=\{a,b\}}$ and $\bm{att=\{(a,b),(b,a)\}}$.\\
 Then it is easy to see, that $\bm{E_{P}=\{\{a\},\{b\}\}}$ but $\bm{E_{C}=\{\emptyset,\{a\},\{b\}\}}$\\
 $\bm{\implies \exists E_{c}: E_{c} \in E_{C} \land E_{c} \notin E_{P} \implies \text{\Lightning}}$
@@ -577,42 +574,43 @@ Proof for this lemma follows directly from definition \ref{ground ext}.
 Up to now, we have only talked about sets of arguments and their properties. Now we will focus on the whole argumentation framework and 
 make a connection between its properties and extensions.
 
+\newpage
+
 \subsection{Well-Founded Argumentation Frameworks}
 The first new property establishes a coherence between preferred, grounded and stable extensions.
-\begin{mydefn}[Well-Founded Argumentation Frameworks]
-An argumentation framework is considered well-founded, iff there exists no infinit sequence of arguments $A_{0},A_{1},\dots,A_{n},\dots$ where each $A_{i+1}$ attacks $A_{i}$.
+\begin{mydefn}[\cite{Dung}]
+An argumentation framework is called well-founded, iff there exists no infinite sequence of arguments $A_{0},A_{1},\dots,A_{n},\dots$ where each $A_{i+1}$ attacks $A_{i}$.
 \end{mydefn}
 
 \begin{myfrmrk}
-This infinite sequence of arguments can be formed by a finite set of arguments (for instance $AR=\{a,b\}$, $att={(a,b),(b,a)}$).
+This infinite sequence of arguments can be formed by a finite set of arguments (for instance $AR=\{a,b\}$, $att={\{(a,b),(b,a)\}}$).
 \end{myfrmrk}
 
-\newpage
-
-Although it might not be the most intuitive observation, following lemma can be extracted from this definition.
+Following lemma can be extracted from this definition.
 \begin{mylem}[\cite{Dung}]
 Every well-founded AF has exactly one complete extension, which is also a preferred, grounded and stable extension.
 \end{mylem}
 
 \begin{myprf}
-Assumption: $\bm{\exists AF: \text{AF is well-founded and } E_{p}=E_{c}=E_{g} \notin E_{S}}$.
+Assumption: $\bm{\text{AF is well-founded and } E_{g} \text{ is not stable}}$.
 We further assume, that $\bm{\exists a \in AR \text{\textbackslash} E_{g} \text{ and } \nexists b \in E_{g}:(b,a) \in att}$.\\
 \bigskip
 If $\bm{a}$ is not acceptable with respect to $\bm{E_{g}}$, this means that there has to be another argument $\bm{c \in AR \text{\textbackslash} E_{g}}$, 
 which is also not attacked by $\bm{E_{g}}$. \\ Therefore an infinite sequence of arguments like $\bm{a \text{ and }c}$ has to exist $\implies \text{\Lightning}$.
 \end{myprf}
 
-\subsection{Coherent Argumentation Frameworks}
-If an AF has a preferred extension, which is not a stable one too, that indicates some sort of "anomaly" in the framework (see example \ref{b loop ex}).\\
-So what we want to do next, is to find out what criteria has to be met so that preferred and stable extension coincide.
+% --- Coherent Argumentation Frameworks ---
+%\subsection{Coherent Argumentation Frameworks}
+%If an AF has a preferred extension, which is not a stable one too, that indicates some sort of "anomaly" in the framework (see example \ref{b loop ex}).\\
+%So what we want to do next, is to find out what criteria has to be met so that preferred and stable extension coincide.
 
-\begin{mydefn}[Coherent Argumentation Frameworks]
-An AF is called coherent, if $\bm{E_{P} = E_{S}}$.
-\end{mydefn}
+%\begin{mydefn}[\cite{Dung}]
+%An AF is called coherent, if $\bm{E_{P} = E_{S}}$.
+%\end{mydefn}
 
-\begin{myrmrk}
-It follows directly from the definition, that there always exists at least one stable extension in a coherent AF.
-\end{myrmrk}
+%\begin{myrmrk}
+%It follows directly from the definition, that there always exists at least one stable extension in a coherent AF.
+%\end{myrmrk}
 
 \chapter{Argumentation Theory and Nonmonotonic Reasoning}
 
@@ -720,9 +718,10 @@ Therefore, the idea of this fourth chapter is providing you with pointers to rel
 
 \section{Structure and Extraction of Arguments}
 Two very interesting topics are the structure of arguments and how they are extracted. During this paper, we only used arguments as abstract objects with no underlying structure.
-If we were trying to solve real world problems by implementing them as an argumentation framework, these two things would be necessary though.
-The general structure of arguments can be described as it is done in the very good 
-\href{http://en.wikipedia.org/wiki/Argumentation_theory#Internal_structure_of_arguments}{wikipedia} article:\\
+If we were trying to solve real world problems by implementing them as an argumentation framework, these two things would be necessary though.\\
+The general structure of arguments can be described as it is done in the very good wikipedia article 
+(\href{http://en.wikipedia.org/wiki/Argumentation_theory#Internal_structure_of_arguments}{http://en.wikipedia.org/wiki/Argumentation\_theory\#Internal\_structure\_of\_arguments}) 
+article:\\
 \medskip
 arguments typically consist of
 \begin{itemize}
@@ -734,7 +733,7 @@ If the reader is more interested in how arguments are extracted from knowledge, 
 
 \newpage 
 
-\section{Real-life Applications}
+\section{Tools \& Systems}
 Since we have already established, that argumentation frameworks can be used to model other logical constructs, it is clear that they can also be a useful tool in various proofs.\\
 This is, of course, of very little use in the daily life of a software engineer. In general, the areas where logical applications shine, are for instance \textbf{planning},
 \textbf{scheduling} or \textbf{software verification}, all areas with a high potential to save some company a lot of money.\\
@@ -774,12 +773,16 @@ The following list is not complete of course, I merely tried to sum up a few rep
 \end{itemize}
 \medskip
 An interesting source that should be mentioned is the \textit{\textbf{COMMA} - Computational Models of Argument} Conference. Most of the above systems are listed amongst
-many more topics on the \href{www.comma-conf.org}{COMMA homepage}.
+many more topics on the \href{www.comma-conf.org}{COMMA website}.
 
 \chapter{Documentation - KAFFEE}
 
 As mentioned in the abstract, a software tool was written to accompany the reader through this paper and provide the necessary environment to playfully learn more about
 the several extensions and their relationships.\\
+
+The source code as well as an executable jar file can be found on \href{https://github.com/e1025119/thesis}{https://github.com/e1025119/thesis}.
+Should any questions or ideas for improvement arise, do not hesitate to write to \href{mailto:e1025119@student.tuwien.ac.at}{e1025119@student.tuwien.ac.at}
+
 The \textbf{K}AFFEE \textbf{A}rgumentation \textbf{F}ramework \textbf{F}or \textbf{E}ngineers and \textbf{E}nthusiasts offers following functions:
 \begin{itemize}
 	\item{Defining new argumentation frameworks}
@@ -868,6 +871,7 @@ There are also a few built-in shortcuts that make the usage of \textbf{KAFFEE} a
 		\item{\textbf{ALT+s} \dots import example "Step By Step"}
 	\end{itemize}
 \end{description}
+
 
 %references
 \printbibliography
